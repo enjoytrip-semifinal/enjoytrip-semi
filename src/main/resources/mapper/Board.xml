@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enjoytrip.board.model.mapper.BoardMapper">
+
+	<!-- board -->
+	<!-- 글 전체 가져오기 -->
+	<select id="listBoard" resultType="boardDto">
+		<![CDATA[
+			select * from board
+		]]>
+	</select>
+	
+	<!-- 글 하나 가져오기 -->
+	<select id="viewBoard" parameterType="int" resultType="boardDto">
+		<![CDATA[
+			select * from board
+			where boardid = #{boardId}
+		]]>
+	</select>
+	
+	<!-- 글 쓰기 -->
+	<insert id="writeBoard" parameterType="boardDto">
+		<![CDATA[
+			insert into board(boardid, register_time, hit, title, content, userid)
+			values (default, now(), #{hit}, #{title}, #{content}, #{userid})
+		]]>
+	</insert>
+	
+	<!-- 글 수정 -->
+	<update id="modifyBoard" parameterType="boardDto">
+		<![CDATA[
+			update board
+			set title = #{title} content = #{content}
+			where boardid = #{boardid}
+		]]>
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="deleteBoard" parameterType="int">
+		<![CDATA[
+			delete from board
+			where boardid = #{boardId}
+		]]>
+	</delete>
+</mapper>
