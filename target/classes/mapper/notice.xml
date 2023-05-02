@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
-<mapper namespace="com.enjoytrip.notice.model.mapper.NoticeMapper">
-	<resultMap type="NoticeDto" id="notice">
-		<result column="noticeid" property="noticeid"/>
-		<result column="register_time" property="registertime"/>
-		<result column="hit" property="hit"/>
-		<result column="title" property=title/>
-		<result column="userid" property="userid"/>
-	</resultMap>
-	
-	<select id="listNotice" resultType="notice" resultMap="notice">
-		select * from notice
+
+<mapper
+	namespace="com.enjoytrip.notice.model.mapper.NoticeMapper">
+	<select id="listNotice" resultType="noticeDto">
+		select *
+		from notice
 	</select>
-	
-	<select id="getNotice" parameterType="int" resultMap="notice">
-		select * from notice where noticeid = #{noticeid}
+
+	<select id="getNotice" parameterType="int">
+		select *
+		from notice where noticeid=#{noticeid}
 	</select>
-	
-	<insert id="write" parameterType="notice">
-		insert into notice (noticeid, registertime, hit, title, userid)
-		values (default, now(), 0, #{title}, #{userid})
+
+	<insert id="write" parameterType="noticeDto">
+		insert into notice (noticeid,
+		register_time, hit, title, content, adminid)
+		values (default, now(), 0, #{title}, #{content}, #{adminid})
 	</insert>
-	
+
 	<delete id="delete" parameterType="java.lang.Integer">
-		delete from notice where noticeid=#{noticeid}
+		delete from notice where
+		noticeid=#{noticeid}
 	</delete>
-	
-	<update id="update" parameterType="notice" resultType="notice">
-		update notice set title=#{title}, registertime=now()
-		where noticeid=#{noticeid}
+
+	<update id="modify" parameterType="NoticeDto" >
+		update
+		notice set title=#{title}, registertime=now()
+		where
+		noticeid=#{noticeid}
 	</update>
-	
+
 	<update id="updateNoticeHit" parameterType="java.lang.Integer">
-		update notice set hit=hit+1 where noticeid=#{noticeid}
+		update notice set
+		hit=hit+1 where noticeid=#{noticeid}
 	</update>
 </mapper>

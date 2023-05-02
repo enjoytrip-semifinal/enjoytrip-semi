@@ -8,5 +8,6 @@ public class NoticeDto {
 	private String registertime;
 	private int hit;
 	private String title;
-	private int userid;
+	private String content;
+	private int adminid;
 }
