@@ -23,13 +23,10 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @Api(tags = {"게시판 관리"})
-@CrossOrigin("*")
 @RequestMapping("/board")
 public class BoardController {
 	
 	private BoardService boardService;
-	
-	@Autowired
 	public BoardController(BoardService boardService) {
 		super();
 		this.boardService = boardService;
