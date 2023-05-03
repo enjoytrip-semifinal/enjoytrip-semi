@@ -1,6 +1,7 @@
 package com.enjoytrip.hotplace.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.enjoytrip.hotplace.model.FileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceDto;
 import com.enjoytrip.hotplace.model.service.HotplaceService;
 
@@ -58,10 +61,11 @@ public class HotplaceRestController {
 	}
 	
 	@GetMapping(value="list")
-	public ResponseEntity<?> list(Map<String, Integer> map) throws Exception {
+	public ResponseEntity<?> list(@RequestParam Map<String, String> map) throws Exception {
 	      try {
+	    	  System.out.println(map.get("sido"));
 	         //return new ResponseEntity<List<HotplaceDto>>(service.listHotplace(map), HttpStatus.OK);
-	         return new ResponseEntity<List<HotplaceDto>>(service.listHotplace(), HttpStatus.OK);
+	         return new ResponseEntity<List<HotplaceDto>>(service.listHotplace(map), HttpStatus.OK);
 	      }catch(Exception e) {
 	    	  e.printStackTrace();
 	         return new ResponseEntity<String>("서버 오류",HttpStatus.INTERNAL_SERVER_ERROR);
@@ -81,11 +85,14 @@ public class HotplaceRestController {
 	
 	
 	@PostMapping(value="list/{num}")
-	public ResponseEntity<?> listOneView(@PathVariable("num")Integer num, @RequestBody String title, @RequestBody String content) throws Exception {
+	public ResponseEntity<?> listOneView(@PathVariable("num")Integer num, @RequestBody HotplaceDto hotplaceDto) throws Exception {
 		try {
 			HotplaceDto hotplace = service.getHotplace(num);
-			hotplace.setTitle(title);
-			hotplace.setContent(content);
+			hotplace.setTitle(hotplaceDto.getTitle());
+			hotplace.setContent(hotplaceDto.getContent());
+			
+			
+			
 			return new ResponseEntity<Integer>(service.modifyHotplace(hotplace), HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

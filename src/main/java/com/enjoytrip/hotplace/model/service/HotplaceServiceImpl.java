@@ -76,37 +76,25 @@ public class HotplaceServiceImpl implements HotplaceService {
 		return hotplaceMapper.updateHit(reviewId);
 	}
 
-/*	@Override
-	public List<HotplaceDto> listHotplace(Map<String, Integer> map) throws SQLException {
-		// TODO Auto-generated method stub
-
-		Map<String, Object> param = new HashMap<String, Object>();
-		if (map.isEmpty()) {
-			param.put("sido", 0);
-			param.put("gugun", 0);
-			param.put("type", 0);
-		}
-
-		// -------------------------------------------------------------yellow!!
-		else {
-			int sido = map.get("sido");
-			int gugun = map.get("gugun");
-			int type = map.get("type");
-			param.put("sido", sido);
-			param.put("gugun", gugun);
-			param.put("type", type);
-		}
-		// -------------------------------------------------------------
-
-		int pgNo = map.get("pgno") == 0 ? 1 : map.get("pgno");
-		int start = pgNo * SizeConstant.LIST_SIZE - SizeConstant.LIST_SIZE;
-		param.put("start", start);
-		param.put("listsize", SizeConstant.LIST_SIZE);
-
-		return hotplaceMapper.listHotplace(param);
-	}*/
-	
-	
+	/*
+	 * @Override public List<HotplaceDto> listHotplace(Map<String, Integer> map)
+	 * throws SQLException { // TODO Auto-generated method stub
+	 * 
+	 * Map<String, Object> param = new HashMap<String, Object>(); if (map.isEmpty())
+	 * { param.put("sido", 0); param.put("gugun", 0); param.put("type", 0); }
+	 * 
+	 * // -------------------------------------------------------------yellow!! else
+	 * { int sido = map.get("sido"); int gugun = map.get("gugun"); int type =
+	 * map.get("type"); param.put("sido", sido); param.put("gugun", gugun);
+	 * param.put("type", type); } //
+	 * -------------------------------------------------------------
+	 * 
+	 * int pgNo = map.get("pgno") == 0 ? 1 : map.get("pgno"); int start = pgNo *
+	 * SizeConstant.LIST_SIZE - SizeConstant.LIST_SIZE; param.put("start", start);
+	 * param.put("listsize", SizeConstant.LIST_SIZE);
+	 * 
+	 * return hotplaceMapper.listHotplace(param); }
+	 */
 
 	@Override
 	public HotplaceDto getHotplace(int reviewId) throws SQLException {
@@ -149,9 +137,24 @@ public class HotplaceServiceImpl implements HotplaceService {
 	}
 
 	@Override
-	public List<HotplaceDto> listHotplace() throws Exception {
+	public List<HotplaceDto> listHotplace(Map<String, String> map) throws Exception {
 		// TODO Auto-generated method stub
-		return hotplaceMapper.listHotplace();
+		Map<String, Integer> param = new HashMap<>();
+
+		Integer sido = map.get("sido")==null ? 0 :Integer.parseInt( map.get("sido"));
+		Integer gugun = map.get("gugun") == null ? 0 : Integer.parseInt( map.get("gugun"));
+		Integer type = map.get("type") == null ? 0 :Integer.parseInt( map.get("type"));
+
+		param.put("sido", sido);
+		param.put("gugun", gugun);
+		param.put("type", type);
+
+		int pgNo = map.get("pgno") == null ? 1 :Integer.parseInt( map.get("pgno"));
+		int start = pgNo * SizeConstant.LIST_SIZE - SizeConstant.LIST_SIZE;
+		param.put("start", start);
+		param.put("listsize", SizeConstant.LIST_SIZE);
+
+		return hotplaceMapper.listHotplace(param);
 	}
 
 }

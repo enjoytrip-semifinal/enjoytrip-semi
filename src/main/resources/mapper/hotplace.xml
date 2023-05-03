@@ -49,25 +49,27 @@
 	</insert>
 
 	<sql id="search">
-
-		<if test="word != null and word != ''">
-			<if test="key == 'subject'">
-				and subject like concat('%', #{word}, '%')
+		
+		<if test="sido!=0 or gugun!=0 or type!=0">
+			where
+			<if test="sido!=0 and gugun!=0">
+				sido = #{sido} and gugun = #{gugun}
 			</if>
-			<if test="key != 'subject'">
-				and ${key} = #{word}
+
+			<if test="type!=0">
+				and type = #{type}
 			</if>
 		</if>
-		<!-- 검색조건 1 sido code -->
-		<!-- 검색 조건 2 gugun code -->
-		<!-- 검색 조건3 type -->
+
 	</sql>
 
-	<select id="listHotplace" 
-		resultMap="hotplace">
+	<select id="listHotplace" parameterType="map" resultMap="hotplace">
 		select *
 		from hotplace
-		order by review_id desc
+		<include refid="search"/>
+		order
+		by review_id desc
+		limit #{start}, #{listsize}
 	</select>
 
 
