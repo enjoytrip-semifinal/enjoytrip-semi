@@ -2,9 +2,11 @@ package com.enjoytrip.user.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,18 +17,22 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.*;
 
+@Slf4j
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name="user")
 @Table
+@DynamicUpdate
 public class UserDto implements UserDetails{
 	
 	@Id
@@ -85,6 +91,22 @@ public class UserDto implements UserDetails{
 		// TODO Auto-generated method stub
 		return true;
 	}
+
 	
+	// 회원가입을 위한
+	public UserDto toEntity() {
+		UserDto userDto = UserDto.builder()
+				.id(id)
+				.password(password)
+				.email(email)
+				.nickname(nickname)
+				.roles(Collections.singletonList("USER"))
+				.sido(sido)
+				.gugun(gugun)
+				.build();
+		
+		log.info(userDto.getRoles().get(0));
+		return userDto;
+	}
 	
 }
