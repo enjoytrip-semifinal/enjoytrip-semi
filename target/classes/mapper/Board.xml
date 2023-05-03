@@ -4,44 +4,62 @@
 
 <mapper namespace="com.enjoytrip.board.model.mapper.BoardMapper">
 
+	<sql id="search">
+		<if test="word != null and word != ''">
+			<if test="key == 'title'">
+				where title like concat('%', #{word}, '%')
+			</if>
+			
+			<if test="key == 'content'">
+				where content like concat('%', #{word}, '%')
+			</if>
+			
+			<if test="key == 'userid'">
+				where userid = ${word}
+			</if>
+		</if>
+	</sql>
+
 	<!-- board -->
 	<!-- 글 전체 가져오기 -->
-	<select id="listBoard" resultType="boardDto">
-		<![CDATA[
-			select * from board
-		]]>
+	<select id="listBoard" parameterType="map" resultType="boardDto">
+		select *
+		from board
+		<include refid="search"></include>
+		order by boardid desc
+		limit #{start}, #{listsize}
+	</select>
+	
+	<!-- 전체 글 수 가져오기 -->
+	<select id="getTotalBoardCount" parameterType="map" resultType="int">
+		select count(boardid)
+		from board
+		<include refid="search"></include>
 	</select>
 	
 	<!-- 글 하나 가져오기 -->
 	<select id="viewBoard" parameterType="int" resultType="boardDto">
-		<![CDATA[
-			select * from board
-			where boardid = #{boardId}
-		]]>
+			select boardid, DATE_FORMAT(register_time, '%Y-%m-%d %H:%i:%s') as 'registertime', hit, title, content, userid
+			from board
+			where boardid = #{boardid}
 	</select>
 	
 	<!-- 글 쓰기 -->
 	<insert id="writeBoard" parameterType="boardDto">
-		<![CDATA[
 			insert into board(boardid, register_time, hit, title, content, userid)
 			values (default, now(), #{hit}, #{title}, #{content}, #{userid})
-		]]>
 	</insert>
 	
 	<!-- 글 수정 -->
 	<update id="modifyBoard" parameterType="boardDto">
-		<![CDATA[
 			update board
-			set title = #{title} content = #{content}
+			set title = #{title}, content = #{content}
 			where boardid = #{boardid}
-		]]>
 	</update>
 	
 	<!-- 글 삭제 -->
 	<delete id="deleteBoard" parameterType="int">
-		<![CDATA[
 			delete from board
-			where boardid = #{boardId}
-		]]>
+			where boardid = #{boardid}
 	</delete>
 </mapper>
