@@ -20,7 +20,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfiguration {
 
 //	http://localhost:8080/swagger-ui/index.html
-	
 	private String version = "Version";
 	private String title = "EnjoyTrip " + version;
 	
