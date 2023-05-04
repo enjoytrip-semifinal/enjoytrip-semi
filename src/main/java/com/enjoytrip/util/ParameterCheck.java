@@ -27,6 +27,7 @@ public class ParameterCheck {
 		else {
 			for (int i = 0; i < str.length(); i++) {
 				int num = str.charAt(i) - 48;
+
 				if(num < 0 || num > 9) {
 					isNum = false;
 					break;
@@ -35,5 +36,4 @@ public class ParameterCheck {
 		}
 		return isNum;
 	}
-	
 }
