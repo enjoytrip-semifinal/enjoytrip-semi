@@ -21,6 +21,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.*;
 
@@ -92,6 +93,10 @@ public class UserDto implements UserDetails{
 		return true;
 	}
 
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(password);
+    }
+	
 	
 	// 회원가입을 위한
 	public UserDto toEntity() {

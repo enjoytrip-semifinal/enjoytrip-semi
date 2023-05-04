@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class UserService {
 	private final UserRespository userRespository;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	private final JwtTokenProvider jwtTokenProvider;
+	private final PasswordEncoder passwordEncoder;
 	
 	// 단순 로그인
 	@Transactional
@@ -84,7 +86,8 @@ public class UserService {
 		try {
 //			log.info(userDto.toString());
 //			log.info(userDto.toEntity().getRoles().get(0));
-			userRespository.save(userDto.toEntity());
+//			userRespository.save(userDto.toEntity());
+			userRespository.save(userDto.toEntity());			
 			
 		} catch (Exception e) {
 			e.printStackTrace();

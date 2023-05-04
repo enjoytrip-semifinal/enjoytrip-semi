@@ -35,7 +35,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()                
+                .httpBasic().disable()   
+//        		.defaultSuccessUrl("/index.html")
+//        		.failureUrl("/login.html?error=true").and()	 
                 .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

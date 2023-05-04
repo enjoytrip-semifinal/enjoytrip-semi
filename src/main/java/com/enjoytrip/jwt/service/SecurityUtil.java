@@ -14,6 +14,7 @@ public class SecurityUtil {
         if (authentication == null || authentication.getName() == null) {
             throw new RuntimeException("No authentication information.");
         }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication.getName();
     }
 }

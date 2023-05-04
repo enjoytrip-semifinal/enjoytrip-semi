@@ -1,5 +1,10 @@
 package com.enjoytrip.user.controller;
 
+import java.security.Principal;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.enjoytrip.jwt.service.SecurityUtil;
 import com.enjoytrip.jwt.service.TokenInfo;
 import com.enjoytrip.user.entity.UserDto;
 import com.enjoytrip.user.model.service.UserService;
@@ -38,16 +44,21 @@ public class UserController {
 	
 	// ## 로그인 관련 ## //
 	@PostMapping("/login")
-	public TokenInfo login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+	public TokenInfo login(@RequestBody UserLoginRequestDto userLoginRequestDto, HttpSession session) {
 		log.info("/user/login !!");
 		String id = userLoginRequestDto.getId();
 		String password = userLoginRequestDto.getPassword();
 		log.info("id : {}, password : {}", id, password);
 		TokenInfo tokenInfo = userService.login(id, password);
 //		TokenInfo tokenInfo = userService.login("test", "1234");
+		
+		
+		// session.setAttribute("userid", id);
+		
 		log.info("tokeninfo : {}", tokenInfo);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		log.info("authentication : {}", authentication.toString());
+		log.info("음:{}", SecurityContextHolder.getContext());
 //		User user = (User) authentication.getPrincipal();
 //		log.info("authentication.getPrincipal().getUsername() : {}", user.toString());
 		return tokenInfo;
@@ -62,7 +73,7 @@ public class UserController {
 	
 	// 아이디 찾기 (이메일로 아이디 찾기)
 	@GetMapping("/find-id")
-	public String findid(String email) throws Exception {
+	public String findidByEmail(String email) throws Exception {
 		log.info("아이디 찾기");
 		String this_id = userService.findId(email);
 		return this_id;
@@ -70,7 +81,7 @@ public class UserController {
 	
 	// 비번 찾기
 	@GetMapping("/find-pw")
-	public String findpw(String emai) {
+	public String findpwByEmail(String emai) {
 		// 구현필요
 		return "";
 	}
@@ -83,7 +94,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/join")
-	public String join(@RequestBody UserDto userDto) throws Exception {
+	public String userJoin(@RequestBody UserDto userDto) throws Exception {
 		
 		userService.join(userDto);
 		
@@ -96,7 +107,7 @@ public class UserController {
 //	void emailVerification(UserDto userDto) throws Exception;
 	
 	@DeleteMapping(value="/join/{id}")
-	public String delete_join(@PathVariable String id) throws Exception {
+	public String userDeleteJoin(@PathVariable String id) throws Exception {
 		if(userService.deleteUser(id) == 1) {
 			log.info("회원 삭제 정상 완료 : {}", id);
 		} else {
@@ -105,8 +116,14 @@ public class UserController {
 		return "index.html";
 	}
 	
+	@GetMapping("/modify")
+	public ResponseEntity<?> existingInfo(Principal principal) throws Exception {
+		log.info("principal.getName():{}", principal.getName());
+		return null;
+	}
+	
 	@PutMapping(value="/modify")
-	public String modify(@RequestBody UserDto userDto) throws Exception {
+	public String userInfoModify(@RequestBody UserDto userDto) throws Exception {
 		if(userService.updateUser(userDto.getId(), userDto) == 1) {
 			log.info("회원 수정 정상 완료 : {}", userDto.getId());
 		} else {
@@ -115,14 +132,29 @@ public class UserController {
 		return "index.html";
 	}
 	
+	@GetMapping(value="/join/{email}")
+	public String emailVerification(@PathVariable String email) throws Exception {
+		log.info("이메일 인증");
+		return "";
+	}
 	
 	
-	@PostMapping("/test")
-    public String test() {
-		log.info("에엥");
-    	return "success";
-    }
+	@GetMapping("/review/board")
+	public String userReviewBoard() {
+		return "";
+	}
 	
+	@GetMapping("/review/hotplace")
+	public String userReviewHotplace() {
+		return "";
+	}
+	
+	@GetMapping("/test")
+	public String test() {
+		log.info("SecurityUtil.getCurrentMemberId(); {}", SecurityUtil.getCurrentMemberId());
+		SecurityUtil.getCurrentMemberId();
+		return SecurityUtil.getCurrentMemberId();
+	}
 	
 	
 }
