@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PageNavigation {
+
 	private boolean startRange; // 현재 페이지가 이전이 눌려지지 않는 범위의 페이지 체크
 	private boolean endRange; // 현재 페이지가 다음이 눌려지지 않는 범위의 페이지 체크
 	private int totalCount; // 총 게시글 갯수
@@ -23,7 +24,6 @@ public class PageNavigation {
 	public boolean isEndRange() {
 		return endRange;
 	}
-	 
 	public void makeNavigator() {
 		int startPage = (currentPage - 1) / naviSize * naviSize + 1;
 		int endPage = startPage + naviSize - 1;
@@ -50,4 +50,5 @@ public class PageNavigation {
 		builder.append("		</ul> \n");
 		this.navigator = builder.toString();
 	}
+
 }

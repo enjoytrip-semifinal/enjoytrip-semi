@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -20,20 +19,17 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfiguration {
 
-//	Swagger-UI 2.x 확인
-//	http://localhost:8080/{your-app-root}/swagger-ui.html
-//	Swagger-UI 3.x 확인
-//	http://localhost:8080/{your-app-root}/swagger-ui/index.html
- 
-	private String version = "V1";
-	private String title = "asd" + version; 
+//	http://localhost:8080/swagger-ui/index.html
+	
+	private String version = "Version";
+	private String title = "EnjoyTrip " + version;
 	
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes()).produces(getProduceContentTypes())
 					.apiInfo(apiInfo()).groupName(version).select()
-					.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.hotplace.controller"))
-					.paths(regex("/hotplace/.*")).build()
+					.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.**.controller"))
+					.paths(regex("/**/.*")).build()
 					.useDefaultResponseMessages(false);
 	}
 	
@@ -52,8 +48,7 @@ public class SwaggerConfiguration {
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title(title)
-				.description("<h3>TEST</h3>") 
+				.description("<h3>EnjoyTrip API Reference </h3>")
 				.version("1.0").build();
 	}
-	
 }

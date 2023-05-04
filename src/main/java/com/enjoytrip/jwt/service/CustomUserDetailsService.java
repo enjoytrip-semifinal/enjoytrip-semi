@@ -11,8 +11,9 @@ import com.enjoytrip.user.entity.UserDto;
 import com.enjoytrip.user.repository.UserRespository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -22,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-		
+		log.info("UserbyUsername : {}", id);
 		return userRepository.findByid(id)
 				.map(this::createUserDetails)
 				.orElseThrow( () -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다."));
@@ -37,7 +38,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 	 * 것이 좋지만, 예제에서는 편의를 위해 검증 객체를 생성할 때 encoding을 해줌.
 	 */
 	private UserDetails createUserDetails(UserDto userDto) {
-		return User.builder().username(userDto.getUsername()).password(passwordEncoder.encode(userDto.getPassword()))
+		
+		return User.builder()
+				.username(userDto.getUsername()).password(passwordEncoder.encode(userDto.getPassword()))
 				.roles(userDto.getRoles().toArray(new String[0])).build();
 	}
 
