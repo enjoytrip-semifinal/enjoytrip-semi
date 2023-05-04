@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enjoytrip.board.model.mapper.BoardMapper">
+
+	<resultMap type="fileInfoDto" id="file">
+		<result column="save_folder" property="saveFolder"/>
+		<result column="original_file" property="originalFile"/>
+		<result column="save_file" property="saveFile"/>
+	</resultMap>
+
+	<sql id="search">
+		<if test="word != null and word != ''">
+			<if test="key == 'title'">
+				where title like concat('%', #{word}, '%')
+			</if>
+			
+			<if test="key == 'content'">
+				where content like concat('%', #{word}, '%')
+			</if>
+			
+			<if test="key == 'userid'">
+				where userid = ${word}
+			</if>
+		</if>
+	</sql>
+
+	<!-- board -->
+	<!-- 글 전체 가져오기 -->
+	<select id="listBoard" parameterType="map" resultType="boardDto">
+		select b.boardid, DATE_FORMAT(b.register_time, '%Y-%m-%d %H:%i:%s') as 'registertime', 
+			   b.hit, b.title, b.userid, b.content, u.nickname
+		from board b left join user u using(userid)
+		<include refid="search"></include>
+		order by boardid desc
+		limit #{start}, #{listsize}
+	</select>
+	
+	<!-- 전체 글 수 가져오기 -->
+	<select id="getTotalBoardCount" parameterType="map" resultType="int">
+		select count(boardid)
+		from board
+		<include refid="search"></include>
+	</select>
+	
+	<!-- 글 하나 가져오기 -->
+	<select id="viewBoard" parameterType="int" resultType="boardDto">
+			select boardid, DATE_FORMAT(register_time, '%Y-%m-%d %H:%i:%s') as 'registertime', hit, title, content, userid
+			from board
+			where boardid = #{boardid}
+	</select>
+	
+	<!-- 글 쓰기 -->
+	<insert id="writeBoard" parameterType="boardDto">
+			insert into board(boardid, register_time, hit, title, content, userid)
+			values (default, now(), #{hit}, #{title}, #{content}, #{userid})
+	</insert>
+	
+	<!-- 글 수정 -->
+	<update id="modifyBoard" parameterType="boardDto">
+			update board
+			set title = #{title}, content = #{content}
+			where boardid = #{boardid}
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="deleteBoard" parameterType="java.lang.Integer">
+			delete from board
+			where boardid = #{boardId}
+	</delete>
+	
+	<!-- 조회수 늘리기 -->
+	<update id="updateHit" parameterType="int">
+		update board
+		set hit = hit + 1
+		where boardid = #{boardid}
+	</update>
+	
+	<!-- 파일 업로드 -->
+	<insert id="registerFile" parameterType="boardDto">
+		insert into file_info (idx, boardid, save_folder, original_file, save_file)
+		values
+		<foreach collection="fileInfos" item="fileinfo" separator=" , ">
+			(default, #{boardid}, #{fileinfo.saveFolder}, #{fileinfo.originalFile}, #{fileinfo.saveFile})
+		</foreach>
+	</insert>
+	
+	<select id="fileInfoList" resultMap="file" parameterType="int">
+		select save_folder, original_file, save_file
+		from file_info
+		where boardid = #{boardid}
+	</select>
+	
+	<!-- 파일 삭제 -->
+	<delete id="deleteFile" parameterType="int">
+		delete from file_info
+		where boardid = #{boardId}
+	</delete>
+</mapper>

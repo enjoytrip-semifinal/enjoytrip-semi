@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,7 +52,7 @@ public class JwtTokenProvider {
 		// 권한 가져오기
 		String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(","));
-
+		log.info("authroities : {}", authorities);
 		long now = (new Date()).getTime();
 		// Access Token 생성
 		Date accessTokenExpiresIn = new Date(now + 86400000);
@@ -85,6 +87,11 @@ public class JwtTokenProvider {
 		UserDetails principal = new User(claims.getSubject(), "", authorities);
 		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 	}
+	
+    // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN": "TOKEN 값"
+    public String resolveToken(HttpServletRequest request) {
+        return request.getHeader("X-AUTH-TOKEN");
+    }
 
 	// 토큰 정보를 검증하는 메서드
 	public boolean validateToken(String token) {

@@ -19,27 +19,22 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfiguration {
 
-//	Swagger-UI 2.x 확인
-//	http://localhost:8080/{your-app-root}/swagger-ui.html
-//	Swagger-UI 3.x 확인
-//	http://localhost:8080/{your-app-root}/swagger-ui/index.html
-
-	private String version = "V1";
+//	http://localhost:8080/swagger-ui/index.html
+	private String version = "Version";
 	private String title = "EnjoyTrip " + version;
 	
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes()).produces(getProduceContentTypes())
 					.apiInfo(apiInfo()).groupName(version).select()
-					.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.itinerary.controller"))
-					.paths(regex("/itinerary/.*")).build()
+					.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.**.controller"))
+					.paths(regex("/**/.*")).build()
 					.useDefaultResponseMessages(false);
 	}
 	
 	private Set<String> getConsumeContentTypes() {
         Set<String> consumes = new HashSet<>();
         consumes.add("application/json;charset=UTF-8");
-//      consumes.add("application/xml;charset=UTF-8");
         consumes.add("application/x-www-form-urlencoded");
         return consumes;
     }
@@ -52,8 +47,7 @@ public class SwaggerConfiguration {
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title(title)
-				.description("<h3>EnjoyTrip</h3>") 
+				.description("<h3>EnjoyTrip API Reference </h3>")
 				.version("1.0").build();
 	}
-	
 }
