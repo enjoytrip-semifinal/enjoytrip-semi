@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@MapperScan(basePackages = {"com.enjoytrip.**.mapper"})
+@MapperScan(basePackages = {"com.enjoytrip.**.model.mapper"})
 public class WebMvcConfiguration implements WebMvcConfigurer{
 	// 허용하는 범위를 설정
 	@Override

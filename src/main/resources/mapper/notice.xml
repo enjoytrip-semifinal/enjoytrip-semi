@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.enjoytrip.notice.model.mapper.NoticeMapper">
+	<select id="listNotice" resultType="NoticeDto">
+		select *
+		from notice
+	</select>
+
+	<select id="getNotice" parameterType="int" resultType="NoticeDto">
+		select *
+		from notice where
+		noticeid=#{noticeid}
+	</select>
+
+	<insert id="write" parameterType="NoticeDto">
+		insert into notice (noticeid,
+		register_time, hit, title, content, adminid)
+		values (default, now(), 0,
+		#{title}, #{content}, #{adminid})
+	</insert>
+
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from notice where
+		noticeid=#{noticeid}
+	</delete>
+
+	<update id="modify" parameterType="NoticeDto">
+		update
+		notice set
+		title=#{title}, register_time=now(), content=#{content}
+		where
+		noticeid=#{noticeid}
+	</update>
+
+	<update id="updateNoticeHit" parameterType="java.lang.Integer">
+		update notice set
+		hit=hit+1 where noticeid=#{noticeid}
+	</update>
+</mapper>
