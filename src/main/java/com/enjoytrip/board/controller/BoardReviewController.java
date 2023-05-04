@@ -37,7 +37,8 @@ public class BoardReviewController {
 	
 	/* 리뷰 관련 */
 	// 1. 리뷰 반환
-	@ApiOperation(value = "페이징 처리된 리뷰 조회", notes = "페이징 처리된 리뷰 <b>목록</b>을 리턴합니다.")
+	@ApiOperation(value = "페이징 처리된 리뷰 조회", notes = "페이징 처리된 리뷰 <b>목록</b>을 리턴합니다. <br>"
+			+ "넘겨줘야하는 QueryString ..../list?pgno=[값]&boardid=[값]")
 	@GetMapping("/list")
 	public ResponseEntity<?> listReview(@RequestParam Map<String, String> map) {
 		List<BoardReviewDto> list = boardReviewService.listReview(map);
@@ -55,10 +56,11 @@ public class BoardReviewController {
 	}
 	
 	// 2. 리뷰 쓰기
+	@ApiOperation(value = "리뷰 쓰기", notes = "리뷰를 작성하여 저장합니다.")
 	@PostMapping("/write")
-	public ResponseEntity<?> writeReview(@RequestBody BoardReviewDto boardReview, HttpSession session) {
+	public ResponseEntity<?> writeReview(@RequestBody BoardReviewDto boardReview) {
 		
-		// 로그인한 사용자 정보를 입력해야함 (로그인 합치면 넣을 예정)
+		// 사용자 정보
 		
 		// ===========================================
 		
@@ -75,7 +77,8 @@ public class BoardReviewController {
 	}
 	
 	// 3. 리뷰  삭제
-	@DeleteMapping("/delete/{boardId}")
+	@ApiOperation(value = "리뷰 삭제", notes = "리뷰를 삭제합니다.")
+	@DeleteMapping("/delete/{boardReviewId}")
 	public ResponseEntity<?> deleteReview(@PathVariable int boardReviewId) {
 		int result = boardReviewService.deleteReview(boardReviewId);
 		
@@ -91,7 +94,8 @@ public class BoardReviewController {
 	}
 	
 	// 4. 리뷰 수정
-	@PutMapping("/modify/{boardId}")
+	@ApiOperation(value = "리뷰 수정", notes = "리뷰를 수정합니다.")
+	@PutMapping("/modify/{boardReviewId}")
 	public ResponseEntity<?> modifyReview(@RequestBody BoardReviewDto boardReview) {
 		int result = boardReviewService.modifyReview(boardReview);
 		

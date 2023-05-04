@@ -6,33 +6,29 @@
 
 	<!-- 리뷰 가져오기 -->
 	<select id="listReview" parameterType="map" resultType="boardReviewDto">
-			select * from boardreview
+			select *
+			from boardreview
+			where boardid = #{boardid}
 			order by boardreviewid desc
 			limit #{start}, #{listsize}
 	</select>
 	
 	<!-- 리뷰 쓰기 -->
 	<insert id="writeReview" parameterType="boardReviewDto">
-		<![CDATA[
 			insert into boardreview(boardreviewid, title, content, date, userid, boardid)
 			values (default, #{title}, #{content}, now(), #{userid}, #{boardid})
-		]]>
 	</insert>
 	
 	<!-- 리뷰 수정 -->
 	<update id="modifyReview" parameterType="boardReviewDto">
-		<![CDATA[
 			update boardreview
-			set title = #{title} content = #{content}
-			where boardid = #{boardId} and boardreviewid = #{boardreviewid}
-		]]>
+			set title = #{title}, content = #{content}
+			where boardid = #{boardid} and boardreviewid = #{boardreviewid}
 	</update>
 	
 	<!-- 리뷰 삭제 -->
 	<delete id="deleteReview" parameterType="int">
-		<![CDATA[
 			delete from boardreview
 			where boardreviewid = #{boardreviewid}
-		]]>
 	</delete>
 </mapper>

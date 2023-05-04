@@ -30,8 +30,8 @@
 	<!-- 글 전체 가져오기 -->
 	<select id="listBoard" parameterType="map" resultType="boardDto">
 		select b.boardid, DATE_FORMAT(b.register_time, '%Y-%m-%d %H:%i:%s') as 'registertime', 
-			   b.hit, b.title, b.userid, b.content
-		from board b
+			   b.hit, b.title, b.userid, b.content, u.nickname
+		from board b left join user u using(userid)
 		<include refid="search"></include>
 		order by boardid desc
 		limit #{start}, #{listsize}

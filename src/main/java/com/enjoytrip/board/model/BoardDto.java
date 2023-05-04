@@ -16,5 +16,6 @@ public class BoardDto {
 	private String title;
 	private String content;
 	private int userid;
+	private String nickname;
 	private List<FileInfoDto> fileInfos;
 }

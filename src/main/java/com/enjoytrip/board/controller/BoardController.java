@@ -54,8 +54,7 @@ public class BoardController {
 	
 	/* 게시판 글 관련 */
 	// 1. 페이징 처리된 게시판 글 조회
-	@ApiOperation(value = "페이징 처리된 게시판 글 조회", notes = "페이징 처리된 게시판의 <b>목록</b>을 리턴합니다. "
-			+ "											<br> URL: /board/list?pgno=[num]&key=[String]&word=[String]")
+	@ApiOperation(value = "페이징 처리된 게시판 글 조회", notes = "페이징 처리된 게시판의 <b>목록</b>을 리턴합니다.")
 	@GetMapping("/list")
 	public ResponseEntity<?> listBoard(@RequestParam Map<String, String> map) throws Exception {
 		List<BoardDto> list = boardService.listBoard(map);
@@ -100,11 +99,11 @@ public class BoardController {
 	}
 	
 	// 3. 게시판 글 쓰기
-	@ApiOperation(value = "게시판 글 쓰기")
+	@ApiOperation(value = "게시판 글 쓰기", notes = "게시판의 글 하나를 작성합니다.")
 	@PostMapping("/write")
-	public ResponseEntity<?> writeBoard(@RequestBody BoardDto board, @RequestParam("upfile") MultipartFile[] files, HttpSession session) throws Exception {
-		// 로그인한 사용자 정보를 입력해야함 (로그인 합치면 넣을 예정)
-		
+	public ResponseEntity<?> writeBoard(@RequestBody BoardDto board, @RequestBody MultipartFile[] files) throws Exception {
+		// 사용자 정보 
+			
 		// ===========================================
 		
 		// 파일 입력 부분
@@ -153,7 +152,7 @@ public class BoardController {
 	}
 	
 	// 4. 게시판 글 삭제
-	@ApiOperation(value = "게시판 글 하나 삭제")
+	@ApiOperation(value = "게시판 글 하나 삭제", notes = "게시판의 글 하나를 삭제합니다.")
 	@DeleteMapping("/delete/{boardId}")
 	public ResponseEntity<?> deleteBoard(@PathVariable int boardId) throws Exception {
 		int result = boardService.deleteBoard(boardId, uploadPath);
@@ -170,7 +169,7 @@ public class BoardController {
 	}
 	
 	// 5. 게시판 수정
-	@ApiOperation(value = "게시판 글 하나 수정")
+	@ApiOperation(value = "게시판 글 하나 수정", notes = "게시판의 글 하나를 수정합니다.")
 	@PutMapping("/modify/{boardId}")
 	public ResponseEntity<?> modifyBoard(@RequestBody BoardDto board) {
 		int result = boardService.modifyBoard(board);
