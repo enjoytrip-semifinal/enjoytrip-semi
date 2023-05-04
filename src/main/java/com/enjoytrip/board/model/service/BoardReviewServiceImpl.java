@@ -1,11 +1,14 @@
 package com.enjoytrip.board.model.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.enjoytrip.board.model.BoardReviewDto;
 import com.enjoytrip.board.model.mapper.BoardReviewMapper;
+import com.enjoytrip.util.SizeConstant;
 
 @Service
 public class BoardReviewServiceImpl implements BoardReviewService{
@@ -16,9 +19,19 @@ public class BoardReviewServiceImpl implements BoardReviewService{
 		this.boardReviewMapper = boardReviewMapper;
 	}
 	
+	// 리뷰 반환
 	@Override
-	public List<BoardReviewDto> listReview() {
-		return boardReviewMapper.listReview();
+	public List<BoardReviewDto> listReview(Map<String, String> map) {
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		int pgNo = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
+		int start = pgNo * SizeConstant.LIST_SIZE - SizeConstant.LIST_SIZE;
+		
+		param.put("start", start);
+		param.put("listsize", SizeConstant.LIST_SIZE);
+		
+		return boardReviewMapper.listReview(param);
 	}
 
 	@Override

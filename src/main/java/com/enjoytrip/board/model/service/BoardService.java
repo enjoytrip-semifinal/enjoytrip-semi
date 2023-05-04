@@ -11,7 +11,8 @@ public interface BoardService {
 	List<BoardDto> listBoard(Map<String, String> map) throws SQLException ;
 	PageNavigation makePageNavigation(Map<String, String> map) throws Exception;
 	BoardDto viewBoard(int boardId);
-	int writeBoard(BoardDto board);
-	int deleteBoard(int boardId);
+	int writeBoard(BoardDto board) throws Exception;
 	int modifyBoard(BoardDto board);
+	void updateHit(int boardId) throws Exception;
+	int deleteBoard(int boardId, String uploadPath) throws Exception;
 }

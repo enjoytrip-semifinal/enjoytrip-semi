@@ -1,13 +1,16 @@
 package com.enjoytrip.board.model.service;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.enjoytrip.board.model.BoardDto;
+import com.enjoytrip.board.model.FileInfoDto;
 import com.enjoytrip.board.model.mapper.BoardMapper;
 import com.enjoytrip.util.PageNavigation;
 import com.enjoytrip.util.SizeConstant;
@@ -41,14 +44,35 @@ public class BoardServiceImpl implements BoardService{
 	
 	// 글 쓰기
 	@Override
-	public int writeBoard(BoardDto board) {
-		return boardMapper.writeBoard(board);
+	@Transactional
+	public int writeBoard(BoardDto board) throws Exception {
+		int reuslt = boardMapper.writeBoard(board);
+		
+		List<FileInfoDto> fileInfos = board.getFileInfos();
+		if (fileInfos != null && !fileInfos.isEmpty()) {
+			boardMapper.registerFile(board);
+		}
+		
+		return reuslt;
 	}
 
 	// 글 삭제
 	@Override
-	public int deleteBoard(int boardId) {
-		return boardMapper.deleteBoard(boardId);
+	public int deleteBoard(int boardId, String uploadPath) throws Exception {
+		List<FileInfoDto> fileList = boardMapper.fileInfoList(boardId);
+		
+		if (!fileList.isEmpty()) {
+			boardMapper.deleteFile(boardId);
+		}
+		
+		int result = boardMapper.deleteBoard(boardId);
+		
+		for(FileInfoDto fileInfoDto : fileList) {
+			File file = new File(uploadPath + File.separator + fileInfoDto.getSaveFolder() + File.separator + fileInfoDto.getSaveFile());
+			file.delete();
+		}
+		
+		return result;
 	}
 
 	// 글 수정
@@ -98,5 +122,11 @@ public class BoardServiceImpl implements BoardService{
 		pageNavigation.makeNavigator();
 
 		return pageNavigation;
+	}
+
+	// 조회수 증가
+	@Override
+	public void updateHit(int boardId) throws Exception{
+		boardMapper.updateHit(boardId);
 	}
 }

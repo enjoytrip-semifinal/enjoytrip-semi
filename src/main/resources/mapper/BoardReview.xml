@@ -5,10 +5,10 @@
 <mapper namespace="com.enjoytrip.board.model.mapper.BoardReviewMapper">
 
 	<!-- 리뷰 가져오기 -->
-	<select id="listReview">
-		<![CDATA[
+	<select id="listReview" parameterType="map" resultType="boardReviewDto">
 			select * from boardreview
-		]]>
+			order by boardreviewid desc
+			limit #{start}, #{listsize}
 	</select>
 	
 	<!-- 리뷰 쓰기 -->
