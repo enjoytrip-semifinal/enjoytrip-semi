@@ -28,8 +28,8 @@ public class SwaggerConfiguration {
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes()).produces(getProduceContentTypes())
 					.apiInfo(apiInfo()).groupName(version).select()
-					.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.notice.controller"))
-					.paths(regex("/notice/.*")).build()
+					.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.**.controller"))
+					.paths(regex("/**/.*")).build()
 					.useDefaultResponseMessages(false);
 	}
 	
@@ -51,6 +51,4 @@ public class SwaggerConfiguration {
 				.description("<h3>EnjoyTrip API Reference </h3>")
 				.version("1.0").build();
 	}
-	
 }
-
