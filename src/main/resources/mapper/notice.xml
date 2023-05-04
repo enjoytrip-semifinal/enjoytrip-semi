@@ -4,20 +4,22 @@
 
 <mapper
 	namespace="com.enjoytrip.notice.model.mapper.NoticeMapper">
-	<select id="listNotice" resultType="noticeDto">
+	<select id="listNotice" resultType="NoticeDto">
 		select *
 		from notice
 	</select>
 
-	<select id="getNotice" parameterType="int">
+	<select id="getNotice" parameterType="int" resultType="NoticeDto">
 		select *
-		from notice where noticeid=#{noticeid}
+		from notice where
+		noticeid=#{noticeid}
 	</select>
 
-	<insert id="write" parameterType="noticeDto">
+	<insert id="write" parameterType="NoticeDto">
 		insert into notice (noticeid,
 		register_time, hit, title, content, adminid)
-		values (default, now(), 0, #{title}, #{content}, #{adminid})
+		values (default, now(), 0,
+		#{title}, #{content}, #{adminid})
 	</insert>
 
 	<delete id="delete" parameterType="java.lang.Integer">
@@ -25,9 +27,10 @@
 		noticeid=#{noticeid}
 	</delete>
 
-	<update id="modify" parameterType="NoticeDto" >
+	<update id="modify" parameterType="NoticeDto">
 		update
-		notice set title=#{title}, registertime=now()
+		notice set
+		title=#{title}, register_time=now(), content=#{content}
 		where
 		noticeid=#{noticeid}
 	</update>
