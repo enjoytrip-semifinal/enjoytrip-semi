@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enjoytrip.itinerary.model.mapper.ItineraryMapper">
+
+	<resultMap type="ItineraryDto" id="itinerary">
+		<result column="itineraryid" property="itineraryid"/>
+		<result column="userid" property="userid"/>
+	</resultMap>
+	
+	<resultMap type="ItineraryDetailDto" id="detail">
+		<result column="orders" property="orders"/>
+		<result column="itineraryid" property="itineraryid"/>
+		<result column="placeid" property="placeid"/>
+		<result column="userid" property="userid"/>
+		<result column="date" property="date"/>
+		<result column="startdate" property="startdate"/>
+		<result column="enddate" property="enddate"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+	</resultMap>
+	
+	<resultMap type="ItineraryReviewDto" id="review">
+		<result column="itineraryreviewid" property="itineraryreviewid"/>
+		<result column="content" property="content"/>
+		<result column="date" property="date"/>
+		<result column="orders" property="orders"/>
+		<result column="itineraryid" property="itineraryid"/>
+		<result column="userid" property="userid"/>
+	</resultMap>
+	
+	<insert id="writeItinerary" parameterType="ItineraryDetailDto">
+		insert into itinerarydetail (itineraryId,orders,placeId,userId,date,startDate,endDate,title,content)
+		values (#{itineraryid}, #{orders},  #{placeid}, #{userid}, now(),now(), now(),#{title},#{content})
+	</insert>
+	
+	<select id="listItinerary" resultMap="itinerary">
+		select * from itinerary
+	</select>
+	
+	<select id="selectOne" resultType="ItineraryDto" parameterType="java.lang.Integer">
+		select * from itinerary where itineraryId=#{itineraryid}
+	</select>
+	
+	<delete id="deleteItinerary" parameterType="java.lang.Integer">
+		delete from itinerary where itineraryId=#{itineraryid}
+	</delete>
+	
+	<update id="modifyItinerary" parameterType="ItineraryDetailDto">
+		update itinerarydetail set title=#{title}, content=#{content}, startdate=#{startdate}, enddate=#{enddate}
+		where itineraryId=#{itineraryid}
+	</update>
+	
+	<insert id="reviewItinerary" parameterType="ItineraryReviewDto">
+		insert into itineraryreview (content,date,orders,itineraryId,userid)
+		values ( #{content}, now(), #{orders}, #{itineraryid}, #{userid})
+	</insert>
+</mapper>
