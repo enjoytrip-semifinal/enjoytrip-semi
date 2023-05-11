@@ -84,8 +84,7 @@ public class HotplaceRestController {
 		}
 	}
 	
-	//
-	//@PostMapping(value="list/{num}")
+	
 	@PutMapping(value = "list/{num}")
 	public ResponseEntity<?> listOneView(@PathVariable("num")Integer num, @RequestBody HotplaceDto hotplaceDto) throws Exception {
 		try {
