@@ -61,7 +61,7 @@ public class HotplaceRestController {
 	}
 	
 	@GetMapping(value="list")
-	public ResponseEntity<?> list(@RequestParam Map<String, String> map) throws Exception {
+	public ResponseEntity<?> list(@RequestParam Map<String, Integer> map) throws Exception {
 	      try {
 	    	  System.out.println(map.get("sido"));
 	         //return new ResponseEntity<List<HotplaceDto>>(service.listHotplace(map), HttpStatus.OK);

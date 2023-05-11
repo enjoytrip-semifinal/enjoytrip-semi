@@ -26,6 +26,7 @@
 		<result column="save_file" property="saveFile" />
 	</resultMap>
 
+	<!-- 글 작성하기 -->
 	<insert id="writeHotplace" parameterType="HotplaceDto">
 		insert into hotplace
 		(user_id,latitude,longitude,title,content,regdate,like_count,hit,sido,gugun,type)
@@ -37,6 +38,7 @@
 		</selectKey>
 	</insert>
 
+	<!-- 글 작성할 때 올린 파일도 같이 등록하기 -->
 	<insert id="registerFile" parameterType="hotplaceDto">
 		insert into file_info (review_id, save_folder, original_file,
 		save_file)
@@ -48,9 +50,10 @@
 		</foreach>
 	</insert>
 
+	<!-- 검색 조건 걸어줄거임 -->
 	<sql id="search">
 
-		<if test="sido!=0 or gugun!=0 or type!=0">
+		<if test="sido != 0 or gugun!=0 or type!=0">
 			where
 			<if test="sido!=0 and gugun!=0">
 				sido = #{sido} and gugun = #{gugun}
@@ -77,6 +80,12 @@
 		limit #{start}, #{listsize}
 	</select>
 
+	<!-- 전체 글 수 가져오기 -->
+	<select id="getTotalHotplaceCount" parameterType="map" resultType="int">
+		select count(reviewId)
+		from hotplace
+		<include refid="search"></include>
+	</select>
 
 	<select id="getHotplace" parameterType="int"
 		resultMap="hotplace">

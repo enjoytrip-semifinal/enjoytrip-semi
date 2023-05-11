@@ -25,7 +25,7 @@ public interface HotplaceService {
 	int updateHit(int reviewId) throws Exception;
 
 	// 6. 전체 목록 불러오기, 현재 광관지 유형을 따라서 보여줄 것이다.
-	List<HotplaceDto> listHotplace(Map<String, String> param) throws Exception;
+	List<HotplaceDto> listHotplace(Map<String, Integer> param) throws Exception;
 	//List<HotplaceDto> listHotplace() throws Exception;
 
 	// 7. 파일 등록
