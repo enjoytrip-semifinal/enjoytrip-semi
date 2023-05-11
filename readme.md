@@ -1,4 +1,7 @@
 ##여행계획
+라우팅 정보
+![AB46A499-FF96-437F-A813-356511A56BEC](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/98890934/27453249-2bbe-47a7-a000-5e431c18fca8)
+
 
 1.전체 여행계획 리스트로 가져오기
 ![리스트가져오기1](https://user-images.githubusercontent.com/76669772/235839585-a5fda6f5-ac9d-4749-95f6-8e62f288a8ee.PNG)
