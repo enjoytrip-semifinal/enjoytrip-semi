@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.enjoytrip.hotplace.model.HotplaceDto;
+import com.enjoytrip.hotplace.model.HotplaceReplyDto;
 import com.enjoytrip.util.PageNavigation;
 
 import io.swagger.models.auth.In;
@@ -34,6 +35,9 @@ public interface HotplaceService {
 	// 8. 하나의 게시글만 봄
 	HotplaceDto getHotplace(int reviewId) throws Exception;
 	
-	//9. 페이징 처리인것 같음
+	//9. 페이징 처리
 	PageNavigation makePageNavigation(Map<String, Integer> map) throws Exception;
+	
+	//10. 해당하는 글의 댓글만 가져욤
+	List<HotplaceReplyDto> replyList(int hotplaceId) throws Exception;
 }

@@ -25,5 +25,6 @@ public class HotplaceDto {
 	private String userId;
 	private int like;
 	private int hit;
+	private List<HotplaceReplyDto> replyList;
 }
  

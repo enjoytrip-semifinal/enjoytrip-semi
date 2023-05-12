@@ -11,14 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.enjoytrip.hotplace.model.FileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceDto;
+import com.enjoytrip.hotplace.model.HotplaceReplyDto;
 import com.enjoytrip.hotplace.model.mapper.HotplaceMapper;
+import com.enjoytrip.hotplace.model.mapper.HotplaceReplyMapper;
 import com.enjoytrip.util.PageNavigation;
 import com.enjoytrip.util.SizeConstant;
 
 @Service
 public class HotplaceServiceImpl implements HotplaceService {
 
+
 	private HotplaceMapper hotplaceMapper;
+	private HotplaceReplyMapper hotplaceReplyMapper;
 
 	public HotplaceServiceImpl(HotplaceMapper hotplaceMapper) {
 		// TODO Auto-generated constructor stub
@@ -44,17 +48,26 @@ public class HotplaceServiceImpl implements HotplaceService {
 
 	@Override
 	@Transactional
-	public int deleteHotplace(int reviewId, String path) throws Exception {
+	public int deleteHotplace(int hotplaceId, String path) throws Exception {
+		
+		
 		// TODO Auto-generated method stub
 
 		// 해당 게시글에 맞는 file을 먼저 가져와준다
-		List<FileInfoDto> fileList = hotplaceMapper.fileInfoList(reviewId);
+		List<FileInfoDto> fileList = hotplaceMapper.fileInfoList(hotplaceId);
+		//삭제할 때 댓글도 함께 삭제해줘야 한다. -> 해당 게시글에 있는 댓글 정보를 불러온다.
+		List<HotplaceReplyDto> replyList = hotplaceMapper.replyList(hotplaceId);
+		
 		// 게시글에 존재하는 파일을 삭제해준다.
 		if (!fileList.isEmpty()) {
-			hotplaceMapper.deleteFile(reviewId);
+			hotplaceMapper.deleteFile(hotplaceId);
+		}
+		
+		if(!replyList.isEmpty()) {	//댓글이 존재한다.
+			hotplaceReplyMapper.deleteReplyAll(hotplaceId);
 		}
 		// 게시글을 먼저 삭제해준다
-		int result = hotplaceMapper.deleteHotplace(reviewId);
+		int result = hotplaceMapper.deleteHotplace(hotplaceId);
 
 		for(FileInfoDto fileInfoDto : fileList) {
 			File file = new File(path + File.separator + fileInfoDto.getSaveFolder() + File.separator + fileInfoDto.getSaveFile());
@@ -71,21 +84,22 @@ public class HotplaceServiceImpl implements HotplaceService {
 	}
 
 	@Override
-	public int updateLike(int reviewId) throws SQLException {
+	@Transactional
+	public int updateLike(int hotplaceId) throws SQLException {
 		// TODO Auto-generated method stub
-		return hotplaceMapper.updateLike(reviewId);
+		return hotplaceMapper.updateLike(hotplaceId);
 	}
 
 	@Override
-	public int updateHit(int reviewId) throws SQLException {
+	public int updateHit(int hotplaceId) throws SQLException {
 		// TODO Auto-generated method stub
-		return hotplaceMapper.updateHit(reviewId);
+		return hotplaceMapper.updateHit(hotplaceId);
 	}
 
 	@Override
-	public HotplaceDto getHotplace(int reviewId) throws SQLException {
+	public HotplaceDto getHotplace(int hotplaceId) throws SQLException {
 		// TODO Auto-generated method stub
-		return hotplaceMapper.getHotplace(reviewId);
+		return hotplaceMapper.getHotplace(hotplaceId);
 	}
 
 	@Override
@@ -150,6 +164,12 @@ public class HotplaceServiceImpl implements HotplaceService {
 		param.put("listsize", SizeConstant.LIST_SIZE);
 
 		return hotplaceMapper.listHotplace(param);
+	}
+
+	@Override
+	public List<HotplaceReplyDto> replyList(int hotplaceId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

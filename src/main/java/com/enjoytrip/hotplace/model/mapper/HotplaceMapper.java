@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.enjoytrip.hotplace.model.FileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceDto;
+import com.enjoytrip.hotplace.model.HotplaceReplyDto;
 
 @Mapper
 public interface HotplaceMapper {
@@ -45,4 +46,7 @@ public interface HotplaceMapper {
 	
 	//11. 페이징 처리를 위해 전체 게시글 수를 구해준다.
 	int getTotalHotplaceCount(Map<String, Object> param) throws SQLException;
+	
+	//12. 해당 게시글에 맞는 댓글을 가져오는 함수
+	List<HotplaceReplyDto> replyList(int hotplaceId) throws Exception;
 }
