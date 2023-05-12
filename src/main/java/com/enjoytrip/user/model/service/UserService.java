@@ -100,6 +100,13 @@ public class UserService {
         return roles.get(0);
     }
 	
+	// user정보 가져오기(user수정에서씀)
+	@Transactional
+	public UserDto userInfo(String id) throws Exception{
+		Optional<UserDto> user = userRespository.findByid(id);
+		return user.get();
+	}
+	
 	@Transactional
 	public String findId(String email) throws Exception {
 		if(userRespository.findByemail(email).isPresent()) {

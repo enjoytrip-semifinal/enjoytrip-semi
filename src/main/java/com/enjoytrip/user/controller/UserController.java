@@ -46,15 +46,21 @@ public class UserController {
 	private final JwtTokenProvider jwtTokenProvider;
 	
 	@GetMapping("/login")
-	public String login() {
-		log.info("GET : /user/login");
-		return "/user/login";
+	public ResponseEntity<?> login() {
+		// 로그인 페이지 이동
+		log.info("로그인 페이지 이동");
+		try {
+			return new ResponseEntity<String>("로그인 페이지 이동에 성공!", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("로그인 페이지 이동에 실패", HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
 	}
 	
 	// 230506 : 로그인 고침
 	@PostMapping("/newlogin") 
 	public ResponseEntity<TokenInfo> authorize(@RequestBody UserLoginRequestDto userLoginRequestDto){
-		log.info("new LOGIN !! ");
+		log.info("로그인 요청 중");
 		String id = userLoginRequestDto.getId();
 		String password = userLoginRequestDto.getPassword();
 		TokenInfo tokenInfo = userService.login(id, password);
@@ -73,7 +79,8 @@ public class UserController {
 	@PostMapping("/refresh-token")
 	public ResponseEntity<?> refreshToken(@RequestBody TokenRefreshRequestDto requestDto) {
 		String requestRefreshToken = requestDto.getRefreshToken();
-		log.info("{}", requestRefreshToken);
+		log.info("현재 리프레시 토큰 : {}", requestRefreshToken);
+		
 		try {
 			userService.validateRefreshToken(requestRefreshToken);
 			String id = userService.findRefrestokenByrefreshtoken(requestRefreshToken).getId();
@@ -86,8 +93,9 @@ public class UserController {
 		} catch (Exception e) {
 			new TokenRefreshException(requestRefreshToken, " -> 이 리프레시 토큰은 DB에 존재하지 않습니다!...");
 		}
+		
 		log.info("리프레시 토큰 에러 !");
-		return null;
+		return new ResponseEntity<String>("모종의 이유로 리프레시 토큰 과정에서 실패했습니다 ㅜㅜ", HttpStatus.INTERNAL_SERVER_ERROR);
 
 	}
 	
@@ -140,18 +148,27 @@ public class UserController {
 	
 	// ## 회원 가입 관련 ## //
 	@GetMapping("/join")
-	public String join() {
-		
-		return "user/join";
+	public ResponseEntity<?> join() {
+		try {
+			return new ResponseEntity<String>("회원 가입 페이지 이동 성공", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("회원 가입 페이지 이동 실패. ", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@PostMapping("/join")
-	public String userJoin(@RequestBody UserDto userDto) throws Exception {
+	public ResponseEntity<?> userJoin(@RequestBody UserDto userDto) throws Exception {
 		
-		userService.join(userDto);
-		
-		return "redirect:/user/join";
+		try {
+			userService.join(userDto);
+			return new ResponseEntity<String>("회원 가입 성공", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("기존 가입유저가 있거나 통신 오류입니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
+	
 	// 2.2 join - check id - GET
 //	int idCheck(String userId) throws Exception;
 	
@@ -159,32 +176,41 @@ public class UserController {
 //	void emailVerification(UserDto userDto) throws Exception;
 	
 	@DeleteMapping(value="/join/{id}")
-	public String userDeleteJoin(@PathVariable String id) throws Exception {
+	public ResponseEntity<?> userDeleteJoin(@PathVariable String id) throws Exception {
 		String loginedId = SecurityUtil.getCurrentMemberId();
 		// 로그인된 ID 와 내가 delete 주소로 온 아이디가 같을 경우에만 삭제 가능
 		
 		if(loginedId.equals(id) && userService.deleteUser(id) == 1) {
 			log.info("회원 탈퇴 정상 완료 : {}", id);
+			return ResponseEntity.ok("회원 탈퇴 정상 완료");
 		} else {
 			log.info("회원 탈퇴 실패!! :  {}", id);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
-		return "index.html";
+		
 	}
 	
 	@GetMapping("/modify")
 	public ResponseEntity<?> existingInfo(Principal principal) throws Exception {
-		log.info("principal.getName():{}", principal.getName());
-		return null;
+		String id = SecurityUtil.getCurrentMemberId();
+		// 수정할 유저 값 불러오기
+		try {
+			return new ResponseEntity<UserDto>(userService.userInfo(id), HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("유저 정보 가져오기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@PutMapping(value="/modify")
-	public String userInfoModify(@RequestBody UserDto userDto) throws Exception {
+	public int userInfoModify(@RequestBody UserDto userDto) throws Exception {
 		if(userService.updateUser(userDto.getId(), userDto) == 1) {
 			log.info("회원 수정 정상 완료 : {}", userDto.getId());
+			return 1;
 		} else {
 			log.info("회원 수정 실패!! :  {}", userDto.getId());
+			return 0;
 		}
-		return "index.html";
 	}
 	
 	@GetMapping(value="/join/{email}")
@@ -206,12 +232,17 @@ public class UserController {
 		return "";
 	}
 	
+	
+	
+	// 아래부터는 테스트 용도입니다. 실제로 사용하지 않습니다.
+	
 	@GetMapping("/test")
 	public String test() {
 		log.info("SecurityUtil.getCurrentMemberId(); {}", SecurityUtil.getCurrentMemberId());
 		SecurityUtil.getCurrentMemberId();
 		return SecurityUtil.getCurrentMemberId();
 	}
+	
 	
 	@GetMapping("/auth/admin/test")
 	public String admin_test() {
