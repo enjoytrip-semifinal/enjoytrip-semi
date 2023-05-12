@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class BoardReviewDto {
-	private int boardreviewid;
+	private int board_review_id;
 	private String title;
 	private String content;
 	private String date;
