@@ -44,14 +44,20 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         } else {
         	log.info("유효성 실패");
         }
+        
+        // new LOGIC 230516 pjh
+//        if (token != null && token)
+        
+        
         chain.doFilter(request, response);
     }
  
     // Request Header 에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
+        
         log.info("bearer Token : {}" ,bearerToken); 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
         return null;
