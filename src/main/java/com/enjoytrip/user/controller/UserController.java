@@ -1,13 +1,20 @@
 package com.enjoytrip.user.controller;
 
 import java.security.Principal;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.javassist.expr.NewArray;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.enjoytrip.jwt.service.JwtTokenProvider;
 import com.enjoytrip.jwt.service.SecurityUtil;
 import com.enjoytrip.jwt.service.TokenInfo;
+import com.enjoytrip.jwt.service.TokenRefreshException;
 import com.enjoytrip.user.entity.UserDto;
 import com.enjoytrip.user.model.service.UserService;
 
@@ -34,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	
 	private final UserService userService;
-	
+	private final JwtTokenProvider jwtTokenProvider;
 	
 	@GetMapping("/login")
 	public String login() {
@@ -42,9 +51,49 @@ public class UserController {
 		return "/user/login";
 	}
 	
+	// 230506 : 로그인 고침
+	@PostMapping("/newlogin") 
+	public ResponseEntity<TokenInfo> authorize(@RequestBody UserLoginRequestDto userLoginRequestDto){
+		log.info("new LOGIN !! ");
+		String id = userLoginRequestDto.getId();
+		String password = userLoginRequestDto.getPassword();
+		TokenInfo tokenInfo = userService.login(id, password);
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + tokenInfo.getAccessToken());
+		
+		log.info("tokeninfo : {}", tokenInfo);
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//		log.info("authentication : {}", authentication.toString());
+		
+		return new ResponseEntity<TokenInfo>(new TokenInfo(tokenInfo.getGrantType(), tokenInfo.getAccessToken(), tokenInfo.getRefreshToken()), httpHeaders, HttpStatus.OK);
+	}
+	
+	// 230506
+	@PostMapping("/refresh-token")
+	public ResponseEntity<?> refreshToken(@RequestBody TokenRefreshRequestDto requestDto) {
+		String requestRefreshToken = requestDto.getRefreshToken();
+		log.info("{}", requestRefreshToken);
+		try {
+			userService.validateRefreshToken(requestRefreshToken);
+			String id = userService.findRefrestokenByrefreshtoken(requestRefreshToken).getId();
+			log.info("id : {}", id);
+			// String rtoken = jwtTokenProvider.generateRefreshToken(id);
+			String role = "ROLE_" + userService.findRolesById(id);
+			String atoken = jwtTokenProvider.genereateAccessToken(id, role);
+			
+			return ResponseEntity.ok(new TokenInfo("Bearer", atoken, requestRefreshToken));
+		} catch (Exception e) {
+			new TokenRefreshException(requestRefreshToken, " -> 이 리프레시 토큰은 DB에 존재하지 않습니다!...");
+		}
+		log.info("리프레시 토큰 에러 !");
+		return null;
+
+	}
+	
 	// ## 로그인 관련 ## //
 	@PostMapping("/login")
-	public TokenInfo login(@RequestBody UserLoginRequestDto userLoginRequestDto, HttpSession session) {
+	public TokenInfo login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
 		log.info("/user/login !!");
 		String id = userLoginRequestDto.getId();
 		String password = userLoginRequestDto.getPassword();
@@ -52,6 +101,8 @@ public class UserController {
 		TokenInfo tokenInfo = userService.login(id, password);
 //		TokenInfo tokenInfo = userService.login("test", "1234");
 		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + tokenInfo.getAccessToken());
 		
 		// session.setAttribute("userid", id);
 		
@@ -70,6 +121,7 @@ public class UserController {
 		return "";
 	}
 	
+
 	
 	// 아이디 찾기 (이메일로 아이디 찾기)
 	@GetMapping("/find-id")
@@ -108,10 +160,13 @@ public class UserController {
 	
 	@DeleteMapping(value="/join/{id}")
 	public String userDeleteJoin(@PathVariable String id) throws Exception {
-		if(userService.deleteUser(id) == 1) {
-			log.info("회원 삭제 정상 완료 : {}", id);
+		String loginedId = SecurityUtil.getCurrentMemberId();
+		// 로그인된 ID 와 내가 delete 주소로 온 아이디가 같을 경우에만 삭제 가능
+		
+		if(loginedId.equals(id) && userService.deleteUser(id) == 1) {
+			log.info("회원 탈퇴 정상 완료 : {}", id);
 		} else {
-			log.info("회원 삭제 실패!! :  {}", id);
+			log.info("회원 탈퇴 실패!! :  {}", id);
 		}
 		return "index.html";
 	}
@@ -141,11 +196,13 @@ public class UserController {
 	
 	@GetMapping("/review/board")
 	public String userReviewBoard() {
+		String loginedId = SecurityUtil.getCurrentMemberId();
 		return "";
 	}
 	
 	@GetMapping("/review/hotplace")
 	public String userReviewHotplace() {
+		String loginedId = SecurityUtil.getCurrentMemberId();
 		return "";
 	}
 	
@@ -154,6 +211,16 @@ public class UserController {
 		log.info("SecurityUtil.getCurrentMemberId(); {}", SecurityUtil.getCurrentMemberId());
 		SecurityUtil.getCurrentMemberId();
 		return SecurityUtil.getCurrentMemberId();
+	}
+	
+	@GetMapping("/auth/admin/test")
+	public String admin_test() {
+		return "i am an admin.";
+	}
+	
+	@GetMapping("/auth/user/test")
+	public String user_test() {
+		return "i am an user.";
 	}
 	
 	
