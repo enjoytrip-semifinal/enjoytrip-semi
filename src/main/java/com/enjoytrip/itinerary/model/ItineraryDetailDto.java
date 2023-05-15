@@ -4,13 +4,11 @@ import lombok.Data;
 
 @Data
 public class ItineraryDetailDto {
-	private int orders;
-	private int itineraryid;
-	private String placeid;
+	private int itineraryId;
 	private int userid;
 	private String date;
-	private String startdate;
-	private String enddate;
+	private String startDate;
+	private String endDate;
 	private String title;
 	private String content;
 }

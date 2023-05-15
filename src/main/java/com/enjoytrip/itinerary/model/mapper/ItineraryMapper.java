@@ -6,13 +6,13 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.enjoytrip.itinerary.model.ItineraryDetailDto;
-import com.enjoytrip.itinerary.model.ItineraryDto;
-import com.enjoytrip.itinerary.model.ItineraryReviewDto;
+import com.enjoytrip.itinerary.model.ItineraryPlaceDto;
+import com.enjoytrip.itinerary.model.ItineraryReplyDto;
 
 @Mapper
 public interface ItineraryMapper {
 	//1. 여행계획 전체 리스트 가져오기
-	List<ItineraryDto> listItinerary(Map<String, Object> map);
+	List<ItineraryDetailDto> listItinerary(Map<String, Object> map);
 	
 	//2.여행계획 작성하기
 	int writeItinerary(ItineraryDetailDto itinerarydetaildto);
@@ -24,10 +24,10 @@ public interface ItineraryMapper {
 	int deleteItinerary(int num);
 	
 	//5. 여행계획 세부내용 보기
-	ItineraryDto selectOne(Integer num);
+	ItineraryDetailDto selectOne(Integer num);
 	
 	//6.여행계획댓글 작성하기
-	Integer reviewItinerary(ItineraryReviewDto itineraryreviewdto);
+	Integer reviewItinerary(ItineraryReplyDto ItineraryReplyDto);
 
 
 }

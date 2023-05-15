@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.enjoytrip.itinerary.model.ItineraryDetailDto;
-import com.enjoytrip.itinerary.model.ItineraryDto;
-import com.enjoytrip.itinerary.model.ItineraryReviewDto;
+import com.enjoytrip.itinerary.model.ItineraryPlaceDto;
+import com.enjoytrip.itinerary.model.ItineraryReplyDto;
 import com.enjoytrip.itinerary.model.mapper.ItineraryMapper;
 
 @Service
@@ -24,7 +24,7 @@ public class ItineraryServiceImpl implements ItineraryService{
 	
 	//1. 여행계획 전체 리스트 가져오기
 	@Override
-	public List<ItineraryDto> listItinerary(Map<String, Object> map) {
+	public List<ItineraryDetailDto> listItinerary(Map<String, Object> map) {
 		return itinerarymapper.listItinerary(map);
 	}
 	//2.여행계획 작성하기
@@ -47,14 +47,14 @@ public class ItineraryServiceImpl implements ItineraryService{
 	
 	//5. 여행계획 세부내용 보기
 	@Override
-	public ItineraryDto selectOne(Integer num) {
+	public ItineraryDetailDto selectOne(Integer num) {
 		return itinerarymapper.selectOne(num);
 	}
 	
 	//6.여행계획댓글 작성하기
 	@Override
-	public Integer reviewItinerary(ItineraryReviewDto itineraryreviewdto) {
-		return itinerarymapper.reviewItinerary(itineraryreviewdto);
+	public Integer reviewItinerary(ItineraryReplyDto ItineraryReplyDto) {
+		return itinerarymapper.reviewItinerary(ItineraryReplyDto);
 	}
 
 

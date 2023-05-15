@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.enjoytrip.itinerary.model.ItineraryDetailDto;
-import com.enjoytrip.itinerary.model.ItineraryDto;
-import com.enjoytrip.itinerary.model.ItineraryReviewDto;
+import com.enjoytrip.itinerary.model.ItineraryPlaceDto;
+import com.enjoytrip.itinerary.model.ItineraryReplyDto;
 import com.enjoytrip.itinerary.model.service.ItineraryService;
 
 import io.swagger.annotations.Api;
@@ -33,12 +33,13 @@ public class ItineraryController {
 		super();
 		this.itineraryService = itineraryService;
 	}
+	
 	//1. 여행계획 전체 리스트 가져오기
 	@GetMapping(value="/list")
 	public ResponseEntity<?> list() throws Exception {
 	      try {
-	    	  List<ItineraryDto> list = itineraryService.listItinerary(null);
-	         return new ResponseEntity<List<ItineraryDto>>(list, HttpStatus.OK);
+	    	  List<ItineraryDetailDto> list = itineraryService.listItinerary(null);
+	         return new ResponseEntity<List<ItineraryDetailDto>>(list, HttpStatus.OK);
 	      }catch(Exception e) {
 	    	  e.printStackTrace();
 	         return new ResponseEntity<String>("서버 오류",HttpStatus.INTERNAL_SERVER_ERROR);
@@ -82,7 +83,7 @@ public class ItineraryController {
 	@GetMapping(value="/list/{itineraryid}")
 	public ResponseEntity<?> listOneView(@PathVariable("itineraryid") Integer num) throws Exception {
 		try {
-			return new ResponseEntity<ItineraryDto>(itineraryService.selectOne(num), HttpStatus.OK);
+			return new ResponseEntity<ItineraryDetailDto>(itineraryService.selectOne(num), HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<String>("서버 오류",HttpStatus.INTERNAL_SERVER_ERROR);
@@ -91,9 +92,9 @@ public class ItineraryController {
 	
 	//6.여행계획댓글 작성하기
 	@PostMapping(value="/review")
-	public ResponseEntity<?> review(@RequestBody ItineraryReviewDto itineraryreviewdto) throws Exception {
+	public ResponseEntity<?> review(@RequestBody ItineraryReplyDto ItineraryReplyDto) throws Exception {
 	      try {
-	         return new ResponseEntity<Integer>(itineraryService.reviewItinerary(itineraryreviewdto), HttpStatus.OK);
+	         return new ResponseEntity<Integer>(itineraryService.reviewItinerary(ItineraryReplyDto), HttpStatus.OK);
 	      }catch(Exception e) {
 	    	  e.printStackTrace();
 	         return new ResponseEntity<String>("서버 오류",HttpStatus.INTERNAL_SERVER_ERROR);
