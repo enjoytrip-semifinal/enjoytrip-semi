@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.enjoytrip.hotplace.model.FileInfoDto;
+import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceDto;
+import com.enjoytrip.hotplace.model.HotplaceReplyDto;
+import com.enjoytrip.hotplace.model.service.HotplaceReplyService;
 import com.enjoytrip.hotplace.model.service.HotplaceService;
 
 import io.swagger.annotations.Api;
@@ -36,6 +38,9 @@ public class HotplaceRestController {
 	@Autowired
 	HotplaceService service;
 	
+	@Autowired
+	HotplaceReplyService replyService;
+	
 	@Value("${file.path}")
 	private String uploadPath;
 	
@@ -50,8 +55,8 @@ public class HotplaceRestController {
 		
 		try {
 			
-			hotplace.setRegDate(LocalDate.now().toString());
-			hotplace.setHit(0);
+			hotplace.setRegTime(LocalDate.now().toString());
+			//hotplace.setHitCount(0);	-> default값 0으로 db에서 설정
 			 return new ResponseEntity<Integer>(service.writeHotplace(hotplace), HttpStatus.OK);
 	      }catch(Exception e) {
 	    	  e.printStackTrace();
@@ -61,7 +66,7 @@ public class HotplaceRestController {
 		
 	}
 	
-	@GetMapping(value="list")
+	@GetMapping(value="/list")
 	public ResponseEntity<?> list(@RequestParam Map<String, Integer> map) throws Exception {
 	      try {
 	    	  System.out.println(map.get("sido"));
@@ -85,7 +90,7 @@ public class HotplaceRestController {
 	}
 	
 	
-	@PutMapping(value = "list/{num}")
+	@PutMapping(value = "/list/{num}")
 	public ResponseEntity<?> listOneView(@PathVariable("num")Integer num, @RequestBody HotplaceDto hotplaceDto) throws Exception {
 		try {
 			HotplaceDto hotplace = service.getHotplace(num);
@@ -101,7 +106,7 @@ public class HotplaceRestController {
 		}
 	}
 	
-	@DeleteMapping(value="list/{num}")
+	@DeleteMapping(value="/list/{num}")
 	public ResponseEntity<?> delete(@PathVariable("num")Integer num) throws Exception {
 		try {
 			return new ResponseEntity<Integer>(service.deleteHotplace(num,uploadPath), HttpStatus.OK);
@@ -110,4 +115,6 @@ public class HotplaceRestController {
 			return new ResponseEntity<String>("서버 오류",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+
 }
