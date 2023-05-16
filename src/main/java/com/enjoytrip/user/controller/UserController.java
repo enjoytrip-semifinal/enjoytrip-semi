@@ -80,6 +80,7 @@ public class UserController {
 			log.info("id : {}", id);
 			// String rtoken = jwtTokenProvider.generateRefreshToken(id);
 			String role = "ROLE_" + userService.findRolesById(id);
+			log.info("test: {}", role);
 			String atoken = jwtTokenProvider.genereateAccessToken(id, role);
 			
 			return ResponseEntity.ok(new TokenInfo("Bearer", atoken, requestRefreshToken));
