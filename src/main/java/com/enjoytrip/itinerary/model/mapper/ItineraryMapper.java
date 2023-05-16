@@ -12,7 +12,7 @@ import com.enjoytrip.itinerary.model.ItineraryReplyDto;
 @Mapper
 public interface ItineraryMapper {
 	//1. 여행계획 전체 리스트 가져오기
-	List<ItineraryDetailDto> listItinerary(Map<String, Object> map);
+	List<ItineraryDetailDto> listItinerary(Map<String, Object> param);
 	
 	//2.여행계획 작성하기
 	int writeItinerary(ItineraryDetailDto itinerarydetaildto);
@@ -26,8 +26,11 @@ public interface ItineraryMapper {
 	//5. 여행계획 세부내용 보기
 	ItineraryDetailDto selectOne(Integer num);
 	
-	//6.여행계획댓글 작성하기
-	Integer reviewItinerary(ItineraryReplyDto ItineraryReplyDto);
+	int getTotalItineraryCount(Map<String, Object> param);
+
+	void registerplace(ItineraryDetailDto itinerarydetaildto);
+
+	List<ItineraryPlaceDto> selectPlace(Integer num);
 
 
 }
