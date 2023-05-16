@@ -9,7 +9,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.enjoytrip.hotplace.model.FileInfoDto;
+import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceDto;
 import com.enjoytrip.hotplace.model.HotplaceReplyDto;
 import com.enjoytrip.hotplace.model.mapper.HotplaceMapper;
@@ -38,7 +38,7 @@ public class HotplaceServiceImpl implements HotplaceService {
 		int result = hotplaceMapper.writeHotplace(hotplaceDto);
 //		System.out.println("글입력 후 dto : " + hotplaceDto);
 
-		List<FileInfoDto> fileInfos = hotplaceDto.getFileInfos();
+		List<HotplaceFileInfoDto> fileInfos = hotplaceDto.getFileInfos();
 		if (fileInfos != null && !fileInfos.isEmpty()) {
 			hotplaceMapper.registerFile(hotplaceDto);
 		}
@@ -54,7 +54,7 @@ public class HotplaceServiceImpl implements HotplaceService {
 		// TODO Auto-generated method stub
 
 		// 해당 게시글에 맞는 file을 먼저 가져와준다
-		List<FileInfoDto> fileList = hotplaceMapper.fileInfoList(hotplaceId);
+		List<HotplaceFileInfoDto> fileList = hotplaceMapper.fileInfoList(hotplaceId);
 		//삭제할 때 댓글도 함께 삭제해줘야 한다. -> 해당 게시글에 있는 댓글 정보를 불러온다.
 		List<HotplaceReplyDto> replyList = hotplaceMapper.replyList(hotplaceId);
 		
@@ -69,7 +69,7 @@ public class HotplaceServiceImpl implements HotplaceService {
 		// 게시글을 먼저 삭제해준다
 		int result = hotplaceMapper.deleteHotplace(hotplaceId);
 
-		for(FileInfoDto fileInfoDto : fileList) {
+		for(HotplaceFileInfoDto fileInfoDto : fileList) {
 			File file = new File(path + File.separator + fileInfoDto.getSaveFolder() + File.separator + fileInfoDto.getSaveFile());
 			file.delete();
 		}
@@ -164,12 +164,6 @@ public class HotplaceServiceImpl implements HotplaceService {
 		param.put("listsize", SizeConstant.LIST_SIZE);
 
 		return hotplaceMapper.listHotplace(param);
-	}
-
-	@Override
-	public List<HotplaceReplyDto> replyList(int hotplaceId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

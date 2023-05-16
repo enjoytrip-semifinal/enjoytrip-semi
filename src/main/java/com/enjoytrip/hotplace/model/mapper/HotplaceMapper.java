@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.enjoytrip.hotplace.model.FileInfoDto;
+import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceDto;
 import com.enjoytrip.hotplace.model.HotplaceReplyDto;
 
@@ -39,7 +39,7 @@ public interface HotplaceMapper {
 	HotplaceDto getHotplace(int reviewId) throws SQLException;
 
 	// 9. 파일만 전체 가져오기
-	List<FileInfoDto> fileInfoList(int reviewId) throws Exception;
+	List<HotplaceFileInfoDto> fileInfoList(int reviewId) throws Exception;
 
 	// 10. 파일 삭제
 	int deleteFile(int reviewId) throws Exception;

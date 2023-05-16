@@ -12,19 +12,19 @@ import lombok.ToString;
 @Setter
 @ToString
 public class HotplaceDto {
-	private int reviewId;
-	private int type;
-	private int gugun;
-	private int sido;
+	private int hotplaceId;
+	private int likeCount;
+	private int hitCount;
 	private int latitude;
 	private int longitude;
 	private String title;
 	private String content;
-	private String regDate;
-	private List<FileInfoDto> fileInfos;
+	private String regTime;
 	private String userId;
-	private int like;
-	private int hit;
-	private List<HotplaceReplyDto> replyList;
+	private int sido;
+	private int gugun;
+	private int type;
+	private String address;
+	private List<HotplaceFileInfoDto> fileInfos;
 }
  
