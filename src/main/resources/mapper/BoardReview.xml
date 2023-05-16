@@ -8,7 +8,7 @@
 	<select id="listReview" parameterType="map" resultType="boardReviewDto">
 			select *
 			from board_reply
-			where board_id = #{board_id}
+			where board_id = #{id}
 			order by board_reply_id desc
 			limit #{start}, #{listsize}
 	</select>

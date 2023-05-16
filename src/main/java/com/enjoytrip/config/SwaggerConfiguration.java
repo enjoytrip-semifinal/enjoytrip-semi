@@ -42,7 +42,7 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
         		.apiInfo(apiInfo()).groupName("User").select()
 				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.*.controller"))
-				.paths(regex("/**/.*")).build()
+				.paths(regex("/user/.*")).build()
 				.useDefaultResponseMessages(false);
     }
 	

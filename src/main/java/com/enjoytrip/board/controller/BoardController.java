@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @Api(tags = {"게시판 API"})
 @RequestMapping("/board")
+@CrossOrigin("*")
 public class BoardController {
 	
 	private BoardService boardService;
@@ -80,7 +82,7 @@ public class BoardController {
 	@GetMapping("/list/{boardId}")
 	public ResponseEntity<?> viewBoard(@PathVariable int boardId, @RequestParam Map<String, String> map) throws Exception {
 		BoardDto board = boardService.viewBoard(boardId);
-		
+		System.out.println("tt");
 		// 조회수 하나 증가
 		boardService.updateHit(boardId);
 		
