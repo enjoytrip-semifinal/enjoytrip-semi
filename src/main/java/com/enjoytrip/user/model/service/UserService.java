@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.enjoytrip.jwt.service.JwtTokenProvider;
 import com.enjoytrip.jwt.service.TokenInfo;
+import com.enjoytrip.jwt.service.TokenRefreshException;
 import com.enjoytrip.user.entity.RefreshToken;
 import com.enjoytrip.user.entity.UserDto;
 import com.enjoytrip.user.repository.RefreshTokenRepository;
@@ -75,7 +76,8 @@ public class UserService {
 	    log.info("리프레시 토큰 기간 : {}", tokenDate);
 	    if (tokenDate.toInstant().isBefore(Instant.now())) {
 	        refreshTokenRepository.delete(refreshToken);
-	        throw new RuntimeException("Refresh token has expired");
+//	        throw new RuntimeException("Refresh token has expired");
+	        throw new TokenRefreshException(token, "리프레시 토큰이 만료되었습니다");
 	    }
 	    
 	    return refreshToken;
@@ -99,6 +101,13 @@ public class UserService {
         List<String> roles = userRespository.findRolesById(userId);
         return roles.get(0);
     }
+	
+	// user정보 가져오기(user수정에서씀)
+	@Transactional
+	public UserDto userInfo(String id) throws Exception{
+		Optional<UserDto> user = userRespository.findByid(id);
+		return user.get();
+	}
 	
 	@Transactional
 	public String findId(String email) throws Exception {
