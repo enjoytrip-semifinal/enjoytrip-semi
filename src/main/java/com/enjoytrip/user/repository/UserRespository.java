@@ -17,6 +17,6 @@ public interface UserRespository extends JpaRepository<UserDto, Long>{
 	//@Query(value = "SELECT nickname, password, email, address WHERE id = ?1", nativeQuery = true)
 	
 	
-	@Query(value = "SELECT roles FROM user_roles WHERE id = ?1", nativeQuery = true)
+	@Query(value = "SELECT roles FROM user_roles WHERE user_id = ?1", nativeQuery = true)
 	List<String> findRolesById(String id);
 }
