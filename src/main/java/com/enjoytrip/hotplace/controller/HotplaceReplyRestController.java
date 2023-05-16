@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,13 +31,10 @@ import io.swagger.annotations.ApiOperation;
 @RestController()
 @Api(tags = {"핫플레이스 댓글 API"})
 @RequestMapping("/hotplace/reply")
-public class HotplaceReplyController {
+public class HotplaceReplyRestController {
 
+	@Autowired
 	private HotplaceReplyService service;
-	public HotplaceReplyController(HotplaceReplyService service) {
-		super();
-		this.service = service;
-	}
 	
 	/* 리뷰 관련 */
 	// 1. 리뷰 반환
@@ -44,7 +42,7 @@ public class HotplaceReplyController {
 			+ "넘겨줘야하는 QueryString ..../list?pgno=[값]&boardid=[값]")
 	@GetMapping("/list")
 	public ResponseEntity<?> listReview(@RequestParam Map<String, String> map) {
-		List<HotplaceReplyDto> list = service.allReply(map);
+		List<HotplaceReplyDto> list = service.getAllReplyByHotplaceId(map);
 		
 		// 리뷰는 리뷰 리스트와 페이지 번호만 있으면 됨
 		Map<String, Object> returnMap = new HashMap<>();
