@@ -6,8 +6,9 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.enjoytrip.hotplace.model.FileInfoDto;
+import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceDto;
+import com.enjoytrip.hotplace.model.HotplaceReplyDto;
 
 @Mapper
 public interface HotplaceMapper {
@@ -28,7 +29,7 @@ public interface HotplaceMapper {
 	int updateHit(int reviewId) throws SQLException;
 
 	// 6. 전체 목록 불러오기, 현재 광관지 유형을 따라서 보여줄 것이다.
-	List<HotplaceDto> listHotplace(Map<String, Integer> param) throws SQLException;
+	List<HotplaceDto> listHotplace(Map<String, Object> param) throws SQLException;
 	//List<HotplaceDto> listHotplace() throws SQLException;
 
 	// 7. 파일 등록
@@ -38,11 +39,14 @@ public interface HotplaceMapper {
 	HotplaceDto getHotplace(int reviewId) throws SQLException;
 
 	// 9. 파일만 전체 가져오기
-	List<FileInfoDto> fileInfoList(int reviewId) throws Exception;
+	List<HotplaceFileInfoDto> fileInfoList(int reviewId) throws Exception;
 
 	// 10. 파일 삭제
 	int deleteFile(int reviewId) throws Exception;
 	
 	//11. 페이징 처리를 위해 전체 게시글 수를 구해준다.
 	int getTotalHotplaceCount(Map<String, Object> param) throws SQLException;
+	
+	//12. 해당 게시글에 맞는 댓글을 가져오는 함수
+	List<HotplaceReplyDto> replyList(int hotplaceId) throws Exception;
 }

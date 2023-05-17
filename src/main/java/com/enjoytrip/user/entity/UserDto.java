@@ -1,6 +1,7 @@
 package com.enjoytrip.user.entity;
 
 import lombok.AllArgsConstructor;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,8 +50,7 @@ public class UserDto implements UserDetails{
 	
 	private String nickname;
 	private String email;
-	private String sido;
-	private String gugun;
+	private String address;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -106,8 +106,7 @@ public class UserDto implements UserDetails{
 				.email(email)
 				.nickname(nickname)
 				.roles(Collections.singletonList("USER"))
-				.sido(sido)
-				.gugun(gugun)
+				.address(address)
 				.build();
 		
 		log.info(userDto.getRoles().get(0));

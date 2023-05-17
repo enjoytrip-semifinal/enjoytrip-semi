@@ -7,7 +7,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class FileInfoDto {
+public class HotplaceFileInfoDto {
+	private int hotplaceId;
 	private String saveFolder;
 	private String originalFile;
 	private String saveFile;
