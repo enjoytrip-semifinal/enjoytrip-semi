@@ -1,13 +1,10 @@
 package com.enjoytrip.itinerary.controller;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,13 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.enjoytrip.board.model.FileInfoDto;
 import com.enjoytrip.itinerary.model.ItineraryDetailDto;
 import com.enjoytrip.itinerary.model.ItineraryPlaceDto;
-import com.enjoytrip.itinerary.model.ItineraryReplyDto;
 import com.enjoytrip.itinerary.model.service.ItineraryService;
 import com.enjoytrip.util.PageNavigation;
 
@@ -68,33 +62,48 @@ public class ItineraryController {
 
 	}
 
-	// 2.여행계획 작성하기
 	@PostMapping(value = "/write")
-	public ResponseEntity<?> write(@RequestBody ItineraryDetailDto Itinerarydetaildto,
-			MultipartHttpServletRequest multipartRequest) throws Exception {
+	public ResponseEntity<?> write(@RequestBody ItineraryDetailDto itineraryDetailDto,
+	        MultipartHttpServletRequest multipartRequest) throws Exception {
 
-		List<ItineraryPlaceDto> itineraryPlaces = new ArrayList<ItineraryPlaceDto>();
-		ItineraryPlaceDto itineraryPlaceDto = new ItineraryPlaceDto();
-		itineraryPlaceDto.setPlaceOrder(0);
-		itineraryPlaceDto.setPlaceName(multipartRequest.getParameter("placeName"));
-		itineraryPlaceDto.setPlaceComment(multipartRequest.getParameter("placeComment"));
-		itineraryPlaceDto.setPlaceAddress(multipartRequest.getParameter("placeAddress"));
-		
-		itineraryPlaces.add(itineraryPlaceDto);
-		Itinerarydetaildto.setItineraryPlaces(itineraryPlaces);
-		
-		// 페이징 처리를 위한 Map
-		Map<String, String> pageMap = new HashMap<String, String>();
-		pageMap.put("pgno", "1");
+	    List<ItineraryPlaceDto> itineraryPlaces = new ArrayList<>();
 
-		int result = itineraryService.writeItinerary(Itinerarydetaildto);
-		if (result > 0) {
-			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-		}
+	    // Get the place information from multipart request
+	    List<String> placeNames = Arrays.asList(multipartRequest.getParameterValues("placeName"));
+	    List<String> placeComments = Arrays.asList(multipartRequest.getParameterValues("placeComment"));
+	    List<String> placeAddresses = Arrays.asList(multipartRequest.getParameterValues("placeAddress"));
 
+	    // Iterate over the place information and create ItineraryPlaceDto objects
+	    int placeOrder = 0;
+	    for (int i = 0; i < placeNames.size(); i++) {
+	        ItineraryPlaceDto itineraryPlaceDto = new ItineraryPlaceDto();
+	        itineraryPlaceDto.setPlaceName(placeNames.get(i));
+	        itineraryPlaceDto.setPlaceComment(placeComments.get(i));
+	        itineraryPlaceDto.setPlaceAddress(placeAddresses.get(i));
+	        itineraryPlaceDto.setPlaceOrder(placeOrder++);
+
+	        itineraryPlaces.add(itineraryPlaceDto);
+
+	        // Reset placeOrder to 0 for a new itinerary_id
+//	        if ((i + 1) % itineraryDetailDto.getItineraryId() == 0) {
+//	            placeOrder = 0;
+//	        }
+	    }
+
+	    itineraryDetailDto.setItineraryPlaces(itineraryPlaces);
+
+	    // 페이징 처리를 위한 Map
+	    Map<String, String> pageMap = new HashMap<>();
+	    pageMap.put("pgno", "1");
+
+	    int result = itineraryService.writeItinerary(itineraryDetailDto);
+	    if (result > 0) {
+	        return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	    }
 	}
+
 
 	// 3.여행계획 수정하기
 	@PutMapping(value = "/modify/{itinersryid}")
@@ -132,10 +141,6 @@ public class ItineraryController {
 	@GetMapping(value = "/detail/{itineraryid}")
 	public ResponseEntity<?> listOneView(@PathVariable("itineraryid") Integer num) throws Exception {
 		ItineraryDetailDto itinerary = itineraryService.selectOne(num);
-		List<ItineraryPlaceDto> itineraryPlaces = new ArrayList<ItineraryPlaceDto>();
-		itineraryPlaces = itineraryService.selectPlace(num);
-		
-		itinerary.setItineraryPlaces(itineraryPlaces);
 		
 		if (itinerary != null) {
 			return new ResponseEntity<ItineraryDetailDto>(itinerary, HttpStatus.OK);

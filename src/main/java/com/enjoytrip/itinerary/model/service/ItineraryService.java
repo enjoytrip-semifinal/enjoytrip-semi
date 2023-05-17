@@ -16,5 +16,4 @@ public interface ItineraryService {
 	public int deleteItinerary(int num);
 	public ItineraryDetailDto selectOne(Integer num);
 	public PageNavigation makePageNavigation(Map<String, String> map);
-	public List<ItineraryPlaceDto> selectPlace(Integer num);
 }

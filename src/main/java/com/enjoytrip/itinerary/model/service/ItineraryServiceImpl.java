@@ -46,7 +46,6 @@ public class ItineraryServiceImpl implements ItineraryService{
 	@Override
 	public int writeItinerary(ItineraryDetailDto itinerarydetaildto) {
 		int result = itinerarymapper.writeItinerary(itinerarydetaildto);
-		itinerarymapper.registerplace(itinerarydetaildto);
 		return result;
 	}
 	
@@ -103,12 +102,6 @@ public class ItineraryServiceImpl implements ItineraryService{
 
 		return pageNavigation;
 	}
-
-	@Override
-	public List<ItineraryPlaceDto> selectPlace(Integer num) {
-		return itinerarymapper.selectPlace(num);
-	}
-
 
 	
 }

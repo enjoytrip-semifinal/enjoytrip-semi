@@ -76,7 +76,7 @@ public class ItineraryReplyController {
 		pageMap.put("pgno", "1");
 		
 		if(result > 0) {
-			return new ResponseEntity<Void>(HttpStatus.OK);
+			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
@@ -93,7 +93,7 @@ public class ItineraryReplyController {
 		pageMap.put("pgno", "1");
 		
 		if(result > 0) {
-			return new ResponseEntity<Void>(HttpStatus.OK);
+			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
