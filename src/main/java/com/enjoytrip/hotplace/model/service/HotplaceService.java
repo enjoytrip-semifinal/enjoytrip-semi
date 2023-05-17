@@ -12,7 +12,7 @@ public interface HotplaceService {
 
 	PageNavigation makePageNavigation(Map<String, String> map) throws Exception;
 
-	HotplaceDto getHotplaceById(int hotplaceId);
+	HotplaceDto getHotplaceById(int hotplaceId)throws Exception;
 
 	int writeHotplace(HotplaceDto hotplace) throws Exception;
 
@@ -20,6 +20,8 @@ public interface HotplaceService {
 
 	int updateHit(int hotplaceId) throws Exception;
 
-	int deleteHotplace(int hotplaceId) throws Exception;
+	int deleteHotplace(int hotplaceId, String uploadpath) throws Exception;
+
+	int updateLike(int hotplaceId) throws Exception;
 
 }

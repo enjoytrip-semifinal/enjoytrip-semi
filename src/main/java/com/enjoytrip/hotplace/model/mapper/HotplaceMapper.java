@@ -20,7 +20,7 @@ public interface HotplaceMapper {
 	int deleteHotplace(int reviewId) throws SQLException;
 
 	// 3. 핫 플레이스 갱신(수정)
-	int modifyHotplace(HotplaceDto hotplaceDto) throws SQLException;
+	int updateHotplace(HotplaceDto hotplaceDto) throws SQLException;
 
 	// 4. 좋아요 수 증가
 	int updateLike(int reviewId) throws SQLException;
@@ -30,13 +30,12 @@ public interface HotplaceMapper {
 
 	// 6. 전체 목록 불러오기, 현재 광관지 유형을 따라서 보여줄 것이다.
 	List<HotplaceDto> listHotplace(Map<String, Object> param) throws SQLException;
-	//List<HotplaceDto> listHotplace() throws SQLException;
 
 	// 7. 파일 등록
 	void registerFile(HotplaceDto hotplaceDto) throws Exception;
 
 	// 8. 하나의 게시글만 봄
-	HotplaceDto getHotplace(int reviewId) throws SQLException;
+	HotplaceDto getHotplaceById(int reviewId) throws SQLException;
 
 	// 9. 파일만 전체 가져오기
 	List<HotplaceFileInfoDto> fileInfoList(int reviewId) throws Exception;
@@ -47,6 +46,4 @@ public interface HotplaceMapper {
 	//11. 페이징 처리를 위해 전체 게시글 수를 구해준다.
 	int getTotalHotplaceCount(Map<String, Object> param) throws SQLException;
 	
-	//12. 해당 게시글에 맞는 댓글을 가져오는 함수
-	List<HotplaceReplyDto> replyList(int hotplaceId) throws Exception;
 }

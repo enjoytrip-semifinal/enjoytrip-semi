@@ -42,7 +42,7 @@ public class HotplaceReplyRestController {
 			+ "넘겨줘야하는 QueryString ..../list?pgno=[값]&boardid=[값]")
 	@GetMapping("/list")
 	public ResponseEntity<?> listReview(@RequestParam Map<String, String> map) {
-		List<HotplaceReplyDto> list = service.getAllReplyByHotplaceId(map);
+		List<HotplaceReplyDto> list = service.listReply(map);
 		
 		// 리뷰는 리뷰 리스트와 페이지 번호만 있으면 됨
 		Map<String, Object> returnMap = new HashMap<>();
@@ -59,7 +59,7 @@ public class HotplaceReplyRestController {
 	// 2. 리뷰 쓰기
 	@ApiOperation(value = "리뷰 쓰기", notes = "리뷰를 작성하여 저장합니다.")
 	@PostMapping("/write")
-	public ResponseEntity<?> writeReview(@RequestBody HotplaceReplyDto replyDto) {
+	public ResponseEntity<?> writeReply(@RequestBody HotplaceReplyDto replyDto) {
 		
 		// 사용자 정보
 		
@@ -70,12 +70,10 @@ public class HotplaceReplyRestController {
 		pageMap.put("pgno", "1");
 		
 		//int result = boardReviewService.writeReview(boardReview);
-		try {
-			int result = service.writeReply(replyDto);
+		int result = service.writeReply(replyDto);
+		if(result > 0) {
 			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 		
@@ -103,7 +101,7 @@ public class HotplaceReplyRestController {
 	@PutMapping("/modify/{hotplaceReplyId}")
 	public ResponseEntity<?> modifyReview(@RequestBody HotplaceReplyDto replyDto) throws SQLException {
 		//int result = boardReviewService.modifyReview(boardReview);
-		int result = service.modifyReply(replyDto);
+		int result = service.updateReply(replyDto);
 		// 댓글을 쓰면 1번으로 이동한다.
 		Map<String, String> pageMap = new HashMap<String, String>();
 		pageMap.put("pgno", "1");
