@@ -26,7 +26,7 @@
 		<result column="save_folder" property="saveFolder" />
 		<result column="original_file" property="originalFile" />
 		<result column="save_file" property="saveFile" />
-	</resultMap>
+	</resultMap> 
 
 	<!-- 글 작성하기 -->
 	<insert id="writeHotplace" parameterType="HotplaceDto">

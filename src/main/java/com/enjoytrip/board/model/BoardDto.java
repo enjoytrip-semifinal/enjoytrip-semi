@@ -10,12 +10,12 @@ import lombok.ToString;
 @Setter
 @ToString
 public class BoardDto {
-	private int boardid;
-	private String registertime;
+	private int board_id;
+	private String register_time;
 	private int hit;
 	private String title;
 	private String content;
-	private int userid;
+	private int user_id;
 	private String nickname;
 	private List<FileInfoDto> fileInfos;
 }
