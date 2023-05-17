@@ -18,6 +18,8 @@ import com.enjoytrip.hotplace.model.mapper.HotplaceReplyMapper;
 import com.enjoytrip.util.PageNavigation;
 import com.enjoytrip.util.SizeConstant;
 
+import io.swagger.models.auth.In;
+
 @Service
 public class HotplaceServiceImpl implements HotplaceService {
 
@@ -113,7 +115,7 @@ public class HotplaceServiceImpl implements HotplaceService {
 
 		int naviSize = SizeConstant.NAVIGATION_SIZE;
 		int sizePerPage = SizeConstant.LIST_SIZE;
-		int currentPage = Integer.parseInt(map.get("pgno"));
+		int currentPage =Integer.parseInt( map.get("pgno")==null?"1":map.get("pgno"));
 		
 		pageNavigation.setCurrentPage(currentPage);
 		pageNavigation.setNaviSize(naviSize);
@@ -123,13 +125,16 @@ public class HotplaceServiceImpl implements HotplaceService {
 		// ------------------------------------------------------------- 
 		//int sido, int gugun, int type 가 만약 없다면? 임시로 0이라는 값을 넣어주고 이 값이 들어오면 전체 검색을 진행한다.
 
-		int sido = Integer.parseInt(map.get("sido"));
-		int gugun =  Integer.parseInt(map.get("gugun"));
-		int type = Integer.parseInt(map.get("type"));
+		int sido = Integer.parseInt( map.get("sido")==null?"0":map.get("sido"));
+		
+		int gugun = Integer.parseInt( map.get("gugun")==null?"0":map.get("gugun"));
+		
+		int type =  Integer.parseInt( map.get("type")==null?"0":map.get("type"));
+		
 		
 		param.put("sido", sido);
 		param.put("gugun", gugun);
-		param.put("type",gugun);
+		param.put("type",type);
 		
 		// -------------------------------------------------------------
 
@@ -148,17 +153,13 @@ public class HotplaceServiceImpl implements HotplaceService {
 
 	@Override
 	public List<HotplaceDto> listHotplace(Map<String, String> map) throws SQLException {
-		Map<String, Object> param = new HashMap<String, Object>();
-		String key = map.get("key");
+		Map<String, Object> param = new HashMap<String, Object>(); 
 		
-//		param.put("key", key == null ? "" : key);
-//		param.put("word", map.get("word") == null ? "" : map.get("word"));
+		param.put("sido", map.get("sido")==null?0:map.get("sido"));
+		param.put("gugun", map.get("gugun")==null?0:map.get("gugun"));
+		param.put("type", map.get("type")==null?0:map.get("type"));
 		
-		param.put("sido", map.get("sido")==null?"0":map.get("sido"));
-		param.put("gugun", map.get("gugun")==null?"0":map.get("gugun"));
-		param.put("type", map.get("type")==null?"0":map.get("type"));
-		
-		int pgNo = Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
+		int pgNo =  Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
 		int start = pgNo * SizeConstant.LIST_SIZE - SizeConstant.LIST_SIZE;
 		
 		param.put("start", start);

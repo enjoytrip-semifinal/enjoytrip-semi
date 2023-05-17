@@ -43,7 +43,7 @@ public class HotplaceReplyRestController {
 	@GetMapping("/list")
 	public ResponseEntity<?> listReview(@RequestParam Map<String, String> map) {
 		List<HotplaceReplyDto> list = service.listReply(map);
-		
+		System.out.println("????");
 		// 리뷰는 리뷰 리스트와 페이지 번호만 있으면 됨
 		Map<String, Object> returnMap = new HashMap<>();
 		returnMap.put("replyList", list);

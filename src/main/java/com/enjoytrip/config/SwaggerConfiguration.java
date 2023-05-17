@@ -32,6 +32,17 @@ public class SwaggerConfiguration {
 					.useDefaultResponseMessages(false);
 	}
 	
+	@Bean
+	public Docket hotplaceApi() {
+	     title = "hotplace API ";
+		
+		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes()).produces(getProduceContentTypes())
+					.apiInfo(apiInfo()).groupName("Hotplace").select()
+					.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.hotplace.controller"))
+					.paths(regex("/hotplace/.*")).build()
+					.useDefaultResponseMessages(false);
+	}
+	
 	private Set<String> getConsumeContentTypes() {
         Set<String> consumes = new HashSet<>();
         consumes.add("application/json;charset=UTF-8");
