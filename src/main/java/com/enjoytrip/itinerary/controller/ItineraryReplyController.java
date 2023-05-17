@@ -32,12 +32,13 @@ public class ItineraryReplyController {
 		this.itineraryReplyService = itineraryReplyService;
 	}
 	
+	// 댓글 리스트로 가져오기
 	@GetMapping("/list")
 	public ResponseEntity<?> listReply(@RequestParam Map<String, String> map){
 		
 		List<ItineraryReplyDto> list = itineraryReplyService.listReply(map);
 		
-		// 리뷰는 리뷰 리스트와 페이지 번호만 있으면 됨
+		// 댓글은 댓글 리스트와 페이지 번호만 있으면 됨
 		Map<String, Object> returnMap = new HashMap<>();
 		returnMap.put("replyList", list);
 		returnMap.put("pgno", map.get("pgno"));
@@ -49,8 +50,8 @@ public class ItineraryReplyController {
 		}
 	}
 	
-	// 2. 리뷰 쓰기
-	@ApiOperation(value = "리뷰 쓰기", notes = "리뷰를 작성하여 저장합니다.")
+	//  댓글 쓰기
+	@ApiOperation(value = "댓글 쓰기", notes = "댓글을 작성하여 저장합니다.")
 	@PostMapping("/write")
 	public ResponseEntity<?> writeReply(@RequestBody ItineraryReplyDto itineraryReply) {
 		
@@ -65,8 +66,8 @@ public class ItineraryReplyController {
 		}
 	}
 	
-	// 3. 리뷰  삭제
-	@ApiOperation(value = "리뷰 삭제", notes = "리뷰를 삭제합니다.")
+	//  댓글  삭제
+	@ApiOperation(value = "댓글 삭제", notes = "댓글을 삭제합니다.")
 	@DeleteMapping("/delete/{itineraryReplyId}")
 	public ResponseEntity<?> deleteReply(@PathVariable int itineraryReplyId) {
 		int result = itineraryReplyService.deleteReply(itineraryReplyId);
@@ -82,8 +83,8 @@ public class ItineraryReplyController {
 		}
 	}
 	
-	// 4. 리뷰 수정
-	@ApiOperation(value = "리뷰 수정", notes = "리뷰를 수정합니다.")
+	//  댓글 수정
+	@ApiOperation(value = "댓글 수정", notes = "댓글을 수정합니다.")
 	@PutMapping("/modify/{itineraryReplyId}")
 	public ResponseEntity<?> modifyReply(@RequestBody ItineraryReplyDto itineraryReply) {
 		int result = itineraryReplyService.modifyReply(itineraryReply);

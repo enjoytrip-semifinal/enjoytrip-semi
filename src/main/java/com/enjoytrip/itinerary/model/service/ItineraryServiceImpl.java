@@ -25,7 +25,7 @@ public class ItineraryServiceImpl implements ItineraryService{
 		this.itinerarymapper = itinerarymapper;
 	}
 	
-	//1. 여행계획 전체 리스트 가져오기
+	// 여행계획 전체 리스트 가져오기
 	@Override
 	public List<ItineraryDetailDto> listItinerary(Map<String, String> map) {
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -42,31 +42,32 @@ public class ItineraryServiceImpl implements ItineraryService{
 		
 		return itinerarymapper.listItinerary(param);
 	}
-	//2.여행계획 작성하기
+	// 여행계획 작성하기
 	@Override
 	public int writeItinerary(ItineraryDetailDto itinerarydetaildto) {
 		int result = itinerarymapper.writeItinerary(itinerarydetaildto);
 		return result;
 	}
 	
-	//3.여행계획 수정하기
+	// 여행계획 수정하기
 	@Override
 	public int modifyItinerary(ItineraryDetailDto itinerarydetaildto) {
 		return itinerarymapper.modifyItinerary(itinerarydetaildto);
 	}
 	
-	//4. 여행계획 삭제하기
+	// 여행계획 삭제하기
 	@Override
 	public int deleteItinerary(int num) {
 		return itinerarymapper.deleteItinerary(num);
 	}
 	
-	//5. 여행계획 세부내용 보기
+	// 여행계획 세부내용 보기
 	@Override
 	public ItineraryDetailDto selectOne(Integer num) {
 		return itinerarymapper.selectOne(num);
 	}
 	
+	// 페이징 처리
 	@Override
 	public PageNavigation makePageNavigation(Map<String, String> map) {
 		PageNavigation pageNavigation = new PageNavigation();

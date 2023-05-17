@@ -40,7 +40,7 @@ public class ItineraryController {
 		this.itineraryService = itineraryService;
 	}
 
-	// 1. 여행계획 전체 리스트 가져오기
+	// 여행계획 전체 리스트 가져오기
 	@GetMapping(value = "/list")
 	public ResponseEntity<?> list(@RequestParam Map<String, String> map) throws Exception {
 		List<ItineraryDetailDto> list = itineraryService.listItinerary(map);
@@ -61,7 +61,8 @@ public class ItineraryController {
 		}
 
 	}
-
+	
+	// 여행계획 작성
 	@PostMapping(value = "/write")
 	public ResponseEntity<?> write(@RequestBody ItineraryDetailDto itineraryDetailDto,
 	        MultipartHttpServletRequest multipartRequest) throws Exception {
@@ -103,9 +104,20 @@ public class ItineraryController {
 	        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	    }
 	}
-
-
-	// 3.여행계획 수정하기
+	
+	// 여행계획 세부사항 선택
+	@GetMapping(value = "/detail/{itineraryid}")
+	public ResponseEntity<?> listOneView(@PathVariable("itineraryid") Integer num) throws Exception {
+		ItineraryDetailDto itinerary = itineraryService.selectOne(num);
+		
+		if (itinerary != null) {
+			return new ResponseEntity<ItineraryDetailDto>(itinerary, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	// 여행계획 수정
 	@PutMapping(value = "/modify/{itinersryid}")
 	public ResponseEntity<?> modify(@RequestBody ItineraryDetailDto Itinerarydetaildto) throws Exception {
 		int result = itineraryService.modifyItinerary(Itinerarydetaildto);
@@ -120,8 +132,8 @@ public class ItineraryController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
-
-	// 4. 여행계획 삭제하기
+	
+	// 여행계획 삭제
 	@DeleteMapping(value = "/delete/{itineraryId}")
 	public ResponseEntity<?> delete(@PathVariable("itineraryId") Integer num) throws Exception {
 		int result = itineraryService.deleteItinerary(num);
@@ -136,16 +148,6 @@ public class ItineraryController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
+	
 
-	// 5. 여행계획 세부내용 보기
-	@GetMapping(value = "/detail/{itineraryid}")
-	public ResponseEntity<?> listOneView(@PathVariable("itineraryid") Integer num) throws Exception {
-		ItineraryDetailDto itinerary = itineraryService.selectOne(num);
-		
-		if (itinerary != null) {
-			return new ResponseEntity<ItineraryDetailDto>(itinerary, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-		}
-	}
 }
