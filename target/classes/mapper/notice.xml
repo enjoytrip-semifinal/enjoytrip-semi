@@ -47,6 +47,11 @@
 		values (default, now(), 0,
 		#{title}, #{content}, #{adminid})
 	</insert>
+	
+	<insert id="registFile" parameterType="NoticeDto">
+		insert into notice_file_Info (idx, notice_id, save_folder, original_file, save_file)
+		values ()
+	</insert>
 
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from notice where
