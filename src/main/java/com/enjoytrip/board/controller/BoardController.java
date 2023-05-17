@@ -56,7 +56,8 @@ public class BoardController {
 	
 	/* 게시판 글 관련 */
 	// 1. 페이징 처리된 게시판 글 조회
-	@ApiOperation(value = "페이징 처리된 게시판 글 조회", notes = "페이징 처리된 게시판의 <b>목록</b>을 리턴합니다.")
+	@ApiOperation(value = "페이징 처리된 게시판 글 조회", notes = "페이징 처리된 게시판의 <b>목록</b>을 리턴합니다. <br>"
+			+ "URL : localhost:9990/board/list?pgno=1&key=&word=")
 	@GetMapping("/list")
 	public ResponseEntity<?> listBoard(@RequestParam Map<String, String> map) throws Exception {
 		List<BoardDto> list = boardService.listBoard(map);
@@ -78,14 +79,14 @@ public class BoardController {
 	}
 	
 	// 2. 게시판 글 하나 조회
-	@ApiOperation(value = "게시판 글 하나 조회", notes = "원하는 게시글 <b>하나</b>를 리턴합니다.")
+	@ApiOperation(value = "게시판 글 하나 조회", notes = "원하는 게시글 <b>하나</b>를 리턴합니다. <br>"
+			+ "map 요소 : (1) pgno, (2) key, (3) word")
 	@GetMapping("/list/{boardId}")
 	public ResponseEntity<?> viewBoard(@PathVariable int boardId, @RequestParam Map<String, String> map) throws Exception {
 		BoardDto board = boardService.viewBoard(boardId);
-		System.out.println("tt");
+		
 		// 조회수 하나 증가
 		boardService.updateHit(boardId);
-		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		resultMap.put("board", board);
@@ -101,6 +102,8 @@ public class BoardController {
 	}
 	
 	// 3. 게시판 글 쓰기
+	// MultipartFile의 경우 Front-End에서 외부 Storage를 사용하여 URL만 받는 식으로 수정해야함
+	
 	@ApiOperation(value = "게시판 글 쓰기", notes = "게시판의 글 하나를 작성합니다.")
 	@PostMapping("/write")
 	public ResponseEntity<?> writeBoard(@RequestBody BoardDto board, @RequestBody MultipartFile[] files) throws Exception {

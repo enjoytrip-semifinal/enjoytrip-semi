@@ -38,7 +38,8 @@ public class BoardReviewController {
 	/* 리뷰 관련 */
 	// 1. 리뷰 반환
 	@ApiOperation(value = "페이징 처리된 리뷰 조회", notes = "페이징 처리된 리뷰 <b>목록</b>을 리턴합니다. <br>"
-			+ "넘겨줘야하는 QueryString ..../list?pgno=[값]&id=[값]")
+			+ "넘겨줘야하는 QueryString ..../list?pgno=[값]&id=[값]"
+			+ "이때 id는 board_id가 들어가야함")
 	@GetMapping("/list")
 	public ResponseEntity<?> listReview(@RequestParam Map<String, String> map) {
 		List<BoardReviewDto> list = boardReviewService.listReview(map);

@@ -20,7 +20,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfiguration {
 
-//	http://localhost:8080/swagger-ui/index.html
+	// 이 포트는 application.properties에서 확인 필요
+	// http://localhost:9990/swagger-ui/index.html
 	
 	private String title = "Enjoy Trip API";
 	
