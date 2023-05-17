@@ -11,8 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.enjoytrip"})
-@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
-
+//@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 public class EnjoytripApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EnjoytripApplication.class, args);   

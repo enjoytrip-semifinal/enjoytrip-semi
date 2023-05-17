@@ -23,7 +23,6 @@ public class SecurityConfig {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
 	
 //	private final LogoutHandler logoutHandler;
 	
@@ -48,21 +47,22 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/board/**").permitAll()
+                .antMatchers("/hotplace/**").permitAll()
+                .antMatchers("/user/*").permitAll()
 //                .anyRequest().authenticated()
-//                .antMatchers("/user/auth/user/*").hasRole("USER")
-//                .antMatchers("/user/auth/admin/*").hasRole("ADMIN")
+                .antMatchers("/user/auth/user/*").hasRole("USER")
+                .antMatchers("/user/auth/admin/*").hasRole("ADMIN")
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .logout()
-                .logoutUrl("/user/logout") 
+//                .logout()
+//                .logoutUrl("/user/logout") 
 //                .addLogoutHandler(logoutHandler)
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
 //                .logoutSuccessHandler(
-//                		(request, response, authentication) 
-//                		-> SecurityContextHolder.clearContext()
+//                		(request, response, authentication) ->
+//                		SecurityContextHolder.clearContext()
 //                )
+//                .invalidateHttpSession(true)
          ;
         return http.build();
     }

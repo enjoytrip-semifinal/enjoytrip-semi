@@ -10,7 +10,8 @@ import com.enjoytrip.user.entity.RefreshToken;
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long>{
 	Optional<RefreshToken> findByrefreshtoken(String refreshToken);
-	void deleteByrefreshtoken(String refreshToken); 
+	void deleteByrefreshtoken(String refreshToken);
+	void deleteByid(String id);
 	
 }
  

@@ -3,6 +3,7 @@ package com.enjoytrip.user.controller;
 import java.security.Principal;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.javassist.expr.NewArray;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.enjoytrip.jwt.service.JwtTokenProvider;
@@ -93,10 +96,15 @@ public class UserController {
 	}
 	
 
-//	@GetMapping("/logout")
-	public String logout() {
-		// LOGOUT HANDLE로 처리
-		return "";
+	@GetMapping("/logout")
+	public ResponseEntity<?> logout(HttpServletRequest request) throws Exception{		
+		String authHeader = request.getHeader("Authorization");		
+		if(StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+			String accessToken = authHeader.substring("Bearer ".length());
+			userService.logoutByToken(accessToken);
+			return new ResponseEntity<String>("로그아웃 성공", HttpStatus.OK);
+		} 
+		return new ResponseEntity<String>("로그아웃 실패", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	
@@ -139,19 +147,25 @@ public class UserController {
 			@ApiResponse(code = 200, message = "회원 가입 성공"), 
 			@ApiResponse(code = 500, message = "기존 가입 유저가 있거나  통신 오류")})
 	@PostMapping("/join")
-	public ResponseEntity<?> userJoin(@RequestBody UserDto userDto) throws Exception {
-		
-		try {
-			userService.join(userDto);
-			return new ResponseEntity<String>("회원 가입 성공", HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<String>("기존 가입유저가 있거나 통신 오류입니다.", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	public ResponseEntity<?> userJoin(@RequestBody UserDto userDto) {
+		userService.join(userDto);
+		return new ResponseEntity<String>("회원 가입 성공", HttpStatus.OK);
 	}
 	
-	// 2.2 join - check id - GET
-//	int idCheck(String userId) throws Exception;
+	
+	@ApiOperation(value = "아이디 중복 여부를 체크합니다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "이 아이디는 사용가능합니다.^~^"), 
+			@ApiResponse(code = 409, message = "기존 가입 유저가 있습니다.")})
+	@GetMapping("/join")
+	public ResponseEntity<?> idCheck(@RequestParam String id) throws Exception {
+		// 아이디가 없으면 200, 있으면 409
+		if(userService.checkForDuplicateId(id)) {
+			return new ResponseEntity<String>("아이디가 존재합니다.", HttpStatus.CONFLICT);
+		} else {
+			return new ResponseEntity<String>("중복 없어요~~", HttpStatus.OK);
+		}		
+	}
 	
 	// 2.3 join - email verification - GET
 //	void emailVerification(UserDto userDto) throws Exception;
