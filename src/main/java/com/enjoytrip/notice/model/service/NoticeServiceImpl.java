@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.enjoytrip.notice.model.NoticeDto;
+import com.enjoytrip.notice.model.NoticeFileInfoDto;
 import com.enjoytrip.notice.model.mapper.NoticeMapper;
 import com.enjoytrip.util.PageNavigation;
 import com.enjoytrip.util.SizeConstant;
@@ -47,6 +48,11 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	public int write(NoticeDto noticeDto) throws Exception {
+		
+		List<NoticeFileInfoDto> fileInfos = noticeDto.getFileInfos();
+		if (fileInfos != null && fileInfos.isEmpty()) {
+			noticeMapper.registFile(noticeDto);
+		}
 		return noticeMapper.write(noticeDto);
 	}
 

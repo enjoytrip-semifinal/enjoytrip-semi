@@ -23,4 +23,6 @@ public interface NoticeMapper {
 	int updateNoticeHit(int noticeid) throws SQLException;
 	
 	int getTotalNoticeCount(Map<String, Object> param) throws SQLException;
+	
+	int registFile(NoticeDto notice) throws SQLException;
 }
