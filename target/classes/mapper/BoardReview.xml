@@ -26,9 +26,15 @@
 			where board_id = #{board_id} and board_reply_id = #{board_reply_id}
 	</update>
 	
-	<!-- 리뷰 삭제 -->
+	<!-- 리뷰 하나 삭제 -->
 	<delete id="deleteReview" parameterType="int">
 			delete from board_reply
 			where board_reply_id = #{board_reply_id}
+	</delete>
+	
+	<!-- 게시글을 지울 때 사용하는 리뷰 전체 삭제 -->
+	<delete id="deleteAllReview" parameterType="int">
+		delete from board_reply
+		where board_id = #{board_id}
 	</delete>
 </mapper>

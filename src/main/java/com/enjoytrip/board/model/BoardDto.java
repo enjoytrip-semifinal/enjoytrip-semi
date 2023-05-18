@@ -1,7 +1,5 @@
 package com.enjoytrip.board.model;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,6 +14,4 @@ public class BoardDto {
 	private String title;
 	private String content;
 	private int user_id;
-	private String nickname;
-	private List<FileInfoDto> fileInfos;
 }

@@ -60,18 +60,13 @@ public class BoardReviewController {
 	@ApiOperation(value = "리뷰 쓰기", notes = "리뷰를 작성하여 저장합니다.")
 	@PostMapping("/write")
 	public ResponseEntity<?> writeReview(@RequestBody BoardReviewDto boardReview) {
-		
 		// 사용자 정보
-		
+			
 		// ===========================================
-		
-		// 댓글을 쓰면 1번으로 이동한다.
-		Map<String, String> pageMap = new HashMap<String, String>();
-		pageMap.put("pgno", "1");
 		
 		int result = boardReviewService.writeReview(boardReview);
 		if(result > 0) {
-			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
@@ -82,11 +77,6 @@ public class BoardReviewController {
 	@DeleteMapping("/delete/{boardReviewId}")
 	public ResponseEntity<?> deleteReview(@PathVariable int boardReviewId) {
 		int result = boardReviewService.deleteReview(boardReviewId);
-		
-		// 댓글을 쓰면 1번으로 이동한다.
-		Map<String, String> pageMap = new HashMap<String, String>();
-		pageMap.put("pgno", "1");
-		
 		if(result > 0) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
@@ -99,11 +89,6 @@ public class BoardReviewController {
 	@PutMapping("/modify/{boardReviewId}")
 	public ResponseEntity<?> modifyReview(@RequestBody BoardReviewDto boardReview) {
 		int result = boardReviewService.modifyReview(boardReview);
-		
-		// 댓글을 쓰면 1번으로 이동한다.
-		Map<String, String> pageMap = new HashMap<String, String>();
-		pageMap.put("pgno", "1");
-		
 		if(result > 0) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
