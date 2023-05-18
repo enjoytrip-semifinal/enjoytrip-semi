@@ -27,6 +27,7 @@ import com.enjoytrip.jwt.service.TokenInfo;
 import com.enjoytrip.jwt.service.TokenRefreshException;
 import com.enjoytrip.user.entity.RefreshToken;
 import com.enjoytrip.user.entity.UserDto;
+import com.enjoytrip.user.entity.UserModifyDto;
 import com.enjoytrip.user.repository.RefreshTokenRepository;
 import com.enjoytrip.user.repository.UserRespository;
 
@@ -136,7 +137,7 @@ public class UserService {
 			
 			for(UserDto user : users) {
 				String id = user.getId();
-				sb.append("<b>"+id+ "</b>, ");
+				sb.append("<b>"+id+ " \n</b> ");
 			}
 			
 			log.info("찾은 아이디 : {}", sb.toString());
@@ -149,7 +150,30 @@ public class UserService {
 			helper.setTo(email);
 			
 			boolean html = true;
-			helper.setText("<h2>EnjoyTrip 아이디 찾기 결과</h2><br> [ " + sb.toString() + " ] 입니다.", html);
+			
+			String htmlContent = "<!DOCTYPE html>" +
+	                "<html>" +
+	                "<head>" +
+	                "<style>" +
+	                "body {font-family: Arial, sans-serif;}" +
+	                ".container {width: 80%; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px;}" +
+	                "h1 {color: #444;}" +
+	                "</style>" +
+	                "</head>" +
+	                "<body>" +
+	                "<div class=\"container\">" +
+	                "<h1>EnjoyTrip : ID 찾기 결과</h1>" +
+	                "<p>Hello,</p>" +
+	                "<p>You recently requested your ID from our site. Your ID is:</p>" +
+	                "<p style=\"font-size:18px; color:#008000;\"><strong> " + sb.toString() + " </strong></p>" +
+	                "<p>If you did not request this, please ignore this email or contact support if you have questions.</p>" +
+	                "<p>Thank you,</p>" +
+	                "<p>The Support Team : <b>Establers@naver.com</b> </p>" +
+	                "</div>" +
+	                "</body>" +
+	                "</html>";
+			
+			helper.setText(htmlContent, html);
 			mailSender.send(message);
 			return true;
 			
@@ -202,6 +226,7 @@ public class UserService {
 		log.info(user.get().toString());
 		if(user.isPresent()) {
 			userRespository.delete(user.get());
+			refreshTokenRepository.deleteByid(user.get().getId());
 			return 1;
 		}
 		return 0;
@@ -209,7 +234,7 @@ public class UserService {
 	
 //	2. **/user/modify (PUT) (정보 수정)**
 	@Transactional
-	public int updateUser(String id, UserDto requestUser) throws Exception{
+	public int updateUser(String id, UserModifyDto requestUser) throws Exception{
 		Optional<UserDto> user = userRespository.findByid(id);
 		if(!user.isPresent()) return 0;
 		
