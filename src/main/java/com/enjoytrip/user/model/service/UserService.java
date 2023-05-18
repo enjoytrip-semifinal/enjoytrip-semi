@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,8 +106,19 @@ public class UserService {
 	// user정보 가져오기(user수정에서씀)
 	@Transactional
 	public UserDto userInfo(String id) throws Exception{
+		log.info("id : {}", id);
 		Optional<UserDto> user = userRespository.findByid(id);
+		log.info("엄 : user.get() : {}", user.get().toString());
 		return user.get();
+	}
+	
+	// 로그아웃 by AccessToken
+	@Transactional
+	public void logoutByToken(String accessToken) throws Exception {
+		Claims claims = jwtTokenProvider.parseClaims(accessToken);
+		String loginedId = claims.getSubject();
+		SecurityContextHolder.clearContext();
+		refreshTokenRepository.deleteByid(loginedId);
 	}
 	
 	@Transactional
@@ -134,24 +146,25 @@ public class UserService {
 		}
 	}
 	
+	/*
+	 * ID 존재 시, True : False
+	 */
+	@Transactional
+	public boolean checkForDuplicateId(String id) {
+		log.info("findByid : {} ", id);
+		if(userRespository.findByid(id).isPresent()) {
+			return true;
+		} 
+		return false;
+	}
+	
 	// 단순 회원가입
 	@Transactional
-	public void join(UserDto userDto) throws Exception {
-		
+	public void join(UserDto userDto) {
 		if(userRespository.findByid(userDto.getId()).isPresent()) {
-			throw new Exception("이미 존재하는 아이디 입니다.");
+			throw new RuntimeException("이미 존재하는 아이디 입니다.");
 		}
-		
-		try {
-//			log.info(userDto.toString());
-//			log.info(userDto.toEntity().getRoles().get(0));
-//			userRespository.save(userDto.toEntity());
-			userRespository.save(userDto.toEntity());			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.info("user service join error ! !");
-		}
+		userRespository.save(userDto.toEntity());			
 	}
 	
 //	1. **/user/join (DELETE) (회원 탈퇴)**
