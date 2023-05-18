@@ -34,7 +34,6 @@ public class SwaggerConfiguration {
 	}
 
 	@Bean
-
 	public Docket hotplaceApi() {
 		title = "hotplace API ";
 
@@ -43,13 +42,15 @@ public class SwaggerConfiguration {
 				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.hotplace.controller"))
 				.paths(regex("/hotplace/.*")).build().useDefaultResponseMessages(false);
 	}
-
+	
+	@Bean
 	public Docket itineraryApi() {
 		title = "Itinerary API ";
 
-		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).groupName("Itinerary").select()
-				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.itinerary.controller"))
-				.paths(regex("/itinerary/.*")).build().useDefaultResponseMessages(false);
+		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes())
+				.produces(getProduceContentTypes()).apiInfo(apiInfo()).groupName("Itinerary").select()
+				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.itinerary.controller")).paths(regex("/itinerary/.*"))
+				.build().useDefaultResponseMessages(false);
 	}
 
 	@Bean
