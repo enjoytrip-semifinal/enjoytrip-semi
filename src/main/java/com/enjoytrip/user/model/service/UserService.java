@@ -8,7 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -41,8 +46,9 @@ public class UserService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final PasswordEncoder passwordEncoder;
 	
-	@Autowired
 	private final RefreshTokenRepository refreshTokenRepository;
+	
+	private final JavaMailSender mailSender;
 	
 	// 단순 로그인
 	@Transactional
@@ -122,21 +128,43 @@ public class UserService {
 	}
 	
 	@Transactional
-	public String findId(String email) throws Exception {
-		if(userRespository.findByemail(email).isPresent()) {
-			String id = userRespository.findByemail(email).get().getId();
-			log.info("찾은 아이디 : {}", id);
-			return id;
+	public Boolean findId(String email) throws Exception {
+		log.info("어 왜 안되지?: {}",email);
+		if(!userRespository.findByemail(email).isEmpty()) {
+			StringBuilder sb = new StringBuilder();
+			List<UserDto> users = userRespository.findByemail(email);
+			
+			for(UserDto user : users) {
+				String id = user.getId();
+				sb.append("<b>"+id+ "</b>, ");
+			}
+			
+			log.info("찾은 아이디 : {}", sb.toString());
+			
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message);
+			
+			helper.setSubject("[EnjoyTrip] 아이디 찾기 결과입니다.");
+			helper.setFrom("hellohwans3@gmail.com");
+			helper.setTo(email);
+			
+			boolean html = true;
+			helper.setText("<h2>EnjoyTrip 아이디 찾기 결과</h2><br> [ " + sb.toString() + " ] 입니다.", html);
+			mailSender.send(message);
+			return true;
+			
 		} else {
-			throw new Exception("존재하지 않은 이메일 입니다.");
+			return false;
 		}
 	}
 	
+	
+	// 구현 안되어이읐음
 	@Transactional
 	public String findpw(String id, String email) throws Exception {
-		if(userRespository.findByemail(id).isPresent()) {
+		if(userRespository.findByemail(id) != null) {
 			if(userRespository.findByid(id).equals(userRespository.findByemail(email))) {
-				String pw = userRespository.findByemail(id).get().getPassword();
+				String pw = userRespository.findByemail(id).get(0).getPassword();
 				return pw;
 			} else {
 				throw new Exception("아이디와 이메일이 매칭되지 않습니다.");

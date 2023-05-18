@@ -8,9 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.javassist.expr.NewArray;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,6 +53,10 @@ public class UserController {
 	
 	private final UserService userService;
 	private final JwtTokenProvider jwtTokenProvider;
+	
+	@Autowired
+	private final JavaMailSender mailSender;
+	
 	
 	@ApiOperation(value = "로그인")
 	@ApiResponses({@ApiResponse(code = 200, message = "로그인 성공 OK"), @ApiResponse(code = 500, message = "서버 에러")})
@@ -110,25 +117,23 @@ public class UserController {
 	
 	
 	// 아이디 찾기 (이메일로 아이디 찾기)
-	@ApiOperation(value = "이메일을 이용해 이메일이 존재한다면 아이디를 리턴")
+	@ApiOperation(value = "이메일을 보내면 이메일에 ID를 전송")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "야호~~ 아이디 찾았다"), 
 			@ApiResponse(code = 500, message = "에러")})
-	@GetMapping("/find-id")
-	public ResponseEntity<?> findidByEmail(String email) throws Exception {
+	@GetMapping("/findid")
+	public ResponseEntity<?> findidByEmail(@RequestParam String email) throws Exception {
 		log.info("아이디 찾기");
-		try {
-			String this_id = userService.findId(email);
-			return new ResponseEntity<String>(this_id, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage()+"냠 냐미 ㅋㅋ", HttpStatus.INTERNAL_SERVER_ERROR);
+		if(userService.findId(email)) {
+			return new ResponseEntity<String>("success", HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			// 이메일 없을 경우 등
 		}
-		
-		
 	}
 	
 	// 비번 찾기
-	@ApiOperation(value = "구현 예정")
+	@ApiOperation(value = "비번 찾기 : 구현 예정")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "야호~~ 비번 찾았다"), 
 			@ApiResponse(code = 500, message = "에러")})
