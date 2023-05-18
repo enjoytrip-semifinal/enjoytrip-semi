@@ -6,7 +6,7 @@
 
 	<resultMap type="HotPlaceDto" id="hotplace">
 		<result column="hotplace_id" property="hotplaceId" />
-		<result column="like_count" property="like" />
+		<result column="like_count" property="likeCount" />
 		<result column="latitude" property="latitude" />
 		<result column="longitude" property="longitude" />
 		<result column="title" property="title" />
@@ -31,7 +31,7 @@
 	<!-- 글 작성하기 -->
 	<insert id="writeHotplace" parameterType="HotplaceDto">
 		insert into hotplace
-		(user_id,latitude,longitude,title,content,regdate,like_count,hit,sido,gugun,type,address)
+		(user_id,latitude,longitude,title,content,regdate,like_count,hit_count,sido,gugun,type,address)
 		values (#{userId},
 		#{latitude},#{longitude},#{title},#{content},now(),0,0,#{sido},#{gugun},#{type},#{address})
 		<selectKey resultType="int" keyProperty="hotplaceId"
@@ -77,19 +77,18 @@
 		select *
 		from hotplace
 		<include refid="search" />
-		order
-		by review_id desc
+		order by hotplace_id desc
 		limit #{start}, #{listsize}
 	</select>
 
 	<!-- 전체 글 수 가져오기 -->
 	<select id="getTotalHotplaceCount" parameterType="map" resultType="int">
-		select count(hotplaceId)
+		select count(hotplace_id)
 		from hotplace
 		<include refid="search"></include>
 	</select>
 
-	<select id="getHotplace" parameterType="int"
+	<select id="getHotplaceById" parameterType="int"
 		resultMap="hotplace">
 		select *
 		from hotplace
