@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
+
 <mapper
 	namespace="com.enjoytrip.notice.model.mapper.NoticeMapper">
-	
+
 	<resultMap type="NoticeDto" id="notice">
 		<result column="notice_id" property="noticeid" />
 		<result column="register_time" property="registertime" />
@@ -13,7 +13,7 @@
 		<result column="content" property="content" />
 		<result column="admin_id" property="adminid" />
 	</resultMap>
-	
+
 	<sql id="search">
 		<if test="word != null and word != ''">
 			<if test="key == 'title'">
@@ -26,7 +26,8 @@
 		</if>
 	</sql>
 
-	<select id="listNotice" parameterType="map" resultType="NoticeDto" resultMap="notice">
+	<select id="listNotice" parameterType="map"
+		resultType="NoticeDto" resultMap="notice">
 		select *
 		from notice
 		<!-- <include refid="search"></include> -->
@@ -44,13 +45,20 @@
 	<insert id="write" parameterType="NoticeDto">
 		insert into notice (notice_id,
 		register_time, hit, title, content, admin_id)
-		values (default, now(), 0,
+		values (default, now(),
+		0,
 		#{title}, #{content}, #{adminid})
 	</insert>
-	
+
 	<insert id="registFile" parameterType="NoticeDto">
-		insert into notice_file_Info (idx, notice_id, save_folder, original_file, save_file)
-		values ()
+		insert into notice_file_Info (idx, notice_id, save_folder,
+		original_file, save_file)
+		values
+		<foreach collection="fileInfos" item="fileinfo"
+			separator=" , ">
+			(#{hotplaceId}, #{fileinfo.saveFolder},
+			#{fileinfo.originalFile}, #{fileinfo.saveFile})
+		</foreach>
 	</insert>
 
 	<delete id="delete" parameterType="java.lang.Integer">

@@ -32,9 +32,6 @@ import com.enjoytrip.notice.model.NoticeDto;
 import com.enjoytrip.notice.model.NoticeFileInfoDto;
 import com.enjoytrip.notice.model.service.NoticeService;
 import com.enjoytrip.util.PageNavigation;
-import com.ssafy.board.model.BoardDto;
-import com.ssafy.board.model.FileInfoDto;
-import com.ssafy.member.model.MemberDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
