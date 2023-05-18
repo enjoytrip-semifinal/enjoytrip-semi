@@ -14,13 +14,13 @@ public interface HotplaceService {
 
 	HotplaceDto getHotplaceById(int hotplaceId)throws Exception;
 
-	int writeHotplace(HotplaceDto hotplace) throws Exception;
+	int insertHotplace(HotplaceDto hotplace) throws Exception;
 
 	int updateHotplace(HotplaceDto hotplace) throws Exception;
 
 	int updateHit(int hotplaceId) throws Exception;
 
-	int deleteHotplace(int hotplaceId, String uploadpath) throws Exception;
+	int deleteHotplace(int hotplaceId) throws Exception;
 
 	int updateLike(int hotplaceId) throws Exception;
 

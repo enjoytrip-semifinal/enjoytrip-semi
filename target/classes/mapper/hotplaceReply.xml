@@ -3,21 +3,19 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
-	namespace="com.enjoytrip.hotplace.model.mapper.HotplaceReplyMapper">
+		namespace="com.enjoytrip.hotplace.model.mapper.HotplaceReplyMapper">
 
-	<resultMap type="HotplaceReplyDto" id="hotplaceReply">
+	<resultMap type="hotplaceReplyDto" id="hotplacereply">
 		<result column="hotplace_reply_id" property="replyId"/>
 		<result column="user_id" property="userId" />
 		<result column="hotplace_id" property="hotplaceId" />
 		<result column="content" property="content" />
-		<result column="register_time" property="regTime" />
-
-
+		<result column="register_date" property="regDate" />
 	</resultMap>
 
 	<!-- 리뷰 가져오기 -->
 	<select id="listReply" parameterType="map"
-		resultType="hotplaceReplyDto">
+		resultType="hotplacereply">
 		select *
 		from hotplace_reply
 		where hotplace_id = #{hotplaceId}
@@ -26,21 +24,26 @@
 	</select>
 
 	<!-- 리뷰 쓰기 -->
-	<insert id="writeReview" parameterType="boardReviewDto">
+	<insert id="insertReply" parameterType="hotplaceReplyDto">
 		insert into hotplace_reply(hotplace_id, content, register_time, user_id)
 		values (#{hotplaceId}, #{content}, now(), #{userId})
 	</insert>
 
 	<!-- 리뷰 수정 -->
-	<update id="modifyReview" parameterType="boardReviewDto">
+	<update id="updateReply" parameterType="hotplaceReplyDto">
 		update hotplace_reply
-		set title = #{title}, content = #{content}
+		set content = #{content}
 		where hotplace_reply_id = #{replyId}
 	</update>
 
 	<!-- 리뷰 삭제 -->
-	<delete id="deleteReview" parameterType="int">
+	<delete id="deleteReply" parameterType="int">
 		delete from hotplace_reply
 		where hotplace_reply_id = #{replyId}
+	</delete>
+	
+	<delete id = "deleteReplyAll" parameterType="int">
+		delete from hotplace_reply
+		where hotplace_id = #{hotplaceId}
 	</delete>
 </mapper>

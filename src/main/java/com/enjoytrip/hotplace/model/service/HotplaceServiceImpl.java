@@ -37,47 +37,34 @@ public class HotplaceServiceImpl implements HotplaceService {
 
 	@Override
 	@Transactional
-	public int writeHotplace(HotplaceDto hotplaceDto) throws Exception {
+	public int insertHotplace(HotplaceDto hotplaceDto) throws Exception {
 
-		int result = hotplaceMapper.writeHotplace(hotplaceDto);
-
-		List<HotplaceFileInfoDto> fileInfos = hotplaceDto.getFileInfos();
-		if (fileInfos != null && !fileInfos.isEmpty()) {
-			hotplaceMapper.registerFile(hotplaceDto);
-		}
+		int result = hotplaceMapper.insertHotplace(hotplaceDto);
 
 		return result;
 	}
 
 	@Override
 	@Transactional
-	public int deleteHotplace(int hotplaceId, String path) throws Exception {
-		
-		
-		// TODO Auto-generated method stub
+	public int deleteHotplace(int hotplaceId) throws Exception {
 
-		// 해당 게시글에 맞는 file을 먼저 가져와준다
-		List<HotplaceFileInfoDto> fileList = hotplaceMapper.fileInfoList(hotplaceId);
-		//삭제할 때 댓글도 함께 삭제해줘야 한다. -> 해당 게시글에 있는 댓글 정보를 불러온다.
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("hotplaceid",String.valueOf(hotplaceId));
+		//해당 게시글에 있는 file을 먼저 제거해준다.
+		List<HotplaceFileInfoDto> fileList = hotplaceMapper.fileInfoList(hotplaceId);
 		List<HotplaceReplyDto> replyList = hotplaceReplyMapper.listReply(map);
 		
-		// 게시글에 존재하는 파일을 삭제해준다.
-		if (!fileList.isEmpty()) {
-			hotplaceMapper.deleteFile(hotplaceId);
+		if(!fileList.isEmpty()) {
+			hotplaceMapper.deleteFileAll(hotplaceId);
+			System.out.println("관련 파일이 모두 삭제되었습니다.");
+		}
+		if(!replyList.isEmpty()) {
+			hotplaceReplyMapper.deleteReply(hotplaceId);
+			System.out.println("관련 댓글이 모두 삭제되었습니다.");
 		}
 		
-		if(!replyList.isEmpty()) {	//댓글이 존재한다.
-			hotplaceReplyMapper.deleteReplyAll(hotplaceId);
-		}
-		// 게시글을 먼저 삭제해준다
-		int result = hotplaceMapper.deleteHotplace(hotplaceId);
-
-		for(HotplaceFileInfoDto fileInfoDto : fileList) {
-			File file = new File(path + File.separator + fileInfoDto.getSaveFolder() + File.separator + fileInfoDto.getSaveFile());
-			file.delete();
-		}
+		//파일과 댓글을 모두 삭제한후 게시글을 삭제해준다.
+		int result = hotplaceMapper.deleteFileAll(hotplaceId);
 		
 		return result;
 	}
@@ -130,11 +117,13 @@ public class HotplaceServiceImpl implements HotplaceService {
 		int gugun = Integer.parseInt( map.get("gugun")==null?"0":map.get("gugun"));
 		
 		int type =  Integer.parseInt( map.get("type")==null?"0":map.get("type"));
+		int season =  Integer.parseInt( map.get("season")==null?"0":map.get("season"));
 		
 		
 		param.put("sido", sido);
 		param.put("gugun", gugun);
 		param.put("type",type);
+		param.put("season",season);
 		
 		// -------------------------------------------------------------
 
@@ -158,6 +147,7 @@ public class HotplaceServiceImpl implements HotplaceService {
 		param.put("sido", map.get("sido")==null?0:map.get("sido"));
 		param.put("gugun", map.get("gugun")==null?0:map.get("gugun"));
 		param.put("type", map.get("type")==null?0:map.get("type"));
+		param.put("season", map.get("season")==null?0:map.get("season"));
 		
 		int pgNo =  Integer.parseInt(map.get("pgno") == null ? "1" : map.get("pgno"));
 		int start = pgNo * SizeConstant.LIST_SIZE - SizeConstant.LIST_SIZE;

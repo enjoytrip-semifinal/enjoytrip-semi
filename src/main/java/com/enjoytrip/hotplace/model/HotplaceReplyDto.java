@@ -12,6 +12,6 @@ public class HotplaceReplyDto {
 	private int userId;
 	private int hotplaceId;
 	private String content;
-	private String regTime;
+	private String regDate;
 	
 }

@@ -35,8 +35,8 @@ public class HotplaceReplyServiceImpl implements HotplaceReplyService {
 	}
 
 	@Override
-	public int writeReply(HotplaceReplyDto replyDto) {
-		return replyMapper.writeReply(replyDto);
+	public int insertReply(HotplaceReplyDto replyDto) {
+		return replyMapper.insertReply(replyDto);
 	}
 
 	@Override

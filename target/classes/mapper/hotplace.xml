@@ -4,72 +4,71 @@
 <mapper
 	namespace="com.enjoytrip.hotplace.model.mapper.HotplaceMapper">
 
-	<resultMap type="HotPlaceDto" id="hotplace">
+	<resultMap type="hotplaceDto" id="hotplace">
 		<result column="hotplace_id" property="hotplaceId" />
 		<result column="like_count" property="likeCount" />
 		<result column="latitude" property="latitude" />
 		<result column="longitude" property="longitude" />
 		<result column="title" property="title" />
 		<result column="content" property="content" />
-		<result column="register_time" property="regTime" />
+		<result column="register_date" property="regDate" />
 		<result column="user_id" property="userId" />
 		<result column="hit_count" property="hitCount" />
 		<result column="sido" property="sido" />
 		<result column="gugun" property="gugun" />
 		<result column="type" property="type" />
-		<result column="address" property="address"/>
-		
+		<result column="address" property="address" />
+		<result column="season" property="season" />
+
 	</resultMap>
 
-	<resultMap type="fileInfoDto" id="file">
+	<resultMap type="hotplaceFileInfoDto" id="file">
 		<result column="hotplace_id" property="hotplaceId" />
 		<result column="save_folder" property="saveFolder" />
 		<result column="original_file" property="originalFile" />
 		<result column="save_file" property="saveFile" />
-	</resultMap> 
+	</resultMap>
 
 	<!-- 글 작성하기 -->
-	<insert id="writeHotplace" parameterType="HotplaceDto">
+	<insert id="insertHotplace" parameterType="hotplaceDto">
 		insert into hotplace
-		(user_id,latitude,longitude,title,content,regdate,like_count,hit_count,sido,gugun,type,address)
+		(user_id,latitude,longitude,title,content,register_date,like_count,hit_count,sido,gugun,type,address,season)
 		values (#{userId},
-		#{latitude},#{longitude},#{title},#{content},now(),0,0,#{sido},#{gugun},#{type},#{address})
+		#{latitude},#{longitude},#{title},#{content},now(),0,0,#{sido},#{gugun},#{type},#{address},#{season})
 		<selectKey resultType="int" keyProperty="hotplaceId"
 			order="AFTER">
 			select last_insert_id()
 		</selectKey>
 	</insert>
 
-	<!-- 글 작성할 때 올린 파일도 같이 등록하기 -->
-	<insert id="registerFile" parameterType="hotplaceDto">
-		insert into hotplace_file_info (hotplace_id, save_folder, original_file,
-		save_file)
-		values
-		<foreach collection="fileInfos" item="fileinfo"
-			separator=" , ">
-			(#{hotplaceId}, #{fileinfo.saveFolder},
-			#{fileinfo.originalFile}, #{fileinfo.saveFile})
-		</foreach>
-	</insert>
-
 	<!-- 검색 조건 걸어줄거임 -->
 	<sql id="search">
-
-		<if test="sido != 0 or gugun!=0 or type!=0">
-			where
-			<if test="sido!=0 and gugun!=0">
-				sido = #{sido} and gugun = #{gugun}
-				<if test="type!=0">
-					and type = #{type}
-				</if>
+		<where>
+			<if test="sido != 0">
+				sido = #{sido}
 			</if>
-			
-			<if test="type!=0">
-					type = #{type}
+
+			<if test="gugun != 0">
+				<if test="sido != 0">
+					and
 				</if>
+				gugun = #{gugun}
+			</if>
 
-		</if>
+			<if test="type != 0">
+				<if test="sido != 0 or gugun != 0">
+					and
+				</if>
+				type = #{type}
+			</if>
 
+			<if test="season != 0">
+				<if test="sido != 0 or gugun != 0 or type != 0">
+					and
+				</if>
+				season = #{season}
+			</if>
+		</where>
 	</sql>
 
 	<select id="listHotplace" parameterType="map"
@@ -82,7 +81,8 @@
 	</select>
 
 	<!-- 전체 글 수 가져오기 -->
-	<select id="getTotalHotplaceCount" parameterType="map" resultType="int">
+	<select id="getTotalHotplaceCount" parameterType="map"
+		resultType="int">
 		select count(hotplace_id)
 		from hotplace
 		<include refid="search"></include>
@@ -97,15 +97,16 @@
 	</select>
 
 	<select id="fileInfoList" resultMap="file">
-		select save_folder,
-		original_file, save_file
-		from file_info
-		where hotplace_id = #{hotplaceId}
+		select *
+		from hotplace_file_info
+		where hotplace_id =
+		#{hotplaceId}
 	</select>
 
 	<update id="updateHit" parameterType="int">
 		update hotplace
-		set hit_count =
+		set
+		hit_count =
 		hit_count +1
 		where hotplace_id = #{hotplaceId}
 	</update>
@@ -118,21 +119,21 @@
 	</update>
 
 
-	<update id="modifyHotplace" parameterType="hotplaceDto">
+	<update id="updateHotplace" parameterType="hotplaceDto">
 		update hotplace
 		set
-		title = #{title}, content = #{content}
-		where hotplace_id = #{hotplaceId}
+		title = #{title}, content = #{content}, season=#{season}
+		where
+		hotplace_id = #{hotplaceId}
 	</update>
 
-	<delete id="deleteFile" parameterType="int">
-		delete from file_info
+	<delete id="deleteFileAll" parameterType="int">
+		delete from hotplace_file_info
 		where hotplace_id = #{hotplaceId}
 	</delete>
 
 	<delete id="deleteHotplace" parameterType="int">
 		delete from hotplace
-		where
 		where hotplace_id = #{hotplaceId}
 	</delete>
 
