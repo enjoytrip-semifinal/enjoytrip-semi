@@ -106,7 +106,9 @@ public class UserService {
 	// user정보 가져오기(user수정에서씀)
 	@Transactional
 	public UserDto userInfo(String id) throws Exception{
+		log.info("id : {}", id);
 		Optional<UserDto> user = userRespository.findByid(id);
+		log.info("엄 : user.get() : {}", user.get().toString());
 		return user.get();
 	}
 	
@@ -149,6 +151,7 @@ public class UserService {
 	 */
 	@Transactional
 	public boolean checkForDuplicateId(String id) {
+		log.info("findByid : {} ", id);
 		if(userRespository.findByid(id).isPresent()) {
 			return true;
 		} 

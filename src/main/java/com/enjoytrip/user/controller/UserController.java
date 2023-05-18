@@ -1,5 +1,6 @@
 package com.enjoytrip.user.controller;
 
+import java.awt.color.ICC_ColorSpace;
 import java.security.Principal;
 import java.util.stream.Collectors;
 
@@ -167,6 +168,19 @@ public class UserController {
 		}		
 	}
 	
+	@ApiOperation(value = "아이디 중복 여부 체크")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "이 아이디는 사용가능합니다.^~^"), 
+			@ApiResponse(code = 409, message = "기존 가입 유저가 있습니다.")})
+	@GetMapping("exist")
+	public ResponseEntity<?> duplicateIdCheck(@RequestParam String id) {
+		if(userService.checkForDuplicateId(id)) {
+			return new ResponseEntity<String>("fail", HttpStatus.CONFLICT);
+		} else {
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		}
+	}
+	
 	// 2.3 join - email verification - GET
 //	void emailVerification(UserDto userDto) throws Exception;
 	
@@ -193,7 +207,7 @@ public class UserController {
 			@ApiResponse(code = 200, message = "회원 정보 불러오기 성공"), 
 			@ApiResponse(code = 500, message = "통신 오류")})
 	@GetMapping("/modify")
-	public ResponseEntity<?> existingInfo(Principal principal) throws Exception {
+	public ResponseEntity<?> existingInfo() throws Exception {
 		String id = "";
 		try {
 			id = SecurityUtil.getCurrentMemberId();
