@@ -103,7 +103,7 @@ public class BoardController {
 	@PostMapping("/write")
 	public ResponseEntity<?> writeBoard(@RequestBody BoardDto board, @RequestBody MultipartFile[] files) throws Exception {
 		// 사용자 정보 
-			
+		
 		// ===========================================
 		
 		// 파일 입력 부분

@@ -148,7 +148,7 @@ public class JwtTokenProvider {
 		return false;
 	}
 
-	private Claims parseClaims(String accessToken) {
+	public Claims parseClaims(String accessToken) {
 		try {
 			return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
 		} catch (ExpiredJwtException e) {
