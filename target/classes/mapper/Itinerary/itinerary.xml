@@ -14,7 +14,7 @@
 		<result property="endDate" column="end_date" />
 		<result property="title" column="title" />
 		<result property="content" column="content" />
-		<collection property="placeList" ofType="ItineraryPlaceDto">
+		<collection property="itineraryPlaces" ofType="ItineraryPlaceDto">
 			<id property="placeName" column="place_name" />
 			<result property="placeAddress" column="place_address" />
 			<result property="placeOrder" column="place_order" />
@@ -99,16 +99,22 @@
 
 	<update id="modifyItinerary" parameterType="ItineraryDetailDto">
 		UPDATE itinerary_detail
-		SET title = #{title}, content = #{content}, start_date = #{startDate},
+		SET title = #{title}, content = #{content},
+		start_date = #{startDate},
 		end_date = #{endDate}
-		WHERE itinerary_id = #{itineraryId};
+		WHERE itinerary_id =
+		#{itineraryId};
 
-		<foreach collection="itineraryPlaces" item="place" index="index">
+		<foreach collection="itineraryPlaces" item="place"
+			index="index">
 			UPDATE itinerary_place
-			SET place_name = #{place.placeName}, place_address =
+			SET place_name = #{place.placeName},
+			place_address =
 			#{place.placeAddress},
-			place_order = #{place.placeOrder}, place_comment = #{place.placeComment}
-			WHERE itinerary_id = #{itineraryId} AND place_name = #{place.placeName};
+			place_order =
+			#{place.placeOrder}, place_comment = #{place.placeComment}
+			WHERE
+			itinerary_id = #{itineraryId} AND place_name = #{place.placeName};
 		</foreach>
 	</update>
 

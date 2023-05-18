@@ -20,10 +20,12 @@ import com.enjoytrip.board.model.BoardReviewDto;
 import com.enjoytrip.itinerary.model.ItineraryReplyDto;
 import com.enjoytrip.itinerary.model.service.ItineraryReplyService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController()
 @RequestMapping("/itinerary/reply")
+@Api(tags = "여행계획댓글")
 public class ItineraryReplyController {
 	
 	private ItineraryReplyService itineraryReplyService;

@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import com.enjoytrip.itinerary.model.ItineraryReplyDto;
 import com.enjoytrip.itinerary.model.mapper.ItineraryReplyMapper;
 import com.enjoytrip.util.SizeConstant;
 
+@Service
 public class ItineraryReplyServiceImpl implements ItineraryReplyService {
 
 	private ItineraryReplyMapper itineraryReplyMapper;
