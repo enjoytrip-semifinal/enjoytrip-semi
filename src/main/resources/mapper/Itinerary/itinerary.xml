@@ -39,30 +39,16 @@
 	</sql>
 
 	<insert id="writeItinerary" parameterType="ItineraryDetailDto">
-		INSERT INTO itinerary_detail (user_id, date, start_date, end_date,
-		title, content)
-		VALUES (#{userId}, NOW(), #{startDate}, #{endDate},
-		#{title}, #{content});
-
-		<foreach collection="itineraryPlaces" item="place"
-			index="index">
-			INSERT INTO itinerary_place (place_name, place_address,
-			place_order,
-			place_comment, itinerary_id)
-			SELECT #{place.placeName},
-			#{place.placeAddress}, #{place.placeOrder},
-			#{place.placeComment},
-			LAST_INSERT_ID()
-			FROM itinerary_detail
-			WHERE user_id = #{userId} AND
-			start_date = #{startDate} AND end_date =
-			#{endDate} AND title =
-			#{title} AND content = #{content};
-		</foreach>
+	  INSERT INTO itinerary_detail (user_id, date, start_date, end_date, title, content)
+	  VALUES (#{userId}, NOW(), #{startDate}, #{endDate}, #{title}, #{content});
+	
+	  <foreach collection="itineraryPlaces" item="itineraryPlace">
+	    INSERT INTO itinerary_place (place_name, place_address, place_order, place_comment, itinerary_id)
+	    VALUES (#{itineraryPlace.placeName}, #{itineraryPlace.placeAddress}, #{itineraryPlace.placeOrder}, #{itineraryPlace.placeComment}, LAST_INSERT_ID());
+	  </foreach>
 	</insert>
 
-	<select id="listItinerary" resultType="ItineraryDetailDto"
-		parameterType="map">
+	<select id="listItinerary" resultMap="ItineraryDetailResultMap" parameterType="map">
 		select * from itinerary_detail
 		<include refid="search"></include>
 		order by itinerary_id

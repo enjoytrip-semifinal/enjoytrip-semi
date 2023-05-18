@@ -20,5 +20,4 @@ public interface ItineraryMapper {
 	int getTotalItineraryCount(Map<String, Object> param);
 	List<ItineraryPlaceDto> selectPlace(Integer num);
 
-
 }
