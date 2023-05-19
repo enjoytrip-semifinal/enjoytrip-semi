@@ -341,7 +341,7 @@ public class UserController {
 	public String user_test() {
 		log.info("USER_TEST : SecurityUtil.getCurrentMemberId(); {}", SecurityUtil.getCurrentMemberId());
 		SecurityUtil.getCurrentMemberId();
-		return SecurityUtil.getCurrentMemberId();
+		return (SecurityUtil.getCurrentMemberId() + " " + String.valueOf(userService.getUser_idbyId())); 
 	}
 	
 	
