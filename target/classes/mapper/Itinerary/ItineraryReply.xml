@@ -12,8 +12,8 @@
 	</select>
 
 	<insert id="writeReply" parameterType="itineraryReplyDto">
-			insert into itinerary_reply(itinerary_reply_id, content, date, itinerary_id, user_id)
-			values (#{itineraryReplyId}, #{content}, now(), #{itineraryId}, #{userId})
+			insert into itinerary_reply(itinerary_reply_id, content, register_date, itinerary_id, user_id)
+			values (default, #{content}, now(), #{itineraryId}, #{userId})
 	</insert>
 	
 	<update id="modifyReply" parameterType="itineraryReplyDto">

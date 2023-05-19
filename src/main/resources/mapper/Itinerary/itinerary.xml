@@ -9,7 +9,7 @@
 		type="ItineraryDetailDto">
 		<id property="itineraryId" column="itinerary_id" />
 		<result property="userId" column="user_id" />
-		<result property="date" column="date" />
+		<result property="registerDate" column="register_date" />
 		<result property="startDate" column="start_date" />
 		<result property="endDate" column="end_date" />
 		<result property="title" column="title" />
@@ -38,15 +38,17 @@
 		</if>
 	</sql>
 
-	<insert id="writeItinerary" parameterType="ItineraryDetailDto">
-	  INSERT INTO itinerary_detail (user_id, date, start_date, end_date, title, content)
-	  VALUES (#{userId}, NOW(), #{startDate}, #{endDate}, #{title}, #{content});
-	
-	  <foreach collection="itineraryPlaces" item="itineraryPlace">
-	    INSERT INTO itinerary_place (place_name, place_address, place_order, place_comment, itinerary_id)
-	    VALUES (#{itineraryPlace.placeName}, #{itineraryPlace.placeAddress}, #{itineraryPlace.placeOrder}, #{itineraryPlace.placeComment}, LAST_INSERT_ID());
-	  </foreach>
+	<insert id="writeItinerary" parameterType="ItineraryDetailDto" useGeneratedKeys="true" keyProperty="itineraryId">
+	  INSERT INTO itinerary_detail (user_id, register_date, start_date, end_date, title, content)
+	  VALUES ( #{userId}, NOW(), #{startDate}, #{endDate}, #{title}, #{content});
 	</insert>
+	
+	<insert id="writePlace" parameterType="ItineraryPlaceDto">
+	    INSERT INTO itinerary_place (place_name, place_address, place_order, place_comment, itinerary_id) 
+	    VALUES (#{placeName}, #{placeAddress}, #{placeOrder}, #{placeComment}, #{itineraryId})
+	</insert>
+	
+
 
 	<select id="listItinerary" resultMap="ItineraryDetailResultMap" parameterType="map">
 		select * from itinerary_detail
@@ -64,11 +66,11 @@
 
 	<select id="selectOne" resultMap="ItineraryDetailResultMap"
 		parameterType="java.lang.Integer">
-		SELECT d.itinerary_id, d.user_id, d.date, d.start_date,
+		SELECT d.itinerary_id, d.user_id, d.register_date, d.start_date,
 		d.end_date, d.title,
 		d.content,
 		p.place_name, p.place_address,
-		p.place_order, p.place_comment
+		p.place_order, p.place_comment, p.place_id
 		FROM itinerary_detail d
 		LEFT JOIN
 		itinerary_place p ON d.itinerary_id = p.itinerary_id
@@ -100,7 +102,7 @@
 			place_order =
 			#{place.placeOrder}, place_comment = #{place.placeComment}
 			WHERE
-			itinerary_id = #{itineraryId} AND place_name = #{place.placeName};
+			itinerary_id = #{itineraryId} AND place_id = #{place.placeId};
 		</foreach>
 	</update>
 

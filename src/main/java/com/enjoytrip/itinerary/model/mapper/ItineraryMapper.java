@@ -19,5 +19,6 @@ public interface ItineraryMapper {
 	ItineraryDetailDto selectOne(Integer num);
 	int getTotalItineraryCount(Map<String, Object> param);
 	List<ItineraryPlaceDto> selectPlace(Integer num);
+	void writePlace(ItineraryPlaceDto itineraryPlace);
 
 }
