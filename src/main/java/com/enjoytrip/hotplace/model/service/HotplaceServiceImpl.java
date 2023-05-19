@@ -87,12 +87,20 @@ public class HotplaceServiceImpl implements HotplaceService {
 
 	@Override
 	@Transactional
-	public int updateLike(int hotplaceId) throws SQLException {
+	public int likeHotplace(int hotplaceId) throws SQLException {
 		// TODO Auto-generated method stub
-		return hotplaceMapper.updateLike(hotplaceId);
+		return hotplaceMapper.likeHotplace(hotplaceId);
+	}
+	
+	@Override
+	@Transactional
+	public int hateHotplace(int hotplaceId) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
+	@Transactional
 	public int updateHit(int hotplaceId) throws SQLException {
 		// TODO Auto-generated method stub
 		return hotplaceMapper.updateHit(hotplaceId);
@@ -167,6 +175,8 @@ public class HotplaceServiceImpl implements HotplaceService {
 
 		return hotplaceMapper.listHotplace(param);
 	}
+
+	
 
 
 
