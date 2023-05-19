@@ -138,7 +138,7 @@ public class UserController {
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "야호~~ 비번 찾았다"), 
 			@ApiResponse(code = 500, message = "에러")})
-	@GetMapping("/find-pw")
+	@GetMapping("/findpw")
 	public ResponseEntity<?> findpwByEmail(String emai) {
 		// 구현필요
 		try {			
@@ -329,14 +329,18 @@ public class UserController {
 	}
 	
 	
-	@GetMapping("/auth/admin/test")
+	@GetMapping("/admin/test")
 	public String admin_test() {
-		return "i am an admin.";
+		log.info("ADMIN_TEST : SecurityUtil.getCurrentMemberId(); {}", SecurityUtil.getCurrentMemberId());
+		SecurityUtil.getCurrentMemberId();
+		return SecurityUtil.getCurrentMemberId();
 	}
 	
-	@GetMapping("/auth/user/test")
+	@GetMapping("/user/test")
 	public String user_test() {
-		return "i am an user.";
+		log.info("USER_TEST : SecurityUtil.getCurrentMemberId(); {}", SecurityUtil.getCurrentMemberId());
+		SecurityUtil.getCurrentMemberId();
+		return SecurityUtil.getCurrentMemberId();
 	}
 	
 	
