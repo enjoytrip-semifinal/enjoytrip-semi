@@ -8,9 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.javassist.expr.NewArray;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,6 +37,7 @@ import com.enjoytrip.jwt.service.SecurityUtil;
 import com.enjoytrip.jwt.service.TokenInfo;
 import com.enjoytrip.jwt.service.TokenRefreshException;
 import com.enjoytrip.user.entity.UserDto;
+import com.enjoytrip.user.entity.UserModifyDto;
 import com.enjoytrip.user.model.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
@@ -50,6 +54,10 @@ public class UserController {
 	
 	private final UserService userService;
 	private final JwtTokenProvider jwtTokenProvider;
+	
+	@Autowired
+	private final JavaMailSender mailSender;
+	
 	
 	@ApiOperation(value = "로그인")
 	@ApiResponses({@ApiResponse(code = 200, message = "로그인 성공 OK"), @ApiResponse(code = 500, message = "서버 에러")})
@@ -110,29 +118,27 @@ public class UserController {
 	
 	
 	// 아이디 찾기 (이메일로 아이디 찾기)
-	@ApiOperation(value = "이메일을 이용해 이메일이 존재한다면 아이디를 리턴")
+	@ApiOperation(value = "이메일을 보내면 이메일에 ID를 전송")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "야호~~ 아이디 찾았다"), 
 			@ApiResponse(code = 500, message = "에러")})
-	@GetMapping("/find-id")
-	public ResponseEntity<?> findidByEmail(String email) throws Exception {
+	@GetMapping("/findid")
+	public ResponseEntity<?> findidByEmail(@RequestParam String email) throws Exception {
 		log.info("아이디 찾기");
-		try {
-			String this_id = userService.findId(email);
-			return new ResponseEntity<String>(this_id, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage()+"냠 냐미 ㅋㅋ", HttpStatus.INTERNAL_SERVER_ERROR);
+		if(userService.findId(email)) {
+			return new ResponseEntity<String>("success", HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			// 이메일 없을 경우 등
 		}
-		
-		
 	}
 	
 	// 비번 찾기
-	@ApiOperation(value = "구현 예정")
+	@ApiOperation(value = "비번 찾기 : 구현 예정")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "야호~~ 비번 찾았다"), 
 			@ApiResponse(code = 500, message = "에러")})
-	@GetMapping("/find-pw")
+	@GetMapping("/findpw")
 	public ResponseEntity<?> findpwByEmail(String emai) {
 		// 구현필요
 		try {			
@@ -231,15 +237,35 @@ public class UserController {
 			@ApiResponse(code = 200, message = "회원 정보 수정 성공"), 
 			@ApiResponse(code = 500, message = "통신 오류")})
 	@PutMapping(value="/modify")
-	public ResponseEntity<?> userInfoModify(@RequestBody UserDto userDto) throws Exception {
-		if(userService.updateUser(userDto.getId(), userDto) == 1) {
-			log.info("회원 수정 정상 완료 : {}", userDto.getId());
-			return new ResponseEntity<String>("유저 정보 수정 성공", HttpStatus.OK);
+	public ResponseEntity<?> userInfoModify(@RequestBody UserModifyDto userModifyDto) throws Exception {
+		String loginedId = SecurityUtil.getCurrentMemberId();
+		log.info("회원 정보를 할 ID :{}", loginedId);
+		if(userService.updateUser(loginedId, userModifyDto) == 1) {
+			log.info("회원 수정 정상 완료 : {}", loginedId);
+			return new ResponseEntity<String>("success", HttpStatus.OK);
 		} else {
-			log.info("회원 수정 실패!! :  {}", userDto.getId());
-			return new ResponseEntity<String>("유저 정보 수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+			log.info("회원 수정 실패!! :  {}", loginedId);
+			return new ResponseEntity<String>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	
+	
+
+//	@ApiOperation(value = "회원 수정 : 수정한 회원 정보 PUT")
+//	@ApiResponses({
+//			@ApiResponse(code = 200, message = "회원 정보 수정 성공"), 
+//			@ApiResponse(code = 500, message = "통신 오류")})
+//	@PutMapping(value="/modify")
+//	public ResponseEntity<?> userInfoModify(@RequestBody UserModifyDto userModifyDto) throws Exception {
+//		if(userService.updateUser(userDto.getId(), userDto) == 1) {
+//			log.info("회원 수정 정상 완료 : {}", userDto.getId());
+//			return new ResponseEntity<String>("유저 정보 수정 성공", HttpStatus.OK);
+//		} else {
+//			log.info("회원 수정 실패!! :  {}", userDto.getId());
+//			return new ResponseEntity<String>("유저 정보 수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
 	
 	
 	
@@ -250,79 +276,51 @@ public class UserController {
 	}
 	
 	
-	@GetMapping("/review/board")
+	@GetMapping("/reply/board")
 	public String userReviewBoard() {
 		String loginedId = SecurityUtil.getCurrentMemberId();
+		
 		return "";
 	}
 	
-	@GetMapping("/review/hotplace")
+	@GetMapping("/reply/hotplace")
 	public String userReviewHotplace() {
 		String loginedId = SecurityUtil.getCurrentMemberId();
 		return "";
 	}
 	
 	// ## 로그인 관련 ## //
-	@ApiOperation(value = "구) 로그인 방식입니다. 사용하지 않는데 혹시 몰라 넣어놨습니다.")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "리프레시 토큰 성공"), 
-			@ApiResponse(code = 403, message = "리프레시 토큰 에러")
-		, 	@ApiResponse(code = 500, message = "서버 에러")})
-	@PostMapping("/oldlogin")
-	public TokenInfo login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
-		log.info("/user/login !!");
-		String id = userLoginRequestDto.getId();
-		String password = userLoginRequestDto.getPassword();
-		log.info("id : {}, password : {}", id, password);
-		TokenInfo tokenInfo = userService.login(id, password);
-//		TokenInfo tokenInfo = userService.login("test", "1234");
-		
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add("Authorization", "Bearer " + tokenInfo.getAccessToken());
-		
-		// session.setAttribute("userid", id);
-		
-		log.info("tokeninfo : {}", tokenInfo);
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		log.info("authentication : {}", authentication.toString());
-		log.info("음:{}", SecurityContextHolder.getContext());
-//		User user = (User) authentication.getPrincipal();
-//		log.info("authentication.getPrincipal().getUsername() : {}", user.toString());
-		return tokenInfo;
-	}
-	
+//	@ApiOperation(value = "구) 로그인 방식입니다. 사용하지 않는데 혹시 몰라 넣어놨습니다.")
+//	@ApiResponses({
+//			@ApiResponse(code = 200, message = "리프레시 토큰 성공"), 
+//			@ApiResponse(code = 403, message = "리프레시 토큰 에러")
+//		, 	@ApiResponse(code = 500, message = "서버 에러")})
+//	@PostMapping("/oldlogin")
+//	public TokenInfo login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
+//		log.info("/user/login !!");
+//		String id = userLoginRequestDto.getId();
+//		String password = userLoginRequestDto.getPassword();
+//		log.info("id : {}, password : {}", id, password);
+//		TokenInfo tokenInfo = userService.login(id, password);
+////		TokenInfo tokenInfo = userService.login("test", "1234");
+//		
+//		HttpHeaders httpHeaders = new HttpHeaders();
+//		httpHeaders.add("Authorization", "Bearer " + tokenInfo.getAccessToken());
+//		
+//		// session.setAttribute("userid", id);
+//		
+//		log.info("tokeninfo : {}", tokenInfo);
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//		log.info("authentication : {}", authentication.toString());
+//		log.info("음:{}", SecurityContextHolder.getContext());
+////		User user = (User) authentication.getPrincipal();
+////		log.info("authentication.getPrincipal().getUsername() : {}", user.toString());
+//		return tokenInfo;
+//	}
+//	
 	
 	// @@@@ 아래부터는 테스트 용도입니다. 실제로 사용하지 않습니다. @@@@
-	
-	
-	// ## 회원 가입 관련 ## //
-//	@ApiOperation(value = "회원가입 페이지로 이동")
-//	@ApiResponses({
-//			@ApiResponse(code = 200, message = "야호~~ 아이디 찾았다"), 
-//			@ApiResponse(code = 500, message = "에러")})
-//	@GetMapping("/join")
-//	public ResponseEntity<?> join() {
-//		try {
-//			return new ResponseEntity<String>("회원 가입 페이지 이동 성공", HttpStatus.OK);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<String>("회원 가입 페이지 이동 실패. ", HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
-	
-//	@ApiOperation(value = "로그인 페이지 이동")
-//	@ApiResponses({@ApiResponse(code = 200, message = "로그인 페이지 이동 OK"), @ApiResponse(code = 500, message = "서버 에러")})
-//	@GetMapping("/login")
-//	public ResponseEntity<?> login() {
-//		// 로그인 페이지 이동
-//		log.info("로그인 페이지 이동");
-//		try {
-//			return new ResponseEntity<String>("로그인 페이지 이동에 성공!", HttpStatus.OK);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<String>("로그인 페이지 이동에 실패", HttpStatus.INTERNAL_SERVER_ERROR); 
-//		}
-//	}
+
 	
 	@GetMapping("/test")
 	public String test() {
@@ -332,14 +330,18 @@ public class UserController {
 	}
 	
 	
-	@GetMapping("/auth/admin/test")
+	@GetMapping("/admin/test")
 	public String admin_test() {
-		return "i am an admin.";
+		log.info("ADMIN_TEST : SecurityUtil.getCurrentMemberId(); {}", SecurityUtil.getCurrentMemberId());
+		SecurityUtil.getCurrentMemberId();
+		return SecurityUtil.getCurrentMemberId();
 	}
 	
-	@GetMapping("/auth/user/test")
+	@GetMapping("/user/test")
 	public String user_test() {
-		return "i am an user.";
+		log.info("USER_TEST : SecurityUtil.getCurrentMemberId(); {}", SecurityUtil.getCurrentMemberId());
+		SecurityUtil.getCurrentMemberId();
+		return SecurityUtil.getCurrentMemberId();
 	}
 	
 	
