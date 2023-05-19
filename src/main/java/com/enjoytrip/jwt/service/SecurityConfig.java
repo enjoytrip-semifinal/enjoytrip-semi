@@ -62,6 +62,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/user/join").permitAll()                
                 .antMatchers("/user/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/user/**").hasRole("USER")
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 //                .logout()
