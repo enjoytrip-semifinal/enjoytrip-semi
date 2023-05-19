@@ -102,7 +102,7 @@ public class HotplaceRestController {
 
 	@ApiOperation(value = "게시판 글 쓰기", notes = "게시판의 글 하나를 작성합니다.")
 	@PostMapping("/write")
-	public ResponseEntity<?> writeHotplace(@RequestBody HotplaceDto hotplace)
+	public ResponseEntity<?> writeHotplace(@RequestBody HotplaceDto hotplace, String[] url)
 			throws Exception {
 		System.out.println("insert hoplace is called!!");
 		// 페이징 처리를 위한 Map
@@ -113,7 +113,7 @@ public class HotplaceRestController {
 		pageMap.put("gugun", "0");
 		pageMap.put("type", "0");
 
-		int result = service.insertHotplace(hotplace);
+		int result = service.insertHotplace(hotplace,url);
 		if (result > 0) {
 			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 		} else {

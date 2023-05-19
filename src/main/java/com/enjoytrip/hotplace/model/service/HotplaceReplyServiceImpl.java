@@ -29,7 +29,7 @@ public class HotplaceReplyServiceImpl implements HotplaceReplyService {
 
 		param.put("start", start);
 		param.put("listsize", SizeConstant.LIST_SIZE);
-		param.put("hotplaceid", map.get("hotplaceid"));
+		param.put("id", Integer.parseInt(map.get("id")));
 
 		return replyMapper.listReply(map);
 	}
