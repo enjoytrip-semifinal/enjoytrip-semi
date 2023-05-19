@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.enjoytrip.notice.model.NoticeDto;
+import com.enjoytrip.util.PageNavigation;
 
 public interface NoticeService {
-	List<NoticeDto> listNotice() throws Exception;
+	List<NoticeDto> listNotice(Map<String, String> map) throws Exception;
 
 	NoticeDto getNotice(int noticeid) throws Exception;
 
@@ -17,4 +18,6 @@ public interface NoticeService {
 	int modify(NoticeDto notice) throws Exception;
 
 	int updateNoticeHit(int noticeid) throws Exception;
+
+	PageNavigation makePageNav(Map<String, String> map) throws Exception;
 }
