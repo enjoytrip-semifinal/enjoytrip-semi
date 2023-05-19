@@ -6,3 +6,4 @@ public class SizeConstant {
 	public final static int NAVIGATION_SIZE = 10;
 	
 }
+

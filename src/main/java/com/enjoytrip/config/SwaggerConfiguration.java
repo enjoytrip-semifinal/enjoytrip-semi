@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -21,36 +20,64 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfiguration {
 
 //	http://localhost:8080/swagger-ui/index.html
-	
 	private String version = "Version";
 	private String title = "EnjoyTrip " + version;
+
+	@Bean
+	public Docket boardApi() {
+		title = "Board API ";
+
+		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes())
+				.produces(getProduceContentTypes()).apiInfo(apiInfo()).groupName("Board").select()
+				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.board.controller")).paths(regex("/board/.*"))
+				.build().useDefaultResponseMessages(false);
+	}
+
+	@Bean
+	public Docket hotplaceApi() {
+		title = "hotplace API ";
+
+		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes())
+				.produces(getProduceContentTypes()).apiInfo(apiInfo()).groupName("Hotplace").select()
+				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.hotplace.controller"))
+				.paths(regex("/hotplace/.*")).build().useDefaultResponseMessages(false);
+	}
 	
 	@Bean
-	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes()).produces(getProduceContentTypes())
-					.apiInfo(apiInfo()).groupName(version).select()
-					.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.notice.controller"))
-					.paths(regex("/notice/.*")).build()
-					.useDefaultResponseMessages(false);
-	}
-	
-	private Set<String> getConsumeContentTypes() {
-        Set<String> consumes = new HashSet<>();
-        consumes.add("application/json;charset=UTF-8");
-        consumes.add("application/x-www-form-urlencoded");
-        return consumes;
-    }
+	public Docket itineraryApi() {
+		title = "Itinerary API ";
 
-    private Set<String> getProduceContentTypes() {
-        Set<String> produces = new HashSet<>();
-        produces.add("application/json;charset=UTF-8");
-        return produces;
-    }
+		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes())
+				.produces(getProduceContentTypes()).apiInfo(apiInfo()).groupName("Itinerary").select()
+				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.itinerary.controller")).paths(regex("/itinerary/.*"))
+				.build().useDefaultResponseMessages(false);
+	}
+
+	@Bean
+	public Docket userApi() {
+		title = "User API ";
+
+		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).groupName("User").select()
+				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.user.controller")).paths(regex("/user/.*"))
+				.build().useDefaultResponseMessages(false);
+
+	}
+
+	private Set<String> getConsumeContentTypes() {
+		Set<String> consumes = new HashSet<>();
+		consumes.add("application/json;charset=UTF-8");
+		consumes.add("application/x-www-form-urlencoded");
+		return consumes;
+	}
+
+	private Set<String> getProduceContentTypes() {
+		Set<String> produces = new HashSet<>();
+		produces.add("application/json;charset=UTF-8");
+		return produces;
+	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title(title)
-				.description("<h3>EnjoyTrip API Reference </h3>")
-				.version("1.0").build();
+		return new ApiInfoBuilder().title(title).description("<h3>EnjoyTrip API Reference </h3>").version("1.0")
+				.build();
 	}
-	
 }
