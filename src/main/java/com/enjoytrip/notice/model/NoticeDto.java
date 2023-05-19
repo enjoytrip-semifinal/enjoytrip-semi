@@ -1,5 +1,7 @@
 package com.enjoytrip.notice.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
@@ -13,5 +15,6 @@ public class NoticeDto {
 	private int hit;
 	private String title;
 	private String content;
-	private int adminid;
+	private int adminid;	
+	private List<NoticeFileInfoDto> fileInfos;
 }

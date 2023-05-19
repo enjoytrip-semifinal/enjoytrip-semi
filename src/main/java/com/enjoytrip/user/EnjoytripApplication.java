@@ -11,8 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.enjoytrip"})
-@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
-
+//@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 public class EnjoytripApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EnjoytripApplication.class, args);   
@@ -23,7 +22,9 @@ public class EnjoytripApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:8081");
+            	registry
+                .addMapping("/**")
+                .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
             }
         };
     }

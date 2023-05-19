@@ -8,10 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +27,7 @@ import com.enjoytrip.jwt.service.TokenInfo;
 import com.enjoytrip.jwt.service.TokenRefreshException;
 import com.enjoytrip.user.entity.RefreshToken;
 import com.enjoytrip.user.entity.UserDto;
+import com.enjoytrip.user.entity.UserModifyDto;
 import com.enjoytrip.user.repository.RefreshTokenRepository;
 import com.enjoytrip.user.repository.UserRespository;
 
@@ -40,8 +47,9 @@ public class UserService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final PasswordEncoder passwordEncoder;
 	
-	@Autowired
 	private final RefreshTokenRepository refreshTokenRepository;
+	
+	private final JavaMailSender mailSender;
 	
 	// 단순 로그인
 	@Transactional
@@ -105,53 +113,110 @@ public class UserService {
 	// user정보 가져오기(user수정에서씀)
 	@Transactional
 	public UserDto userInfo(String id) throws Exception{
+		log.info("id : {}", id);
 		Optional<UserDto> user = userRespository.findByid(id);
+		log.info("엄 : user.get() : {}", user.get().toString());
 		return user.get();
 	}
 	
+	// 로그아웃 by AccessToken
 	@Transactional
-	public String findId(String email) throws Exception {
-		if(userRespository.findByemail(email).isPresent()) {
-			String id = userRespository.findByemail(email).get().getId();
-			log.info("찾은 아이디 : {}", id);
-			return id;
-		} else {
-			throw new Exception("존재하지 않은 이메일 입니다.");
-		}
+	public void logoutByToken(String accessToken) throws Exception {
+		Claims claims = jwtTokenProvider.parseClaims(accessToken);
+		String loginedId = claims.getSubject();
+		SecurityContextHolder.clearContext();
+		refreshTokenRepository.deleteByid(loginedId);
 	}
 	
 	@Transactional
+	public Boolean findId(String email) throws Exception {
+		log.info("어 왜 안되지?: {}",email);
+		if(!userRespository.findByemail(email).isEmpty()) {
+			StringBuilder sb = new StringBuilder();
+			List<UserDto> users = userRespository.findByemail(email);
+			
+			for(UserDto user : users) {
+				String id = user.getId();
+				sb.append("<b>"+id+ " \n</b> ");
+			}
+			
+			log.info("찾은 아이디 : {}", sb.toString());
+			
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message);
+			
+			helper.setSubject("[EnjoyTrip] 아이디 찾기 결과입니다.");
+			helper.setFrom("hellohwans3@gmail.com");
+			helper.setTo(email);
+			
+			boolean html = true;
+			
+			String htmlContent = "<!DOCTYPE html>" +
+	                "<html>" +
+	                "<head>" +
+	                "<style>" +
+	                "body {font-family: Arial, sans-serif;}" +
+	                ".container {width: 80%; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px;}" +
+	                "h1 {color: #444;}" +
+	                "</style>" +
+	                "</head>" +
+	                "<body>" +
+	                "<div class=\"container\">" +
+	                "<h1>EnjoyTrip : ID 찾기 결과</h1>" +
+	                "<p>Hello,</p>" +
+	                "<p>You recently requested your ID from our site. Your ID is:</p>" +
+	                "<p style=\"font-size:18px; color:#008000;\"><strong> " + sb.toString() + " </strong></p>" +
+	                "<p>If you did not request this, please ignore this email or contact support if you have questions.</p>" +
+	                "<p>Thank you,</p>" +
+	                "<p>The Support Team : <b>Establers@naver.com</b> </p>" +
+	                "</div>" +
+	                "</body>" +
+	                "</html>";
+			
+			helper.setText(htmlContent, html);
+			mailSender.send(message);
+			return true;
+			
+		} else {
+			return false;
+		}
+	}
+	
+	
+	// 구현 안되어이읐음
+	@Transactional
 	public String findpw(String id, String email) throws Exception {
-		if(userRespository.findByemail(id).isPresent()) {
+		if(userRespository.findByemail(id) != null) {
 			if(userRespository.findByid(id).equals(userRespository.findByemail(email))) {
-				String pw = userRespository.findByemail(id).get().getPassword();
+				String pw = userRespository.findByemail(id).get(0).getPassword();
 				return pw;
 			} else {
-				throw new Exception("아이디와 이메일이 매칭되지 않습니다.");
+				throw new RuntimeException("아이디와 이메일이 매칭되지 않습니다.");
 			}
 		} else {
-			throw new Exception("아이디가 존재하지 않습니다.");
+			throw new RuntimeException("아이디가 존재하지 않습니다.");
 		}
+	}
+	
+	/*
+	 * ID 존재 시, True : False
+	 */
+	@Transactional
+	public boolean checkForDuplicateId(String id) {
+		log.info("findByid : {} ", id);
+		if(userRespository.findByid(id).isPresent()) {
+			return true;
+		} 
+		return false;
 	}
 	
 	// 단순 회원가입
 	@Transactional
-	public void join(UserDto userDto) throws Exception {
-		
+	public void join(UserDto userDto) {
 		if(userRespository.findByid(userDto.getId()).isPresent()) {
-			throw new Exception("이미 존재하는 아이디 입니다.");
+			throw new RuntimeException("이미 존재하는 아이디 입니다.");
 		}
-		
-		try {
-//			log.info(userDto.toString());
-//			log.info(userDto.toEntity().getRoles().get(0));
-//			userRespository.save(userDto.toEntity());
-			userRespository.save(userDto.toEntity());			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.info("user service join error ! !");
-		}
+		userRespository.save(userDto.toEntity());			
 	}
 	
 //	1. **/user/join (DELETE) (회원 탈퇴)**
@@ -161,6 +226,7 @@ public class UserService {
 		log.info(user.get().toString());
 		if(user.isPresent()) {
 			userRespository.delete(user.get());
+			refreshTokenRepository.deleteByid(user.get().getId());
 			return 1;
 		}
 		return 0;
@@ -168,7 +234,7 @@ public class UserService {
 	
 //	2. **/user/modify (PUT) (정보 수정)**
 	@Transactional
-	public int updateUser(String id, UserDto requestUser) throws Exception{
+	public int updateUser(String id, UserModifyDto requestUser) throws Exception{
 		Optional<UserDto> user = userRespository.findByid(id);
 		if(!user.isPresent()) return 0;
 		

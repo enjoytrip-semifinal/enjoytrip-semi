@@ -9,7 +9,7 @@ public interface HotplaceReplyService {
 	//전체 댓글 불러오기
 	List<HotplaceReplyDto> listReply(Map<String, String> map);
 	//댓글 쓰기
-	int writeReply(HotplaceReplyDto replyDto);
+	int insertReply(HotplaceReplyDto replyDto);
 	//댓글 삭제
 	int deleteReply(int replyId);
 	//댓글 수정
