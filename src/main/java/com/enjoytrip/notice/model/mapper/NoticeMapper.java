@@ -10,6 +10,7 @@ import com.enjoytrip.notice.model.NoticeDto;
 
 @Mapper
 public interface NoticeMapper {
+
 	List<NoticeDto> listNotice(Map<String, Object> param) throws SQLException;
 
 	NoticeDto getNotice(int noticeid) throws SQLException;
@@ -19,10 +20,11 @@ public interface NoticeMapper {
 	int delete(int noticeid) throws SQLException;
 
 	int modify(NoticeDto notice) throws SQLException;
-	
+
 	int updateNoticeHit(int noticeid) throws SQLException;
-	
+
 	int getTotalNoticeCount(Map<String, Object> param) throws SQLException;
-	
+
 	int registFile(NoticeDto notice) throws SQLException;
+
 }

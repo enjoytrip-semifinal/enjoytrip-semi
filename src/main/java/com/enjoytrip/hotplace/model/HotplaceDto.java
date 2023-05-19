@@ -19,12 +19,13 @@ public class HotplaceDto {
 	private int longitude;
 	private String title;
 	private String content;
-	private String regTime;
+	private String regDate;
 	private String userId;
 	private int sido;
 	private int gugun;
 	private int type;
 	private String address;
 	private List<HotplaceFileInfoDto> fileInfos;
+	private int season;
 }
  

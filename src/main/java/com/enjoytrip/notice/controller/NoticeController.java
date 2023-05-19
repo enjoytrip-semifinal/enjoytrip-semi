@@ -158,5 +158,5 @@ public class NoticeController {
 			return new ResponseEntity<String>("서버 오류", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 }
+

@@ -2,6 +2,7 @@ package com.enjoytrip.jwt.service;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -47,13 +48,20 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .antMatchers("/board/**").permitAll()
-                .antMatchers("/hotplace/**").permitAll()
-                .antMatchers("/user/**").permitAll()
-//                .anyRequest().authenticated()
-                .antMatchers("/user/auth/user/*").hasRole("USER")
-                .antMatchers("/user/auth/admin/*").hasRole("ADMIN")
+//                .antMatchers("/**").permitAll()
+                .antMatchers("/exist").permitAll()
+                .antMatchers("/notice/list").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/notice/write", "/notice/delete", "/notice/modify").hasRole("ADMIN")
+                .antMatchers("/board/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/file/download/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/hotplace/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/itinerary/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/user/login", "/user/findid", "/user/findpw").permitAll()
+                .antMatchers("/user/refresh-token", "/user/logout", "/user/modify").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/user/join").permitAll()
+                .antMatchers(HttpMethod.POST, "/user/join").permitAll()                
+                .antMatchers("/user/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/user/**").hasRole("USER")
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 //                .logout()
