@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.enjoytrip.hotplace.model.mapper.HotplaceMapper">
+
+	<resultMap type="hotplaceDto" id="hotplace">
+		<result column="hotplace_id" property="hotplaceId" />
+		<result column="like_count" property="likeCount" />
+		<result column="latitude" property="latitude" />
+		<result column="longitude" property="longitude" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="register_date" property="regDate" />
+		<result column="user_id" property="userId" />
+		<result column="hit_count" property="hitCount" />
+		<result column="sido" property="sido" />
+		<result column="gugun" property="gugun" />
+		<result column="type" property="type" />
+		<result column="address" property="address" />
+		<result column="season" property="season" />
+
+	</resultMap>
+
+	<resultMap type="hotplaceFileInfoDto" id="file">
+		<result column="hotplace_id" property="hotplaceId" />
+		<result column="save_folder" property="saveFolder" />
+		<result column="original_file" property="originalFile" />
+		<result column="save_file" property="saveFile" />
+	</resultMap>
+
+	<!-- 글 작성하기 -->
+	<insert id="insertHotplace" parameterType="hotplaceDto">
+		insert into hotplace
+		(user_id,latitude,longitude,title,content,register_date,like_count,hit_count,sido,gugun,type,address,season)
+		values (#{userId},
+		#{latitude},#{longitude},#{title},#{content},now(),0,0,#{sido},#{gugun},#{type},#{address},#{season})
+		<selectKey resultType="int" keyProperty="hotplaceId"
+			order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+
+	<!-- 검색 조건 걸어줄거임 -->
+	<sql id="search">
+		<where>
+			<if test="sido != 0">
+				sido = #{sido}
+			</if>
+
+			<if test="gugun != 0">
+				<if test="sido != 0">
+					and
+				</if>
+				gugun = #{gugun}
+			</if>
+
+			<if test="type != 0">
+				<if test="sido != 0 or gugun != 0">
+					and
+				</if>
+				type = #{type}
+			</if>
+
+			<if test="season != 0">
+				<if test="sido != 0 or gugun != 0 or type != 0">
+					and
+				</if>
+				season = #{season}
+			</if>
+		</where>
+	</sql>
+
+	<select id="listHotplace" parameterType="map"
+		resultMap="hotplace">
+		select *
+		from hotplace
+		<include refid="search" />
+		order by hotplace_id desc
+		limit #{start}, #{listsize}
+	</select>
+
+	<!-- 전체 글 수 가져오기 -->
+	<select id="getTotalHotplaceCount" parameterType="map"
+		resultType="int">
+		select count(hotplace_id)
+		from hotplace
+		<include refid="search"></include>
+	</select>
+
+	<select id="getHotplaceById" parameterType="int"
+		resultMap="hotplace">
+		select *
+		from hotplace
+		where
+		hotplace_id = #{hotplaceId}
+	</select>
+
+	<select id="fileInfoList" resultMap="file">
+		select *
+		from
+		hotplace_file_info
+		where hotplace_id =
+		#{hotplaceId}
+	</select>
+
+	<update id="updateHit" parameterType="int">
+		update hotplace
+		set
+		hit_count =
+		hit_count +1
+		where hotplace_id = #{hotplaceId}
+	</update>
+
+	<update id="updateLike" parameterType="int">
+		update hotplace
+		set
+		like_count = like_count +1
+		where hotplace_id = #{hotplaceId}
+	</update>
+
+
+	<update id="updateHotplace" parameterType="hotplaceDto">
+		update hotplace
+		set
+		title = #{title}, content = #{content}, season=#{season}
+		where
+		hotplace_id = #{hotplaceId}
+	</update>
+
+	<delete id="deleteFileAll" parameterType="int">
+		delete from
+		hotplace_file_info
+		where hotplace_id = #{hotplaceId}
+	</delete>
+
+	<delete id="deleteHotplace" parameterType="int">
+		delete from hotplace
+		where hotplace_id = #{hotplaceId}
+	</delete>
+
+	<update id="likeHotplace" parameterType="int">
+		update hotplace
+		set like_count = like_count+1
+		where hotplace_id = #{hotplaceId}
+	</update>
+	
+	<insert id = "userLikeHotplace" parameterType="map">
+		insert into user_like_hotplace
+		(hotplace_id, user_id) values (#{hotplac_id}, #{user_id})
+	</insert>
+	
+	<update id="hateHotplace" parameterType="int">
+		update hotplace
+		set like_count = like_count-1
+		where hotplace_id = #{hotplaceId}
+	</update>
+	
+	<delete id="userHateHotplace" parameterType="map">
+		delete from user_like_hotplace
+		where hotplace_id = #{hotplaceId} and user_id = #{user_id}
+	</delete>
+
+</mapper>
