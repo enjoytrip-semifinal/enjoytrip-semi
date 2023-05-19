@@ -100,46 +100,11 @@ public class HotplaceRestController {
 
 	}
 
-	// 3. 게시판 글 쓰기
 	@ApiOperation(value = "게시판 글 쓰기", notes = "게시판의 글 하나를 작성합니다.")
 	@PostMapping("/write")
-	public ResponseEntity<?> writeHotplace(@RequestBody HotplaceDto hotplace, @RequestBody MultipartFile[] files)
+	public ResponseEntity<?> writeHotplace(@RequestBody HotplaceDto hotplace, String[] url)
 			throws Exception {
-		// 사용자 정보
-
-		// ===========================================
-
-		// 파일 입력 부분
-		if (!files[0].isEmpty()) {
-			String today = new SimpleDateFormat("yyMMdd").format(new Date());
-			String saveFolder = uploadPath + File.separator + today;
-
-			File folder = new File(saveFolder);
-
-			// 폴더가 없으면 폴더를 만들어줌
-			if (!folder.exists())
-				folder.mkdirs();
-
-			List<HotplaceFileInfoDto> fileInfos = new ArrayList<>();
-			for (MultipartFile mfile : files) {
-				HotplaceFileInfoDto fileInfoDto = new HotplaceFileInfoDto();
-				String originalFileName = mfile.getOriginalFilename();
-
-				if (!originalFileName.isEmpty()) {
-					String saveFileName = UUID.randomUUID().toString()
-							+ originalFileName.substring(originalFileName.lastIndexOf('.'));
-
-					fileInfoDto.setSaveFolder(today);
-					fileInfoDto.setOriginalFile(originalFileName);
-					fileInfoDto.setSaveFile(saveFileName);
-					mfile.transferTo(new File(folder, saveFileName));
-				}
-
-				fileInfos.add(fileInfoDto);
-			}
-			hotplace.setFileInfos(fileInfos);
-		} // file
-
+		System.out.println("insert hoplace is called!!");
 		// 페이징 처리를 위한 Map
 		Map<String, String> pageMap = new HashMap<String, String>();
 
@@ -148,7 +113,7 @@ public class HotplaceRestController {
 		pageMap.put("gugun", "0");
 		pageMap.put("type", "0");
 
-		int result = service.writeHotplace(hotplace);
+		int result = service.insertHotplace(hotplace,url);
 		if (result > 0) {
 			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 		} else {
@@ -159,8 +124,8 @@ public class HotplaceRestController {
 	// 4. 게시판 글 삭제
 	@ApiOperation(value = "게시판 글 하나 삭제", notes = "게시판의 글 하나를 삭제합니다.")
 	@DeleteMapping("/delete/{num}")
-	public ResponseEntity<?> deleteBoard(@PathVariable int num) throws Exception {
-		int result = service.deleteHotplace(num, uploadPath);
+	public ResponseEntity<?> deleteHotplace(@PathVariable int num) throws Exception {
+		int result = service.deleteHotplace(num);
 		
 		// 페이징 처리를 위한 Map
 		Map<String, String> pageMap = new HashMap<String, String>();
@@ -172,5 +137,35 @@ public class HotplaceRestController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	//5. 좋아요 수 증가
+	@ApiOperation(value = "좋앙용~~~", notes = "너어무우 좋아용~~~")
+	@DeleteMapping("/like/{num}")
+	public ResponseEntity<?> likeHotplace(@PathVariable int num) throws Exception {
+		int result = service.likeHotplace(num);
+
+		if (result > 0) {
+			HotplaceDto hotplace = service.getHotplaceById(num);
+			return new ResponseEntity<HotplaceDto>(hotplace, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	
+	
+	//5. 좋아요 수 감소
+		@ApiOperation(value = "싫어용!!", notes = "싫은데요~~~")
+		@DeleteMapping("/hate/{num}")
+		public ResponseEntity<?> hateHotplace(@PathVariable int num) throws Exception {
+			int result = service.hateHotplace(num);
+
+			if (result > 0) {
+				HotplaceDto hotplace = service.getHotplaceById(num);
+				return new ResponseEntity<HotplaceDto>(hotplace, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			}
+		}
 
 }

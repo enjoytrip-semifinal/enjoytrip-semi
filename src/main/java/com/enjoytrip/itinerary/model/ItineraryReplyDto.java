@@ -6,7 +6,7 @@ import lombok.Data;
 public class ItineraryReplyDto {
 	private int itineraryReplyId;
 	private String content;
-	private String date;
+	private String registerDate;
 	private int itineraryId;
 	private int userId;
 }

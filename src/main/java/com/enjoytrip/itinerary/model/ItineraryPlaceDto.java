@@ -9,4 +9,5 @@ public class ItineraryPlaceDto {
 	private int placeOrder;
 	private String placeComment;
 	private int itineraryId;
+	private int placeId;
 }
