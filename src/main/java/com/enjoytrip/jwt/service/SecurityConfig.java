@@ -65,14 +65,6 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-//                .logout()
-//                .logoutUrl("/user/logout") 
-//                .addLogoutHandler(logoutHandler)
-//                .logoutSuccessHandler(
-//                		(request, response, authentication) ->
-//                		SecurityContextHolder.clearContext()
-//                )
-//                .invalidateHttpSession(true)
          ;
         return http.build();
     }
