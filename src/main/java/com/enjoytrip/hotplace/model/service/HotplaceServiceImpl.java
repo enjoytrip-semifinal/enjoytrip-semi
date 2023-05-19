@@ -14,16 +14,19 @@ import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceReplyDto;
 import com.enjoytrip.hotplace.model.mapper.HotplaceMapper;
 import com.enjoytrip.hotplace.model.mapper.HotplaceReplyMapper;
+import com.enjoytrip.user.model.service.UserService;
 import com.enjoytrip.util.PageNavigation;
 import com.enjoytrip.util.SizeConstant;
 
 @Service
 public class HotplaceServiceImpl implements HotplaceService {
 
+	private final UserService userService;
 	private HotplaceMapper hotplaceMapper;
 	private HotplaceReplyMapper hotplaceReplyMapper;
 
-	public HotplaceServiceImpl(HotplaceMapper hotplaceMapper, HotplaceReplyMapper hotplaceReplyMapper) {
+	public HotplaceServiceImpl(HotplaceMapper hotplaceMapper, HotplaceReplyMapper hotplaceReplyMapper, UserService userService) {
+		this.userService = userService;
 		this.hotplaceMapper = hotplaceMapper;
 		this.hotplaceReplyMapper = hotplaceReplyMapper;
 	}
@@ -82,6 +85,7 @@ public class HotplaceServiceImpl implements HotplaceService {
 	@Override
 	public int updateHotplace(HotplaceDto hotplaceDto) throws SQLException {
 		// TODO Auto-generated method stub
+		
 		return hotplaceMapper.updateHotplace(hotplaceDto);
 	}
 
@@ -89,14 +93,33 @@ public class HotplaceServiceImpl implements HotplaceService {
 	@Transactional
 	public int likeHotplace(int hotplaceId) throws SQLException {
 		// TODO Auto-generated method stub
+		/*좋아요를 눌러 줬으니까 user_like_hotplace에 user_id와 hotplace_id를 추가해줘야한다*/
+		int userid = userService.getUser_idbyId();	//int userid를 받아 온다.
+		Map<String , Object> map = new HashMap<>();
+		map.put("userId", userid);
+		map.put("hotplaceId", hotplaceId);
+		int add = hotplaceMapper.userLikeHotplace(map);
+		
+		if(add>0)
+			System.out.println("add "+userid+" and "+hotplaceId+" into user_like_hotplace table");
+		
 		return hotplaceMapper.likeHotplace(hotplaceId);
 	}
 	
 	@Override
 	@Transactional
 	public int hateHotplace(int hotplaceId) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		/*좋아요를 취소 했으니까 user_like_hotplace에 user_id와 hotplace_id를 추가해줘야한다*/
+		
+		int userid = userService.getUser_idbyId();	//int userid를 받아 온다.
+		Map<String , Object> map = new HashMap<>();
+		map.put("userId", userid);
+		map.put("hotplaceId", hotplaceId);
+		int del = hotplaceMapper.userLikeHotplace(map);
+		if(del>0)
+			System.out.println("del "+userid+" and "+hotplaceId+" into user_like_hotplace table");
+		
+		return hotplaceMapper.hateHotplace(hotplaceId);
 	}
 
 	@Override

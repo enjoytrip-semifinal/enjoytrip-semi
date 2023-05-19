@@ -60,6 +60,7 @@ public class ItineraryController {
 
 	}
 	
+	// 여행계획 작성
 	@PostMapping(value = "/write")
 	public ResponseEntity<?> write(@RequestBody ItineraryDetailDto itineraryDetailDto) throws Exception {
 
@@ -91,8 +92,6 @@ public class ItineraryController {
 	    }
 	}
 
-
-	
 	// 여행계획 세부사항 선택
 	@GetMapping(value = "/detail/{itineraryId}")
 	public ResponseEntity<?> listOneView(@PathVariable("itineraryId") Integer num) throws Exception {
