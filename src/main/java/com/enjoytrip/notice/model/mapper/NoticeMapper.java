@@ -9,15 +9,15 @@ import com.enjoytrip.notice.model.NoticeDto;
 
 @Mapper
 public interface NoticeMapper {
-	List<NoticeDto> listNotice() throws SQLException;
-
-	NoticeDto getNotice(int noticeid) throws SQLException;
-
-	int write(NoticeDto noticeDto) throws SQLException;
-
-	int delete(int noticeid) throws SQLException;
-
-	int modify(NoticeDto notice) throws SQLException;
-	
-	int updateNoticeHit(int noticeid) throws SQLException;
+//	List<NoticeDto> listNotice() throws SQLException;
+//
+//	NoticeDto getNotice(int noticeid) throws SQLException;
+//
+//	int write(NoticeDto noticeDto) throws SQLException;
+//
+//	int delete(int noticeid) throws SQLException;
+//
+//	int modify(NoticeDto notice) throws SQLException;
+//	
+//	int updateNoticeHit(int noticeid) throws SQLException;
 }
