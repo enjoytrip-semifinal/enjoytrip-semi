@@ -7,28 +7,34 @@
 	<!-- 리뷰 가져오기 -->
 	<select id="listReview" parameterType="map" resultType="boardReviewDto">
 			select *
-			from boardreview
-			where boardid = #{boardid}
-			order by boardreviewid desc
+			from board_reply
+			where board_id = #{id}
+			order by board_reply_id desc
 			limit #{start}, #{listsize}
 	</select>
 	
 	<!-- 리뷰 쓰기 -->
 	<insert id="writeReview" parameterType="boardReviewDto">
-			insert into boardreview(boardreviewid, title, content, date, userid, boardid)
-			values (default, #{title}, #{content}, now(), #{userid}, #{boardid})
+			insert into board_reply (board_reply_id, content, register_date, user_id, board_id)
+			values (default, #{content}, now(), #{user_id}, #{board_id})
 	</insert>
 	
 	<!-- 리뷰 수정 -->
 	<update id="modifyReview" parameterType="boardReviewDto">
-			update boardreview
-			set title = #{title}, content = #{content}
-			where boardid = #{boardid} and boardreviewid = #{boardreviewid}
+			update board_reply
+			set content = #{content}
+			where board_id = #{board_id} and board_reply_id = #{board_reply_id}
 	</update>
 	
-	<!-- 리뷰 삭제 -->
+	<!-- 리뷰 하나 삭제 -->
 	<delete id="deleteReview" parameterType="int">
-			delete from boardreview
-			where boardreviewid = #{boardreviewid}
+			delete from board_reply
+			where board_reply_id = #{board_reply_id}
+	</delete>
+	
+	<!-- 게시글을 지울 때 사용하는 리뷰 전체 삭제 -->
+	<delete id="deleteAllReview" parameterType="int">
+		delete from board_reply
+		where board_id = #{board_id}
 	</delete>
 </mapper>
