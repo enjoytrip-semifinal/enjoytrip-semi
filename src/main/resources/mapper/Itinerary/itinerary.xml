@@ -51,7 +51,9 @@
 	</insert>
 
 	<select id="listItinerary" resultMap="ItineraryDetailResultMap" parameterType="map">
-		select * from itinerary_detail
+		select d.itineary_id, d.user_id, DATE_FORMAT(d.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', 
+			d.start_date, d.end_date, d.title, d.content, u.nickname
+		from itinerary_detail d left join user u using(user_id)
 		<include refid="search"></include>
 		order by itinerary_id
 		limit #{start}, #{listsize}
