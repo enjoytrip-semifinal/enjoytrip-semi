@@ -61,7 +61,14 @@ public class ItineraryServiceImpl implements ItineraryService{
 	// 여행계획 수정하기
 	@Override
 	public int modifyItinerary(ItineraryDetailDto itinerarydetaildto) {
-		return itinerarymapper.modifyItinerary(itinerarydetaildto);
+	    int result = itinerarymapper.modifyItinerary(itinerarydetaildto);
+
+	    List<ItineraryPlaceDto> itineraryPlaces = itinerarydetaildto.getItineraryPlaces();
+	    for (ItineraryPlaceDto itineraryPlace : itineraryPlaces) {
+	        itinerarymapper.modifyPlace(itineraryPlace);
+	    }
+	    
+	    return result;
 	}
 	
 	// 여행계획 삭제하기

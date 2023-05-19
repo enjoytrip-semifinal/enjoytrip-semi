@@ -47,8 +47,6 @@
 	    INSERT INTO itinerary_place (place_name, place_address, place_order, place_comment, itinerary_id) 
 	    VALUES (#{placeName}, #{placeAddress}, #{placeOrder}, #{placeComment}, #{itineraryId})
 	</insert>
-	
-
 
 	<select id="listItinerary" resultMap="ItineraryDetailResultMap" parameterType="map">
 		select * from itinerary_detail
@@ -87,24 +85,14 @@
 
 	<update id="modifyItinerary" parameterType="ItineraryDetailDto">
 		UPDATE itinerary_detail
-		SET title = #{title}, content = #{content},
-		start_date = #{startDate},
-		end_date = #{endDate}
-		WHERE itinerary_id =
-		#{itineraryId};
+		SET title = #{title}, content = #{content}, start_date = #{startDate},end_date = #{endDate}
+		WHERE itinerary_id = #{itineraryId};
 
-		<foreach collection="itineraryPlaces" item="place"
-			index="index">
-			UPDATE itinerary_place
-			SET place_name = #{place.placeName},
-			place_address =
-			#{place.placeAddress},
-			place_order =
-			#{place.placeOrder}, place_comment = #{place.placeComment}
-			WHERE
-			itinerary_id = #{itineraryId} AND place_id = #{place.placeId};
-		</foreach>
 	</update>
-
+	<update id="modifyPlace" parameterType="ItineraryPlaceDto">
+		UPDATE itinerary_place
+		SET place_name = #{placeName}, place_address = #{placeAddress}, place_order = #{placeOrder}, place_comment = #{placeComment}
+		WHERE itinerary_id = #{itineraryId} AND place_id = #{placeId};
+	</update>
 
 </mapper>

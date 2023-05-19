@@ -18,8 +18,8 @@
 	
 	<update id="modifyReply" parameterType="itineraryReplyDto">
 			update itinerary_reply
-			set content = #{content}
-			where itinerary_reply_id = #{itineraryReplyId} and user_id = #{userId}
+			set content = #{content}, register_date = now()
+			where itinerary_reply_id = #{itineraryReplyId}
 	</update>
 	
 	<delete id="deleteReply" parameterType="int">
