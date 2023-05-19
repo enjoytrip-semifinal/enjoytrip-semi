@@ -276,13 +276,14 @@ public class UserController {
 	}
 	
 	
-	@GetMapping("/review/board")
+	@GetMapping("/reply/board")
 	public String userReviewBoard() {
 		String loginedId = SecurityUtil.getCurrentMemberId();
+		
 		return "";
 	}
 	
-	@GetMapping("/review/hotplace")
+	@GetMapping("/reply/hotplace")
 	public String userReviewHotplace() {
 		String loginedId = SecurityUtil.getCurrentMemberId();
 		return "";
