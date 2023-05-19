@@ -30,7 +30,7 @@
 		resultType="NoticeDto" resultMap="notice">
 		select *
 		from notice
-		<!-- <include refid="search"></include> -->
+		<include refid="search"></include>
 		order by notice_id
 		limit #{start}, #{listsize}
 	</select>
@@ -44,9 +44,8 @@
 
 	<insert id="write" parameterType="NoticeDto">
 		insert into notice (notice_id,
-		register_time, hit, title, content, admin_id)
-		values (default, now(),
-		0,
+		register_time, hit, title, content, user_id)
+		values (default, now(), 0,
 		#{title}, #{content}, #{adminid})
 	</insert>
 

@@ -25,7 +25,6 @@ import com.enjoytrip.util.PageNavigation;
 
 import io.swagger.annotations.Api;
 
-
 @RestController
 @RequestMapping("/itinerary")
 @Api(tags = "여행계획")
@@ -91,6 +90,7 @@ public class ItineraryController {
 	        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	    }
 	}
+
 
 	
 	// 여행계획 세부사항 선택
