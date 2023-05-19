@@ -23,6 +23,8 @@ public interface HotplaceService {
 
 	int deleteHotplace(int hotplaceId) throws Exception;
 
-	int updateLike(int hotplaceId) throws Exception;
+	int likeHotplace(int hotplaceId) throws Exception;
+	
+	int hateHotplace(int hotplaceId) throws Exception;
 
 }

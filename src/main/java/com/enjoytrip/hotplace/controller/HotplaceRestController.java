@@ -124,7 +124,7 @@ public class HotplaceRestController {
 	// 4. 게시판 글 삭제
 	@ApiOperation(value = "게시판 글 하나 삭제", notes = "게시판의 글 하나를 삭제합니다.")
 	@DeleteMapping("/delete/{num}")
-	public ResponseEntity<?> deleteBoard(@PathVariable int num) throws Exception {
+	public ResponseEntity<?> deleteHotplace(@PathVariable int num) throws Exception {
 		int result = service.deleteHotplace(num);
 		
 		// 페이징 처리를 위한 Map
@@ -137,5 +137,35 @@ public class HotplaceRestController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	//5. 좋아요 수 증가
+	@ApiOperation(value = "좋앙용~~~", notes = "너어무우 좋아용~~~")
+	@DeleteMapping("/like/{num}")
+	public ResponseEntity<?> likeHotplace(@PathVariable int num) throws Exception {
+		int result = service.likeHotplace(num);
+
+		if (result > 0) {
+			HotplaceDto hotplace = service.getHotplaceById(num);
+			return new ResponseEntity<HotplaceDto>(hotplace, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	
+	
+	//5. 좋아요 수 감소
+		@ApiOperation(value = "싫어용!!", notes = "싫은데요~~~")
+		@DeleteMapping("/hate/{num}")
+		public ResponseEntity<?> hateHotplace(@PathVariable int num) throws Exception {
+			int result = service.hateHotplace(num);
+
+			if (result > 0) {
+				HotplaceDto hotplace = service.getHotplaceById(num);
+				return new ResponseEntity<HotplaceDto>(hotplace, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			}
+		}
 
 }
