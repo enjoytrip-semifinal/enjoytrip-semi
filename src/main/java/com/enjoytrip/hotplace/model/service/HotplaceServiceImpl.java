@@ -1,24 +1,20 @@
 package com.enjoytrip.hotplace.model.service;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceDto;
+import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceReplyDto;
 import com.enjoytrip.hotplace.model.mapper.HotplaceMapper;
 import com.enjoytrip.hotplace.model.mapper.HotplaceReplyMapper;
 import com.enjoytrip.util.PageNavigation;
 import com.enjoytrip.util.SizeConstant;
-
-import io.swagger.models.auth.In;
 
 @Service
 public class HotplaceServiceImpl implements HotplaceService {
@@ -29,7 +25,7 @@ public class HotplaceServiceImpl implements HotplaceService {
 
 	public HotplaceServiceImpl(HotplaceMapper hotplaceMapper, HotplaceReplyMapper hotplaceReplyMapper) {
 		// TODO Auto-generated constructor stub
-		super();
+		//super();
 		this.hotplaceMapper = hotplaceMapper;
 		this.hotplaceReplyMapper = hotplaceReplyMapper;
 	}
