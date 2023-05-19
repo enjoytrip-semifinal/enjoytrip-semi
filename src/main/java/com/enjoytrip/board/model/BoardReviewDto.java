@@ -9,11 +9,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class BoardReviewDto {
-	private int boardreviewid;
-	private String title;
+	private int board_reply_id;
 	private String content;
-	private String date;
-	private String nickname;
-	private int userid;
-	private int boardid;
+	private String register_date;
+	private int board_id;
+	private int user_id;
 }

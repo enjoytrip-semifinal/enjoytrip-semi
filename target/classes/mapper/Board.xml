@@ -4,12 +4,6 @@
 
 <mapper namespace="com.enjoytrip.board.model.mapper.BoardMapper">
 
-	<resultMap type="fileInfoDto" id="file">
-		<result column="save_folder" property="saveFolder"/>
-		<result column="original_file" property="originalFile"/>
-		<result column="save_file" property="saveFile"/>
-	</resultMap>
-
 	<sql id="search">
 		<if test="word != null and word != ''">
 			<if test="key == 'title'">
@@ -29,7 +23,8 @@
 	<!-- board -->
 	<!-- 글 전체 가져오기 -->
 	<select id="listBoard" parameterType="map" resultType="boardDto">
-		select b.board_id, DATE_FORMAT(b.register_time, '%Y-%m-%d %H:%i:%s') as 'register_time', 
+
+		select b.board_id, DATE_FORMAT(b.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', 
 			   b.hit, b.title, b.user_id, b.content, u.nickname
 		from board b left join user u using(user_id)
 		<include refid="search"></include>
@@ -46,14 +41,16 @@
 	
 	<!-- 글 하나 가져오기 -->
 	<select id="viewBoard" parameterType="int" resultType="boardDto">
-			select board_id, DATE_FORMAT(register_time, '%Y-%m-%d %H:%i:%s') as 'register_time', hit, title, content, user_id
+
+			select board_id, DATE_FORMAT(register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', hit, title, content, user_id
 			from board
 			where board_id = #{boardId}
 	</select>
 	
 	<!-- 글 쓰기 -->
 	<insert id="writeBoard" parameterType="boardDto">
-			insert into board(board_id, register_time, hit, title, content, user_id)
+
+			insert into board(board_id, register_date, hit, title, content, user_id)
 			values (default, now(), #{hit}, #{title}, #{content}, #{user_id})
 	</insert>
 	
@@ -78,16 +75,17 @@
 	</update>
 	
 	<!-- 파일 업로드 -->
-	<insert id="registerFile" parameterType="boardDto">
-		insert into board_file_info (idx, board_id, save_folder, original_file, save_file)
+	<insert id="registerFileInfo">
+		insert into board_file_info (board_file_id, file_url, board_id)
 		values
-		<foreach collection="fileInfos" item="fileinfo" separator=" , ">
-			(default, #{board_id}, #{fileinfo.saveFolder}, #{fileinfo.originalFile}, #{fileinfo.saveFile})
+		<foreach collection="fileInfoList" item="fileInfoDto" separator=",">
+			(default, #{fileInfoDto.file_url}, #{fileInfoDto.board_id}
 		</foreach>
 	</insert>
 	
-	<select id="fileInfoList" resultMap="file" parameterType="int">
-		select save_folder, original_file, save_file
+	<!-- 파일 정보 가져오기 -->
+	<select id="fileInfoList" parameterType="int" resultType="fileInfoDto">
+		select board_file_id, file_url, board_id
 		from board_file_info
 		where board_id = #{boardId}
 	</select>
