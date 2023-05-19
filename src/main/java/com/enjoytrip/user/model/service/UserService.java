@@ -191,10 +191,10 @@ public class UserService {
 				String pw = userRespository.findByemail(id).get(0).getPassword();
 				return pw;
 			} else {
-				throw new Exception("아이디와 이메일이 매칭되지 않습니다.");
+				throw new RuntimeException("아이디와 이메일이 매칭되지 않습니다.");
 			}
 		} else {
-			throw new Exception("아이디가 존재하지 않습니다.");
+			throw new RuntimeException("아이디가 존재하지 않습니다.");
 		}
 	}
 	
