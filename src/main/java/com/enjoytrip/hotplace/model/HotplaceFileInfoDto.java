@@ -8,9 +8,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class HotplaceFileInfoDto {
+	private int fileId;
 	private int hotplaceId;
-	private String saveFolder;
-	private String originalFile;
-	private String saveFile;
+	private String url;
 }
  

@@ -30,7 +30,7 @@ public class BoardReviewServiceImpl implements BoardReviewService{
 		
 		param.put("start", start);
 		param.put("listsize", SizeConstant.LIST_SIZE);
-		param.put("boardid", map.get("boardid"));
+		param.put("id", map.get("id"));
 		
 		return boardReviewMapper.listReview(param);
 	}

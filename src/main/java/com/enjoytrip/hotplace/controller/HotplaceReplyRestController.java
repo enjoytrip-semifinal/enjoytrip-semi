@@ -41,9 +41,8 @@ public class HotplaceReplyRestController {
 	@ApiOperation(value = "페이징 처리된 리뷰 조회", notes = "페이징 처리된 리뷰 <b>목록</b>을 리턴합니다. <br>"
 			+ "넘겨줘야하는 QueryString ..../list?pgno=[값]&boardid=[값]")
 	@GetMapping("/list")
-	public ResponseEntity<?> listReview(@RequestParam Map<String, String> map) {
+	public ResponseEntity<?> listReply(@RequestParam Map<String, String> map) {
 		List<HotplaceReplyDto> list = service.listReply(map);
-		System.out.println("????");
 		// 리뷰는 리뷰 리스트와 페이지 번호만 있으면 됨
 		Map<String, Object> returnMap = new HashMap<>();
 		returnMap.put("replyList", list);
@@ -52,14 +51,14 @@ public class HotplaceReplyRestController {
 		if(list != null && !list.isEmpty()) {
 			return new ResponseEntity<Map>(returnMap, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<String>("댓글 리스트 불러오기중 오류가 발생하였습니다.",HttpStatus.NO_CONTENT);
 		}
 	}
 	
 	// 2. 리뷰 쓰기
 	@ApiOperation(value = "리뷰 쓰기", notes = "리뷰를 작성하여 저장합니다.")
 	@PostMapping("/write")
-	public ResponseEntity<?> writeReply(@RequestBody HotplaceReplyDto replyDto) {
+	public ResponseEntity<?> insertReply(@RequestBody HotplaceReplyDto replyDto) {
 		
 		// 사용자 정보
 		
@@ -70,11 +69,11 @@ public class HotplaceReplyRestController {
 		pageMap.put("pgno", "1");
 		
 		//int result = boardReviewService.writeReview(boardReview);
-		int result = service.writeReply(replyDto);
+		int result = service.insertReply(replyDto);
 		if(result > 0) {
 			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<String>("댓글을 적는 과정에서 오류가 발생했습니다.",HttpStatus.NO_CONTENT);
 		}
 		
 	}
@@ -82,7 +81,7 @@ public class HotplaceReplyRestController {
 	// 3. 리뷰  삭제
 	@ApiOperation(value = "댓글 삭제", notes = "댓글을 삭제합니다.")
 	@DeleteMapping("/delete/{hotplaceReplyId}")
-	public ResponseEntity<?> deleteReview(@PathVariable int replyId) throws SQLException {
+	public ResponseEntity<?> deleteReply(@PathVariable int replyId) throws SQLException {
 		int result = service.deleteReply(replyId);
 		
 		// 댓글을 쓰면 1번으로 이동한다.
@@ -92,14 +91,14 @@ public class HotplaceReplyRestController {
 		if(result > 0) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<String>("댓글을 삭제하는 과정에서 오류가 발생했습니다.",HttpStatus.NO_CONTENT);
 		}
 	}
 	
 	// 4. 리뷰 수정
 	@ApiOperation(value = "댓글 수정", notes = "댓글 수정합니다.")
 	@PutMapping("/modify/{hotplaceReplyId}")
-	public ResponseEntity<?> modifyReview(@RequestBody HotplaceReplyDto replyDto) throws SQLException {
+	public ResponseEntity<?> updateReply(@RequestBody HotplaceReplyDto replyDto) throws SQLException {
 		//int result = boardReviewService.modifyReview(boardReview);
 		int result = service.updateReply(replyDto);
 		// 댓글을 쓰면 1번으로 이동한다.
@@ -109,7 +108,7 @@ public class HotplaceReplyRestController {
 		if(result > 0) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<String>("댓글을 수정하는 과정에서 오류가 발생했습니다.",HttpStatus.NO_CONTENT);
 		}
 	}
 }

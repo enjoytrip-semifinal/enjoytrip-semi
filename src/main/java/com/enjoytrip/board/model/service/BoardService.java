@@ -8,11 +8,21 @@ import com.enjoytrip.board.model.BoardDto;
 import com.enjoytrip.util.PageNavigation;
 
 public interface BoardService {
+	// 게시글 리스트 가져오기
 	List<BoardDto> listBoard(Map<String, String> map) throws SQLException ;
-	PageNavigation makePageNavigation(Map<String, String> map) throws Exception;
-	BoardDto viewBoard(int boardId);
-	int writeBoard(BoardDto board) throws Exception;
-	int modifyBoard(BoardDto board);
+	
+	// 게시글 하나 가져오기
+	Map<String, Object> viewBoard(int boardId) throws Exception;
+	
+	// 글 쓰기
+	int writeBoard(BoardDto board, String[] path) throws Exception;
+	
+	// 글 수정하기
+	int modifyBoard(BoardDto board, String[] path) throws Exception;
+	
+	// 조회수 증가하기
 	void updateHit(int boardId) throws Exception;
-	int deleteBoard(int boardId, String uploadPath) throws Exception;
+	
+	// 삭제하기
+	int deleteBoard(int boardId) throws Exception;
 }
