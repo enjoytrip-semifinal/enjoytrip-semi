@@ -106,7 +106,7 @@ public class ItineraryController {
 	}
 	
 	// 여행계획 수정
-	@PutMapping(value = "/modify/{itinersryid}")
+	@PutMapping(value = "/modify/{itineraryid}")
 	public ResponseEntity<?> modify(@RequestBody ItineraryDetailDto Itinerarydetaildto) throws Exception {
 		int result = itineraryService.modifyItinerary(Itinerarydetaildto);
 
@@ -122,7 +122,7 @@ public class ItineraryController {
 	}
 	
 	// 여행계획 삭제
-	@DeleteMapping(value = "/delete/{itineraryId}")
+	@DeleteMapping(value = "/delete/{itineraryid}")
 	public ResponseEntity<?> delete(@PathVariable("itineraryId") Integer num) throws Exception {
 		int result = itineraryService.deleteItinerary(num);
 
