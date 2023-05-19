@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.enjoytrip.jwt.service.JwtTokenProvider;
+import com.enjoytrip.jwt.service.SecurityUtil;
 import com.enjoytrip.jwt.service.TokenInfo;
 import com.enjoytrip.jwt.service.TokenRefreshException;
 import com.enjoytrip.user.entity.RefreshToken;
@@ -247,6 +248,13 @@ public class UserService {
 		log.info("UPDATE 전 : {}", updateUser.getEmail());
 		userRespository.save(updateUser);
 		return 1;
+	}
+	
+	// id(String) 으로 AutoInc user_id 를 가져옵니다.
+	@Transactional
+	public int getUser_idbyId() {
+		String id = SecurityUtil.getCurrentMemberId();
+		return userRespository.finduser_idbyId(id);
 	}
 	
 //	3. **/user/review/board (GET)**

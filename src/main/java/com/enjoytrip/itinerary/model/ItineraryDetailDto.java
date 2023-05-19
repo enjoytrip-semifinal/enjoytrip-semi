@@ -8,7 +8,7 @@ import lombok.Data;
 public class ItineraryDetailDto {
 	private int itineraryId;
 	private int userId;
-	private String date;
+	private String registerDate;
 	private String startDate;
 	private String endDate;
 	private String title;
