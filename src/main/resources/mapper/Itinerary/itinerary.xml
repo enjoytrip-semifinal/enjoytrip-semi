@@ -9,16 +9,18 @@
 		type="ItineraryDetailDto">
 		<id property="itineraryId" column="itinerary_id" />
 		<result property="userId" column="user_id" />
-		<result property="date" column="date" />
+		<result property="registerDate" column="register_date" />
 		<result property="startDate" column="start_date" />
 		<result property="endDate" column="end_date" />
 		<result property="title" column="title" />
 		<result property="content" column="content" />
 		<collection property="itineraryPlaces" ofType="ItineraryPlaceDto">
-			<id property="placeName" column="place_name" />
+			<result property="placeName" column="place_name" />
 			<result property="placeAddress" column="place_address" />
 			<result property="placeOrder" column="place_order" />
 			<result property="placeComment" column="place_comment" />
+			<result property="itineraryId" column="itinerary_id" />
+			<result property="placeId" column="place_id" />
 		</collection>
 	</resultMap>
 
@@ -38,32 +40,20 @@
 		</if>
 	</sql>
 
-	<insert id="writeItinerary" parameterType="ItineraryDetailDto">
-		INSERT INTO itinerary_detail (user_id, date, start_date, end_date,
-		title, content)
-		VALUES (#{userId}, NOW(), #{startDate}, #{endDate},
-		#{title}, #{content});
-
-		<foreach collection="itineraryPlaces" item="place"
-			index="index">
-			INSERT INTO itinerary_place (place_name, place_address,
-			place_order,
-			place_comment, itinerary_id)
-			SELECT #{place.placeName},
-			#{place.placeAddress}, #{place.placeOrder},
-			#{place.placeComment},
-			LAST_INSERT_ID()
-			FROM itinerary_detail
-			WHERE user_id = #{userId} AND
-			start_date = #{startDate} AND end_date =
-			#{endDate} AND title =
-			#{title} AND content = #{content};
-		</foreach>
+	<insert id="writeItinerary" parameterType="ItineraryDetailDto" useGeneratedKeys="true" keyProperty="itineraryId">
+	  INSERT INTO itinerary_detail (user_id, register_date, start_date, end_date, title, content)
+	  VALUES ( #{userId}, NOW(), #{startDate}, #{endDate}, #{title}, #{content});
+	</insert>
+	
+	<insert id="writePlace" parameterType="ItineraryPlaceDto">
+	    INSERT INTO itinerary_place (place_name, place_address, place_order, place_comment, itinerary_id) 
+	    VALUES (#{placeName}, #{placeAddress}, #{placeOrder}, #{placeComment}, #{itineraryId})
 	</insert>
 
-	<select id="listItinerary" resultType="ItineraryDetailDto"
-		parameterType="map">
-		select * from itinerary_detail
+	<select id="listItinerary" resultMap="ItineraryDetailResultMap" parameterType="map">
+		select d.itineary_id, d.user_id, DATE_FORMAT(d.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', 
+			d.start_date, d.end_date, d.title, d.content, u.nickname
+		from itinerary_detail d left join user u using(user_id)
 		<include refid="search"></include>
 		order by itinerary_id
 		limit #{start}, #{listsize}
@@ -78,11 +68,11 @@
 
 	<select id="selectOne" resultMap="ItineraryDetailResultMap"
 		parameterType="java.lang.Integer">
-		SELECT d.itinerary_id, d.user_id, d.date, d.start_date,
+		SELECT d.itinerary_id, d.user_id, d.register_date, d.start_date,
 		d.end_date, d.title,
 		d.content,
 		p.place_name, p.place_address,
-		p.place_order, p.place_comment
+		p.place_order, p.place_comment, p.place_id
 		FROM itinerary_detail d
 		LEFT JOIN
 		itinerary_place p ON d.itinerary_id = p.itinerary_id
@@ -99,24 +89,13 @@
 
 	<update id="modifyItinerary" parameterType="ItineraryDetailDto">
 		UPDATE itinerary_detail
-		SET title = #{title}, content = #{content},
-		start_date = #{startDate},
-		end_date = #{endDate}
-		WHERE itinerary_id =
-		#{itineraryId};
+		SET title = #{title}, content = #{content}, start_date = #{startDate},end_date = #{endDate}
+		WHERE itinerary_id = #{itineraryId};
 
-		<foreach collection="itineraryPlaces" item="place"
-			index="index">
-			UPDATE itinerary_place
-			SET place_name = #{place.placeName},
-			place_address =
-			#{place.placeAddress},
-			place_order =
-			#{place.placeOrder}, place_comment = #{place.placeComment}
-			WHERE
-			itinerary_id = #{itineraryId} AND place_name = #{place.placeName};
-		</foreach>
 	</update>
-
-
+	<update id="modifyPlace" parameterType="ItineraryPlaceDto">
+		UPDATE itinerary_place
+		SET place_name = #{placeName}, place_address = #{placeAddress}, place_order = #{placeOrder}, place_comment = #{placeComment}
+		WHERE itinerary_id = #{itineraryId} AND place_id = #{placeId};
+	</update>
 </mapper>

@@ -51,6 +51,7 @@ public class UserDto implements UserDetails{
 	private String nickname;
 	private String email;
 	private String address;
+	private String user_id;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

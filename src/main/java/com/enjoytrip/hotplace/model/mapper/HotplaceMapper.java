@@ -21,9 +21,20 @@ public interface HotplaceMapper {
 	// 3. 핫 플레이스 갱신(수정)
 	int updateHotplace(HotplaceDto hotplaceDto) throws SQLException;
 
+	//===============================================================
 	// 4. 좋아요 수 증가
-	int updateLike(int hotplaceId) throws SQLException;
-
+	int likeHotplace(int hotplaceId) throws SQLException;
+	
+	//좋아요 수가 증가하면 좋아하는 유저와 게시물을 테이블에 저장해준다,
+	int userLikeHotplace(Map<String, Object> param) throws SQLException;
+	
+	//좋아요 수 감소
+	int hateHotplace(int hotplaceId) throws SQLException;
+	
+	//좋아요 수가 감소하면 해당 게시물과 유저의 정보를 테이블에서 삭제해준다,
+	int userHateHotplace(Map<String, Object> param) throws SQLException;
+	//===============================================================
+	
 	// 5. 조회수 증가
 	int updateHit(int hotplaceId) throws SQLException;
 

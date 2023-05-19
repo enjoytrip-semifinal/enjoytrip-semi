@@ -98,7 +98,8 @@
 
 	<select id="fileInfoList" resultMap="file">
 		select *
-		from hotplace_file_info
+		from
+		hotplace_file_info
 		where hotplace_id =
 		#{hotplaceId}
 	</select>
@@ -128,7 +129,8 @@
 	</update>
 
 	<delete id="deleteFileAll" parameterType="int">
-		delete from hotplace_file_info
+		delete from
+		hotplace_file_info
 		where hotplace_id = #{hotplaceId}
 	</delete>
 
@@ -137,5 +139,26 @@
 		where hotplace_id = #{hotplaceId}
 	</delete>
 
+	<update id="likeHotplace" parameterType="int">
+		update hotplace
+		set like_count = like_count+1
+		where hotplace_id = #{hotplaceId}
+	</update>
+	
+	<insert id = "userLikeHotplace" parameterType="map">
+		insert into user_like_hotplace
+		(hotplace_id, user_id) values (#{hotplac_id}, #{user_id})
+	</insert>
+	
+	<update id="hateHotplace" parameterType="int">
+		update hotplace
+		set like_count = like_count-1
+		where hotplace_id = #{hotplaceId}
+	</update>
+	
+	<delete id="userHateHotplace" parameterType="map">
+		delete from user_like_hotplace
+		where hotplace_id = #{hotplaceId} and user_id = #{user_id}
+	</delete>
 
 </mapper>

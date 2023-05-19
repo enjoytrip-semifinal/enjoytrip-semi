@@ -57,21 +57,15 @@ public class SecurityConfig {
                 .antMatchers("/hotplace/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/itinerary/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/user/login", "/user/findid", "/user/findpw").permitAll()
-                .antMatchers("/user/refresh-token", "/user/logout", "/user/modify").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/user/logout", "/user/modify").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/user/refresh-token").permitAll()
                 .antMatchers(HttpMethod.GET, "/user/join").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/join").permitAll()                
                 .antMatchers("/user/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/user/**").hasRole("USER")
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-//                .logout()
-//                .logoutUrl("/user/logout") 
-//                .addLogoutHandler(logoutHandler)
-//                .logoutSuccessHandler(
-//                		(request, response, authentication) ->
-//                		SecurityContextHolder.clearContext()
-//                )
-//                .invalidateHttpSession(true)
          ;
         return http.build();
     }
