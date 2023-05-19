@@ -95,9 +95,14 @@ public class HotplaceServiceImpl implements HotplaceService {
 		// TODO Auto-generated method stub
 		/*좋아요를 눌러 줬으니까 user_like_hotplace에 user_id와 hotplace_id를 추가해줘야한다*/
 		int userid = userService.getUser_idbyId();	//int userid를 받아 온다.
-		Map<String , Integer> map = new HashMap<>();
+		Map<String , Object> map = new HashMap<>();
 		map.put("userId", userid);
 		map.put("hotplaceId", hotplaceId);
+		int add = hotplaceMapper.userLikeHotplace(map);
+		
+		if(add>0)
+			System.out.println("add "+userid+" and "+hotplaceId+" into user_like_hotplace table");
+		
 		return hotplaceMapper.likeHotplace(hotplaceId);
 	}
 	
@@ -105,6 +110,15 @@ public class HotplaceServiceImpl implements HotplaceService {
 	@Transactional
 	public int hateHotplace(int hotplaceId) throws Exception {
 		/*좋아요를 취소 했으니까 user_like_hotplace에 user_id와 hotplace_id를 추가해줘야한다*/
+		
+		int userid = userService.getUser_idbyId();	//int userid를 받아 온다.
+		Map<String , Object> map = new HashMap<>();
+		map.put("userId", userid);
+		map.put("hotplaceId", hotplaceId);
+		int del = hotplaceMapper.userLikeHotplace(map);
+		if(del>0)
+			System.out.println("del "+userid+" and "+hotplaceId+" into user_like_hotplace table");
+		
 		return hotplaceMapper.hateHotplace(hotplaceId);
 	}
 
