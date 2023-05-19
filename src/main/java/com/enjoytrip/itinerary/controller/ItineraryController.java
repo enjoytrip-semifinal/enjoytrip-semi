@@ -94,8 +94,8 @@ public class ItineraryController {
 
 	
 	// 여행계획 세부사항 선택
-	@GetMapping(value = "/detail/{itineraryid}")
-	public ResponseEntity<?> listOneView(@PathVariable("itineraryid") Integer num) throws Exception {
+	@GetMapping(value = "/detail/{itineraryId}")
+	public ResponseEntity<?> listOneView(@PathVariable("itineraryId") Integer num) throws Exception {
 		ItineraryDetailDto itinerary = itineraryService.selectOne(num);
 		
 		if (itinerary != null) {
@@ -106,7 +106,7 @@ public class ItineraryController {
 	}
 	
 	// 여행계획 수정
-	@PutMapping(value = "/modify/{itineraryid}")
+	@PutMapping(value = "/modify/{itineraryId}")
 	public ResponseEntity<?> modify(@RequestBody ItineraryDetailDto Itinerarydetaildto) throws Exception {
 		int result = itineraryService.modifyItinerary(Itinerarydetaildto);
 
@@ -122,7 +122,7 @@ public class ItineraryController {
 	}
 	
 	// 여행계획 삭제
-	@DeleteMapping(value = "/delete/{itineraryid}")
+	@DeleteMapping(value = "/delete/{itineraryId}")
 	public ResponseEntity<?> delete(@PathVariable("itineraryId") Integer num) throws Exception {
 		int result = itineraryService.deleteItinerary(num);
 
