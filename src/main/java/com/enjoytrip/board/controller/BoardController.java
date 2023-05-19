@@ -22,6 +22,8 @@ import com.enjoytrip.board.model.service.BoardService;
 import com.enjoytrip.util.PageNavigation;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -39,7 +41,8 @@ public class BoardController {
 	/* 게시판 글 관련 */
 	// 1. 페이징 처리된 게시판 글 조회
 	@ApiOperation(value = "페이징 처리된 게시판 글 조회", notes = "페이징 처리된 게시판의 <b>목록</b>을 리턴합니다. <br>"
-			+ "URL : localhost:9990/board/list?pgno=1&key=&word=")
+			+ "map : pgno=[페이지 번호]&key=[검색종류 : (title, content, userId)]&word=[검색어] <br>"
+			+ "ex : pgno=1&key=&word=")
 	@GetMapping("/list")
 	public ResponseEntity<?> listBoard(@RequestParam Map<String, String> map) throws Exception {
 		List<BoardDto> list = boardService.listBoard(map);
@@ -50,28 +53,25 @@ public class BoardController {
 		returnMap.put("key", map.get("key"));
 		returnMap.put("word", map.get("word"));
 		
+		System.out.println("pgno : " + returnMap.get("pgno"));
+		
 		if(list != null && !list.isEmpty()) {
-			return new ResponseEntity<List<BoardDto>>(list, HttpStatus.OK);
+			return new ResponseEntity<Map>(returnMap, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
 	
 	// 2. 게시판 글 하나 조회
-	@ApiOperation(value = "게시판 글 하나 조회", notes = "원하는 게시글 <b>하나</b>를 리턴합니다. <br>"
-			+ "map 요소 : (1) pgno, (2) key, (3) word")
+	@ApiOperation(value = "게시판 글 하나 조회", notes = "원하는 게시글 <b>하나</b>를 리턴합니다. <br>")
 	@GetMapping("/list/{boardId}")
-	public ResponseEntity<?> viewBoard(@PathVariable int boardId, @RequestParam Map<String, String> map) throws Exception {
+	public ResponseEntity<?> viewBoard(@PathVariable int boardId) throws Exception {
 		
 		// 게시글과 그 게시글에 대한 파일 정보 가져오기
 		Map<String, Object> resultMap = boardService.viewBoard(boardId);
 		
 		// 조회수 하나 증가
 		boardService.updateHit(boardId);
-		
-		resultMap.put("pgno", map.get("pgno"));
-		resultMap.put("key", map.get("key"));
-		resultMap.put("word", map.get("word"));
 		
 		if(resultMap.get("board") != null) {
 			return new ResponseEntity<Map>(resultMap, HttpStatus.OK);

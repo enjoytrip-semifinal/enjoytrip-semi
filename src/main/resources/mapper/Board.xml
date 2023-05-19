@@ -23,7 +23,7 @@
 	<!-- board -->
 	<!-- 글 전체 가져오기 -->
 	<select id="listBoard" parameterType="map" resultType="boardDto">
-		select b.board_id, DATE_FORMAT(b.register_time, '%Y-%m-%d %H:%i:%s') as 'register_time', 
+		select b.board_id, DATE_FORMAT(b.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', 
 			   b.hit, b.title, b.user_id, b.content, u.nickname
 		from board b left join user u using(user_id)
 		<include refid="search"></include>
@@ -40,14 +40,14 @@
 	
 	<!-- 글 하나 가져오기 -->
 	<select id="viewBoard" parameterType="int" resultType="boardDto">
-			select board_id, DATE_FORMAT(register_time, '%Y-%m-%d %H:%i:%s') as 'register_time', hit, title, content, user_id
+			select board_id, DATE_FORMAT(register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', hit, title, content, user_id
 			from board
 			where board_id = #{boardId}
 	</select>
 	
 	<!-- 글 쓰기 -->
 	<insert id="writeBoard" parameterType="boardDto">
-			insert into board(board_id, register_time, hit, title, content, user_id)
+			insert into board(board_id, register_date, hit, title, content, user_id)
 			values (default, now(), #{hit}, #{title}, #{content}, #{user_id})
 	</insert>
 	

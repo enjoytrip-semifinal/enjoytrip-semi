@@ -15,14 +15,14 @@
 	
 	<!-- 리뷰 쓰기 -->
 	<insert id="writeReview" parameterType="boardReviewDto">
-			insert into board_reply (board_reply_id, title, content, date, user_id, board_id)
-			values (default, #{title}, #{content}, now(), #{user_id}, #{board_id})
+			insert into board_reply (board_reply_id, content, register_date, user_id, board_id)
+			values (default, #{content}, now(), #{user_id}, #{board_id})
 	</insert>
 	
 	<!-- 리뷰 수정 -->
 	<update id="modifyReview" parameterType="boardReviewDto">
 			update board_reply
-			set title = #{title}, content = #{content}
+			set content = #{content}
 			where board_id = #{board_id} and board_reply_id = #{board_reply_id}
 	</update>
 	
