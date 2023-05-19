@@ -15,10 +15,12 @@
 		<result property="title" column="title" />
 		<result property="content" column="content" />
 		<collection property="itineraryPlaces" ofType="ItineraryPlaceDto">
-			<id property="placeName" column="place_name" />
+			<result property="placeName" column="place_name" />
 			<result property="placeAddress" column="place_address" />
 			<result property="placeOrder" column="place_order" />
 			<result property="placeComment" column="place_comment" />
+			<result property="itineraryId" column="itinerary_id" />
+			<result property="placeId" column="place_id" />
 		</collection>
 	</resultMap>
 
