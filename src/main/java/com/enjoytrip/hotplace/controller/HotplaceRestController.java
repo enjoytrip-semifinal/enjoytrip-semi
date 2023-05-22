@@ -35,6 +35,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/hotplace")
@@ -51,25 +53,45 @@ public class HotplaceRestController {
 	private String uploadImgPath;
 
 	// 게시판 전체 목록 조회
-	@ApiOperation(value = "페이징 처리된 핫플레이스 글 조회", notes = "페이징 처리된 핫플레이스의 <b>목록</b>을 리턴합니다.")
+	@ApiOperation(value = "페이징 처리된 게시판 글 조회", notes = "페이징 처리된 게시판의 <b>목록</b>을 리턴합니다. <br>"
+			+ "map : pgno=[페이지 번호]&key=[검색종류 : (title, content, userId)]&word=[검색어] <br>"
+			+ "ex : pgno=1&key=&word=")
+	@Parameter(name = "pgno", schema = @Schema(type="number"))
+	@Parameter(name = "sido", schema = @Schema(type="number"))
+	@Parameter(name = "gugun", schema = @Schema(type="number"))
+	@Parameter(name = "type", schema = @Schema(type="number"))
+	@Parameter(name = "season", schema = @Schema(type="number"))
 	@GetMapping("/list")
 	public ResponseEntity<?> listHotplace(@RequestParam Map<String, String> map) throws Exception {
+		
 		List<HotplaceDto> list = service.listHotplace(map);
+		
+		//System.out.println(list.size());
+
 		PageNavigation pageNavigation = service.makePageNavigation(map);
 
 		Map<String, Object> returnMap = new HashMap<>();
 		returnMap.put("hotplaceList", list);
 		returnMap.put("navigation", pageNavigation);
 
-		returnMap.put("pgno", map.get("pgno"));
-		returnMap.put("sido", map.get("key"));
-		returnMap.put("gugun", map.get("word"));
-		returnMap.put("type", map.get("type"));
+		returnMap.put("pgno", map.get("pgno").isEmpty()?0:Integer.parseInt(map.get("pgno")));
+		returnMap.put("sido", map.get("sido").isEmpty()?0:Integer.parseInt(map.get("sido")));
+		returnMap.put("gugun", map.get("gugun").isEmpty()?0:Integer.parseInt(map.get("gugun")));
+		returnMap.put("type", map.get("type").isEmpty()?0:Integer.parseInt(map.get("type")));
+		returnMap.put("season", map.get("season").isEmpty()?0:Integer.parseInt(map.get("season")));
+		
 
+//		returnMap.put("pgno", map.get("pgno"));
+//		returnMap.put("sido", map.get("sido"));
+//		returnMap.put("gugun", map.get("gugun"));
+//		returnMap.put("type", map.get("type"));
+//		returnMap.put("season", map.get("season"));
+
+		
 		if (list != null && !list.isEmpty()) {
-			return new ResponseEntity<List<HotplaceDto>>(list, HttpStatus.OK);
+			return new ResponseEntity<Map>(returnMap, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -88,8 +110,8 @@ public class HotplaceRestController {
 
 		returnMap.put("hotplace", hotplace);
 		returnMap.put("pgno", map.get("pgno"));
-		returnMap.put("sido", map.get("key"));
-		returnMap.put("gugun", map.get("word"));
+		returnMap.put("sido", map.get("sido"));
+		returnMap.put("gugun", map.get("gugun"));
 		returnMap.put("type", map.get("type"));
 
 		if (hotplace != null) {
@@ -112,12 +134,13 @@ public class HotplaceRestController {
 		pageMap.put("sido", "0");
 		pageMap.put("gugun", "0");
 		pageMap.put("type", "0");
+		pageMap.put("season","0");
 
 		int result = service.insertHotplace(hotplace,url);
 		if (result > 0) {
 			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<String>("게시글 등록 중 오류 발생", HttpStatus.NO_CONTENT);
+			return new ResponseEntity<String>("게시글 등록 중 오류 발생", HttpStatus.BAD_REQUEST);
 		}
 	}
 
