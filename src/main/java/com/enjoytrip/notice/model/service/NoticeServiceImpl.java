@@ -1,5 +1,6 @@
 package com.enjoytrip.notice.model.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,16 +29,16 @@ public class NoticeServiceImpl implements NoticeService {
 	public List<NoticeDto> listNotice(Map<String, String> map) throws Exception {
 		Map<String, Object> param = new HashMap<String, Object>();
 		String key = map.get("key");
-		
+
 		param.put("key", key == null ? "" : key);
 		param.put("word", map.get("word") == null ? "" : map.get("word"));
-		
+
 		int pgNo = Integer.parseInt(map.get("pgno"));
 		int start = (pgNo - 1) * SizeConstant.LIST_SIZE;
-		
+
 		param.put("start", start);
 		param.put("listsize", SizeConstant.LIST_SIZE);
-		
+
 		return noticeMapper.listNotice(param);
 	}
 
@@ -47,12 +48,20 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public int write(NoticeDto noticeDto) throws Exception {
+	public int write(NoticeDto noticeDto, String[] url) throws Exception {
 		
-		List<NoticeFileInfoDto> fileInfos = noticeDto.getFileInfos();
-		if (fileInfos != null && fileInfos.isEmpty()) {
-			noticeMapper.registFile(noticeDto);
+		if (url != null) {
+			List<NoticeFileInfoDto> files = new ArrayList<>();
+			for (String path : url) {
+				NoticeFileInfoDto file = new NoticeFileInfoDto();
+				file.setNoticeId(noticeDto.getNoticeid());
+				file.setFileUrl(path);
+				files.add(file);
+			}
+			
+			noticeMapper.registFile(files);
 		}
+		
 		return noticeMapper.write(noticeDto);
 	}
 
@@ -74,14 +83,14 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public PageNavigation makePageNav(Map<String, String> map) throws Exception {
 		PageNavigation pageNavigation = new PageNavigation();
-		
+
 		int naviSize = SizeConstant.NAVIGATION_SIZE;
 		int sizePerPage = SizeConstant.LIST_SIZE;
 		int currentPage = Integer.parseInt(map.get("pgno"));
-		
+
 		pageNavigation.setCurrentPage(currentPage);
 		pageNavigation.setNaviSize(naviSize);
-		
+
 		Map<String, Object> param = new HashMap<>();
 		String key = map.get("key");
 
@@ -90,7 +99,7 @@ public class NoticeServiceImpl implements NoticeService {
 
 		param.put("key", key == null ? "" : key);
 		param.put("word", map.get("word") == null ? "" : map.get("word"));
-		
+
 		int totalCount = noticeMapper.getTotalNoticeCount(param);
 		pageNavigation.setTotalCount(totalCount);
 
@@ -103,7 +112,7 @@ public class NoticeServiceImpl implements NoticeService {
 		boolean endRange = (totalPageCount - 1) / naviSize * naviSize < currentPage;
 		pageNavigation.setEndRange(endRange);
 		pageNavigation.makeNavigator();
-		
+
 		return pageNavigation;
 	}
 }

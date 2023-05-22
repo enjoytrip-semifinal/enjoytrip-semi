@@ -97,41 +97,13 @@ public class NoticeController {
 	@ApiOperation(value = "공지 사항 글 쓰기")
 	@ApiResponses({ @ApiResponse(code = 200, message = "공지 사항 글 쓰기 OK"), @ApiResponse(code = 500, message = "서버 에러") })
 	@PostMapping("/write")
-	public ResponseEntity<?> write(@RequestBody NoticeDto notice, @RequestBody MultipartFile[] files) throws Exception {
-		if (!files[0].isEmpty()) {
-			String today = new SimpleDateFormat("yyMMdd").format(new Date());
-			String saveFolder = uploadPath + File.separator + today;
-
-			File folder = new File(saveFolder);
-
-			if (!folder.exists()) {
-				folder.mkdirs();
-			}
-
-			List<NoticeFileInfoDto> fileInfos = new ArrayList<>();
-			for (MultipartFile mfile : files) {
-				NoticeFileInfoDto fileInfoDto = new NoticeFileInfoDto();
-				String originalFileName = mfile.getOriginalFilename();
-
-				if (!originalFileName.isEmpty()) {
-					String saveFileName = UUID.randomUUID().toString()
-							+ originalFileName.substring(originalFileName.lastIndexOf('.'));
-
-					fileInfoDto.setSaveFolder(today);
-					fileInfoDto.setOriginalFile(originalFileName);
-					fileInfoDto.setSaveFile(saveFileName);
-					mfile.transferTo(new File(folder, saveFileName));
-				}
-				fileInfos.add(fileInfoDto);
-			}
-			notice.setFileInfos(fileInfos);
-		}
-	
-		try {
-			return new ResponseEntity<Integer>(noticeService.write(notice), HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<String>("서버 오류", HttpStatus.INTERNAL_SERVER_ERROR);
+	public ResponseEntity<?> write(@RequestBody NoticeDto notice, String[] url) throws Exception {
+		int result = noticeService.write(notice, url);
+		System.out.println(result);
+		if(result > 0) {
+			return new ResponseEntity<Integer>(result, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("게시글 등록 중 오류 발생", HttpStatus.NO_CONTENT);
 		}
 	}
 

@@ -11,10 +11,9 @@ import lombok.Data;
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class NoticeDto {
 	private int noticeid;
-	private String registertime;
+	private String registerdate;
 	private int hit;
 	private String title;
 	private String content;
 	private int adminid;	
-	private List<NoticeFileInfoDto> fileInfos;
 }

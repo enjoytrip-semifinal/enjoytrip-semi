@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.enjoytrip.notice.model.NoticeDto;
+import com.enjoytrip.notice.model.NoticeFileInfoDto;
 
 @Mapper
 public interface NoticeMapper {
@@ -25,6 +26,6 @@ public interface NoticeMapper {
 
 	int getTotalNoticeCount(Map<String, Object> param) throws SQLException;
 
-	int registFile(NoticeDto notice) throws SQLException;
+	int registFile(List<NoticeFileInfoDto> files) throws SQLException;
 
 }
