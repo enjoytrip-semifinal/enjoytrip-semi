@@ -49,12 +49,14 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
+
                 .antMatchers("/swagger/**").permitAll()
                 .antMatchers("/exist", "/signup","/","/notice","/board","/tour","/place","/plan","/login").permitAll()
                 .antMatchers("/user/refresh-token").permitAll()
                 .antMatchers("/user/login", "/user/findid", "/user/findpw").permitAll()
                 .antMatchers(HttpMethod.GET, "/user/join").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/join").permitAll() 
+
                 .antMatchers("/notice/list").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/notice/write", "/notice/delete", "/notice/modify").hasRole("ADMIN")
                 .antMatchers("/board/**").hasAnyRole("USER", "ADMIN")

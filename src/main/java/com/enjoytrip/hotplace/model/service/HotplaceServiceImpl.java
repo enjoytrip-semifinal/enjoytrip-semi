@@ -154,12 +154,35 @@ public class HotplaceServiceImpl implements HotplaceService {
 		// int sido, int gugun, int type 가 만약 없다면? 임시로 0이라는 값을 넣어주고 이 값이 들어오면 전체 검색을
 		// 진행한다.
 
-		int sido = Integer.parseInt(map.get("sido") == null ? "0" : map.get("sido"));
+		int sido = 0;
+		if(map.get("sido").equals("") || map.get("sido").isEmpty()) {
+			sido=0;
+		}else {
+			sido = Integer.parseInt(map.get("sido"));
+		}
+		
+		int gugun = 0;
+		if(map.get("gugun").equals("") || map.get("gugun").isEmpty()) {
+			gugun=0;
+		}else {
+			gugun = Integer.parseInt(map.get("sido"));
+		}
+		
+		int type = 0;
+		if(map.get("type").equals("") || map.get("type").isEmpty()) {
+			type=0;
+		}else {
+			type = Integer.parseInt(map.get("sido"));
+		}
+		int season = 0;
+		if(map.get("season").equals("") || map.get("season").isEmpty()) {
+			season=0;
+		}else {
+			season = Integer.parseInt(map.get("sido"));
+		}
+	
 
-		int gugun = Integer.parseInt(map.get("gugun") == null ? "0" : map.get("gugun"));
 
-		int type = Integer.parseInt(map.get("type") == null ? "0" : map.get("type"));
-		int season = Integer.parseInt(map.get("season") == null ? "0" : map.get("season"));
 
 		param.put("sido", sido);
 		param.put("gugun", gugun);
