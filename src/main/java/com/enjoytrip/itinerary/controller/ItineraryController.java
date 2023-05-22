@@ -60,6 +60,7 @@ public class ItineraryController {
 
 	}
 	
+	// 여행계획 작성
 	@PostMapping(value = "/write")
 	public ResponseEntity<?> write(@RequestBody ItineraryDetailDto itineraryDetailDto) throws Exception {
 
@@ -92,8 +93,7 @@ public class ItineraryController {
 	}
 
 
-	
-	// 여행계획 세부사항 선택
+	// 여행계획 글 하나 조회
 	@GetMapping(value = "/detail/{itineraryId}")
 	public ResponseEntity<?> listOneView(@PathVariable("itineraryId") Integer num) throws Exception {
 		ItineraryDetailDto itinerary = itineraryService.selectOne(num);
@@ -110,12 +110,8 @@ public class ItineraryController {
 	public ResponseEntity<?> modify(@RequestBody ItineraryDetailDto Itinerarydetaildto) throws Exception {
 		int result = itineraryService.modifyItinerary(Itinerarydetaildto);
 
-		// 페이징 처리를 위한 Map
-		Map<String, String> pageMap = new HashMap<String, String>();
-		pageMap.put("pgno", "1");
-
 		if (result > 0) {
-			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
