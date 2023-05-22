@@ -92,5 +92,4 @@
 		SET place_name = #{placeName}, place_address = #{placeAddress}, place_order = #{placeOrder}, place_comment = #{placeComment}
 		WHERE itinerary_id = #{itineraryId} AND place_id = #{placeId};
 	</update>
-
 </mapper>
