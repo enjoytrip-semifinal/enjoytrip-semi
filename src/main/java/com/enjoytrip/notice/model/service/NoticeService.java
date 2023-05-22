@@ -11,7 +11,7 @@ public interface NoticeService {
 
 	NoticeDto getNotice(int noticeid) throws Exception;
 
-	int write(NoticeDto notice) throws Exception;
+	int write(NoticeDto notice, String[] url) throws Exception;
 
 	int delete(int noticeid) throws Exception;
 
