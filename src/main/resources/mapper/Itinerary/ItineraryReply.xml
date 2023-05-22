@@ -4,7 +4,7 @@
 <mapper namespace="com.enjoytrip.itinerary.model.mapper.ItineraryReplyMapper">
 
 	<select id="listReply" parameterType="map" resultType="itineraryReplyDto">
-			select r.itineary_reply_id, r.content, DATE_FORMAT(r.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', 
+			select r.itinerary_reply_id, r.content, DATE_FORMAT(r.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', 
 				r.itinerary_id, r.user_id, u.nickname
 			from itinerary_reply r left join user u using(user_id)
 			where itinerary_id = #{itineraryId}
@@ -13,8 +13,8 @@
 	</select>
 
 	<insert id="writeReply" parameterType="itineraryReplyDto">
-			insert into itinerary_reply(itinerary_reply_id, content, register_date, itinerary_id, user_id)
-			values (default, #{content}, now(), #{itineraryId}, #{userId})
+			insert into itinerary_reply(content, register_date, itinerary_id, user_id)
+			values (#{content}, now(), #{itineraryId}, #{userId})
 	</insert>
 	
 	<update id="modifyReply" parameterType="itineraryReplyDto">

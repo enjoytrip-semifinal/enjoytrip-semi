@@ -56,13 +56,10 @@ public class ItineraryReplyController {
 	@ApiOperation(value = "댓글 쓰기", notes = "댓글을 작성하여 저장합니다.")
 	@PostMapping("/write")
 	public ResponseEntity<?> writeReply(@RequestBody ItineraryReplyDto itineraryReply) {
-		
-		Map<String, String> pageMap = new HashMap<String, String>();
-		pageMap.put("pgno", "1");
-		
 		int result = itineraryReplyService.writeReply(itineraryReply);
+		
 		if(result > 0) {
-			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
@@ -74,12 +71,8 @@ public class ItineraryReplyController {
 	public ResponseEntity<?> deleteReply(@PathVariable int itineraryReplyId) {
 		int result = itineraryReplyService.deleteReply(itineraryReplyId);
 		
-		// 댓글을 쓰면 1번으로 이동한다.
-		Map<String, String> pageMap = new HashMap<String, String>();
-		pageMap.put("pgno", "1");
-		
 		if(result > 0) {
-			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
@@ -91,12 +84,8 @@ public class ItineraryReplyController {
 	public ResponseEntity<?> modifyReply(@RequestBody ItineraryReplyDto itineraryReply) {
 		int result = itineraryReplyService.modifyReply(itineraryReply);
 		
-		// 댓글을 쓰면 1번으로 이동한다.
-		Map<String, String> pageMap = new HashMap<String, String>();
-		pageMap.put("pgno", "1");
-		
 		if(result > 0) {
-			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}

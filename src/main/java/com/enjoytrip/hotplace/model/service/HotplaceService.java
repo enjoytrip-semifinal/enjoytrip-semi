@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.enjoytrip.hotplace.model.HotplaceDto;
-import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 import com.enjoytrip.util.PageNavigation;
 
 public interface HotplaceService {
