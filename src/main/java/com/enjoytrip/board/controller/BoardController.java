@@ -48,7 +48,7 @@ public class BoardController {
 		List<BoardDto> list = boardService.listBoard(map);
 		
 		Map<String, Object> returnMap = new HashMap<>();
-		returnMap.put("bordList", list);
+		returnMap.put("boardList", list);
 		returnMap.put("pgno", map.get("pgno"));
 		returnMap.put("key", map.get("key"));
 		returnMap.put("word", map.get("word"));
