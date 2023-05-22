@@ -53,7 +53,7 @@ public class ItineraryController {
 		returnMap.put("word", map.get("word"));
 
 		if (list != null && !list.isEmpty()) {
-			return new ResponseEntity<List<ItineraryDetailDto>>(list, HttpStatus.OK);
+			return new ResponseEntity<Map>(returnMap, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}

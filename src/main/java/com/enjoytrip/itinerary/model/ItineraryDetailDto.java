@@ -13,5 +13,6 @@ public class ItineraryDetailDto {
 	private String endDate;
 	private String title;
 	private String content;
+	private String nickname;
 	private List<ItineraryPlaceDto> ItineraryPlaces;
 }

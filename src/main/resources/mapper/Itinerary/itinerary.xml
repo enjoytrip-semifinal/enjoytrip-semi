@@ -14,6 +14,7 @@
 		<result property="endDate" column="end_date" />
 		<result property="title" column="title" />
 		<result property="content" column="content" />
+		<result column="nickname" property="nickname" />
 		<collection property="itineraryPlaces" ofType="ItineraryPlaceDto">
 			<result property="placeName" column="place_name" />
 			<result property="placeAddress" column="place_address" />
