@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class NoticeFileInfoDto {
-	private String saveFolder;
-	private String originalFile;
-	private String saveFile;
+	private int noticeFileId;
+	private String fileUrl;
+	private int noticeId;
 }

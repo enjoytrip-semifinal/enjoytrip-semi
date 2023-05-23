@@ -7,11 +7,11 @@
 
 	<resultMap type="NoticeDto" id="notice">
 		<result column="notice_id" property="noticeid" />
-		<result column="register_time" property="registertime" />
+		<result column="register_date" property="registerdate" />
 		<result column="hit" property="hit" />
 		<result column="title" property="title" />
 		<result column="content" property="content" />
-		<result column="admin_id" property="adminid" />
+		<result column="user_id" property="adminid" />
 	</resultMap>
 
 	<sql id="search">
@@ -26,6 +26,8 @@
 		</if>
 	</sql>
 
+	<!-- notice -->
+	<!-- 공지사항 전체 가져오기 -->
 	<select id="listNotice" parameterType="map"
 		resultType="NoticeDto" resultMap="notice">
 		select *
@@ -35,6 +37,7 @@
 		limit #{start}, #{listsize}
 	</select>
 
+	<!-- 공지사항 하나 가져오기 -->
 	<select id="getNotice" parameterType="int"
 		resultType="NoticeDto">
 		select *
@@ -42,42 +45,51 @@
 		notice_id=#{noticeid}
 	</select>
 
+	<!-- 공지사항 쓰기 -->
 	<insert id="write" parameterType="NoticeDto">
 		insert into notice (notice_id,
-		register_time, hit, title, content, user_id)
+		register_date, hit, title, content, user_id)
 		values (default, now(), 0,
 		#{title}, #{content}, #{adminid})
 	</insert>
 
-	<insert id="registFile" parameterType="NoticeDto">
-		insert into notice_file_Info (idx, notice_id, save_folder,
-		original_file, save_file)
+	<insert id="registFile">
+		insert into notice_file_info (notice_file_id, notice_url, notice_id)
 		values
-		<foreach collection="fileInfos" item="fileinfo"
+		<foreach collection="files" item="file"
 			separator=" , ">
-			(#{hotplaceId}, #{fileinfo.saveFolder},
-			#{fileinfo.originalFile}, #{fileinfo.saveFile})
+			(default, #{file.fileUrl}, #{file.noticeId}
 		</foreach>
 	</insert>
+	
+<!-- 	<select id="fileInfoList" parameterType="int" resultType="fileInfoDto">
+		select notice_file_id, file_url, notice_id
+		from board_file_info
+		where notice_id = #{noticeId}
+	</select> -->
 
+	<!-- 공지사항 삭제 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from notice where
 		notice_id=#{noticeid}
 	</delete>
-
+	
+	<!-- 공지사항 수정 -->
 	<update id="modify" parameterType="NoticeDto">
 		update
 		notice set
-		title=#{title}, register_time=now(), content=#{content}
+		title=#{title}, register_date=now(), content=#{content}
 		where
 		notice_id=#{noticeid}
 	</update>
 
+	<!-- 공지사항 조회수 늘리기 -->
 	<update id="updateNoticeHit" parameterType="java.lang.Integer">
 		update notice set
 		hit=hit+1 where notice_id=#{noticeid}
 	</update>
 
+	<!-- 총 공지사항 글 수 가져오기  -->
 	<select id="getTotalNoticeCount" parameterType="map"
 		resultType="int">
 		select count(notice_id)

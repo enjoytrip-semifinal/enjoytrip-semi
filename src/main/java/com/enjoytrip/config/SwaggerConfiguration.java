@@ -47,12 +47,23 @@ public class SwaggerConfiguration {
 	}
 	
 	@Bean
+	public Docket noticeApi() {
+		title = "notice API ";
+	
+		return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes())
+				.produces(getProduceContentTypes()).apiInfo(apiInfo()).groupName("Notice").select()
+				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.notice.controller"))
+				.paths(regex("/notice/.*")).build().useDefaultResponseMessages(false);
+	}
+	
+	
+	@Bean
 	public Docket userApi() { 
         title = "User API ";
 
         return new Docket(DocumentationType.SWAGGER_2)
         		.apiInfo(apiInfo()).groupName("User").select()
-				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.*.controller"))
+				.apis(RequestHandlerSelectors.basePackage("com.enjoytrip.user.controller"))
 				.paths(regex("/user/.*")).build()
 				.useDefaultResponseMessages(false);
     }

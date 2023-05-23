@@ -14,5 +14,5 @@ public class BoardDto {
 	private String title;
 	private String content;
 	private int user_id;
-
+	private String nickname;
 }
