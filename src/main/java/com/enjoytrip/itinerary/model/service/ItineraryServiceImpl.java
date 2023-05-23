@@ -64,7 +64,9 @@ public class ItineraryServiceImpl implements ItineraryService{
 	    int result = itinerarymapper.modifyItinerary(itinerarydetaildto);
 
 	    List<ItineraryPlaceDto> itineraryPlaces = itinerarydetaildto.getItineraryPlaces();
+	    int placeOrder = 0;
 	    for (ItineraryPlaceDto itineraryPlace : itineraryPlaces) {
+	    	itineraryPlace.setPlaceOrder(placeOrder++);
 	        itinerarymapper.modifyPlace(itineraryPlace);
 	    }
 	    

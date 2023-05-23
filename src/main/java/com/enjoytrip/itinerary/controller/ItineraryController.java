@@ -107,8 +107,8 @@ public class ItineraryController {
 	
 	// 여행계획 수정
 	@PutMapping(value = "/modify/{itineraryId}")
-	public ResponseEntity<?> modify(@RequestBody ItineraryDetailDto Itinerarydetaildto) throws Exception {
-		int result = itineraryService.modifyItinerary(Itinerarydetaildto);
+	public ResponseEntity<?> modify(@RequestBody ItineraryDetailDto itineraryDetailDto) throws Exception {
+		int result = itineraryService.modifyItinerary(itineraryDetailDto);
 
 		if (result > 0) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
