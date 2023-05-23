@@ -19,6 +19,8 @@
 		<result column="type" property="type" />
 		<result column="address" property="address" />
 		<result column="season" property="season" />
+		<result column="nickname" property="nickname" />
+		
 
 	</resultMap>
 
@@ -73,11 +75,14 @@
 
 	<select id="listHotplace" parameterType="map"
 		resultMap="hotplace">
-		select *
-		from hotplace
+		
+		select h.*, u.nickname
+		from hotplace h left join user u using(user_id)
 		<include refid="search" />
 		order by hotplace_id desc
 		limit #{start}, #{listsize}
+		
+		
 	</select>
 
 	<!-- 전체 글 수 가져오기 -->
@@ -90,10 +95,10 @@
 
 	<select id="getHotplaceById" parameterType="int"
 		resultMap="hotplace">
-		select *
-		from hotplace
+		select h.*, u.nickname
+		from hotplace h left join user u using(user_id)
 		where
-		hotplace_id = #{hotplaceId}
+		h.hotplace_id = #{hotplaceId}
 	</select>
 
 	<select id="fileInfoList" resultMap="file">

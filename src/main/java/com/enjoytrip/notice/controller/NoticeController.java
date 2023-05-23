@@ -81,16 +81,15 @@ public class NoticeController {
 		}
 	}
 
-	@ApiOperation(value = "공지 사항 세부")
-	@ApiResponses({ @ApiResponse(code = 200, message = "공지 사항 세부 OK"), @ApiResponse(code = 500, message = "서버 에러") })
+	@ApiOperation(value = "공지 사항 글 하나 조회")
+	@ApiResponses({ @ApiResponse(code = 200, message = "공지 사항 글 하나 조회 OK"), @ApiResponse(code = 500, message = "서버 에러") })
 	@GetMapping("/list/{noticeid}")
 	public ResponseEntity<?> getNotice(@PathVariable("noticeid") Integer noticeid) throws Exception {
-		try {
-			noticeService.updateNoticeHit(noticeid);
-			return new ResponseEntity<NoticeDto>(noticeService.getNotice(noticeid), HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<String>("서버 오류", HttpStatus.INTERNAL_SERVER_ERROR);
+		Map<String, Object> resultMap = noticeService.getNotice(noticeid);
+		if (resultMap.get("files") != null) {
+			return new ResponseEntity<Map>(resultMap, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("게시글 가져오기 중 오류 발생", HttpStatus.NO_CONTENT);
 		}
 	}
 

@@ -26,6 +26,8 @@ public interface NoticeMapper {
 
 	int getTotalNoticeCount(Map<String, Object> param) throws SQLException;
 
-	int registFile(List<NoticeFileInfoDto> files) throws SQLException;
+	int registFiles(List<NoticeFileInfoDto> files) throws SQLException;
+	
+	List<NoticeFileInfoDto> getFiles(int noticeid) throws SQLException;
 
 }

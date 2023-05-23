@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.enjoytrip.notice.model.NoticeDto;
 import com.enjoytrip.notice.model.NoticeFileInfoDto;
@@ -43,14 +44,20 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public NoticeDto getNotice(int noticeid) throws Exception {
-		return noticeMapper.getNotice(noticeid);
+	public Map<String, Object> getNotice(int noticeid) throws Exception {
+		Map<String, Object> serviceMap = new HashMap<>();
+		
+		serviceMap.put("notice", noticeMapper.getNotice(noticeid));
+		serviceMap.put("files", noticeMapper.getFiles(noticeid));
+		
+		return serviceMap;
 	}
 
 	@Override
+	@Transactional
 	public int write(NoticeDto noticeDto, String[] url) throws Exception {
 		
-		if (url != null) {
+		if (url != null && url.length > 0) {
 			List<NoticeFileInfoDto> files = new ArrayList<>();
 			for (String path : url) {
 				NoticeFileInfoDto file = new NoticeFileInfoDto();
@@ -59,7 +66,7 @@ public class NoticeServiceImpl implements NoticeService {
 				files.add(file);
 			}
 			
-			noticeMapper.registFile(files);
+			noticeMapper.registFiles(files);
 		}
 		
 		return noticeMapper.write(noticeDto);

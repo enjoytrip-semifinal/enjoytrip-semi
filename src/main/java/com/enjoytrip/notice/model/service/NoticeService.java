@@ -9,7 +9,7 @@ import com.enjoytrip.util.PageNavigation;
 public interface NoticeService {
 	List<NoticeDto> listNotice(Map<String, String> map) throws Exception;
 
-	NoticeDto getNotice(int noticeid) throws Exception;
+	Map<String, Object> getNotice(int noticeid) throws Exception;
 
 	int write(NoticeDto notice, String[] url) throws Exception;
 
