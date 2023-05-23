@@ -85,42 +85,4 @@ public class ItineraryServiceImpl implements ItineraryService{
 		return itinerarymapper.selectOne(num);
 	}
 	
-	// 페이징 처리
-	@Override
-	public PageNavigation makePageNavigation(Map<String, String> map) {
-		PageNavigation pageNavigation = new PageNavigation();
-
-		int naviSize = SizeConstant.NAVIGATION_SIZE;
-		int sizePerPage = SizeConstant.LIST_SIZE;
-		int currentPage = Integer.parseInt(map.get("pgno"));
-
-		pageNavigation.setCurrentPage(currentPage);
-		pageNavigation.setNaviSize(naviSize);
-		
-		Map<String, Object> param = new HashMap<String, Object>();
-		String key = map.get("key");
-		
-		if ("userid".equals(key))
-			key = "user_id";
-		
-		param.put("key", key == null ? "" : key);
-		param.put("word", map.get("word") == null ? "" : map.get("word"));
-		
-		int totalCount = itinerarymapper.getTotalItineraryCount(param);
-		pageNavigation.setTotalCount(totalCount);
-		
-		int totalPageCount = (totalCount - 1) / sizePerPage + 1;
-		pageNavigation.setTotalPageCount(totalPageCount);
-		
-		boolean startRange = currentPage <= naviSize;
-		pageNavigation.setStartRange(startRange);
-		
-		boolean endRange = (totalPageCount - 1) / naviSize * naviSize < currentPage;
-		pageNavigation.setEndRange(endRange);
-		pageNavigation.makeNavigator();
-
-		return pageNavigation;
-	}
-
-	
 }
