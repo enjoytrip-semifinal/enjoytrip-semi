@@ -13,4 +13,5 @@ public class HotplaceReplyDto {
 	private int hotplaceId;
 	private String content;
 	private String regDate;
+	private String nickname;
 }

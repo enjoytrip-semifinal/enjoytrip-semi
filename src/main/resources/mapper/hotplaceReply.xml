@@ -10,13 +10,14 @@
 		<result column="hotplace_id" property="hotplaceId" />
 		<result column="content" property="content" />
 		<result column="register_date" property="regDate" />
+		<result column="nickname" property="nickname" />
 	</resultMap>
 
 	<!-- 리뷰 가져오기 -->
 	<select id="listReply" parameterType="map"
 		resultType="hotplacereplyDto">
-		select *
-		from hotplace_reply
+		select h.*, u.nickname
+		from hotplace_reply left join user u using(user_id)
 		where hotplace_id = #{id}
 		order by hotplace_reply_id desc
 		<if test="start !=null and listsize != null">limit #{start}, #{listsize}</if>
