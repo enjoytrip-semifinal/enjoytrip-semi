@@ -60,13 +60,6 @@
 		limit #{start}, #{listsize}
 	</select>
 
-	<select id="getTotalItineraryCount" parameterType="map"
-		resultType="int">
-		select count(itinerary_id)
-		from itinerary_detail
-		<include refid="search"></include>
-	</select>
-
 	<select id="selectOne" resultMap="ItineraryDetailResultMap"
 		parameterType="java.lang.Integer">
 		SELECT d.itinerary_id, d.user_id, d.register_date, d.start_date, d.end_date, d.title, d.content,

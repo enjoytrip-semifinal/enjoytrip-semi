@@ -42,12 +42,9 @@ public class ItineraryController {
 	@GetMapping(value = "/list")
 	public ResponseEntity<?> list(@RequestParam Map<String, String> map) throws Exception {
 		List<ItineraryDetailDto> list = itineraryService.listItinerary(map);
-		PageNavigation pageNavigation = itineraryService.makePageNavigation(map);
 
 		Map<String, Object> returnMap = new HashMap<>();
 		returnMap.put("itineraryList", list);
-		returnMap.put("navigation", pageNavigation);
-
 		returnMap.put("pgno", map.get("pgno"));
 		returnMap.put("key", map.get("key"));
 		returnMap.put("word", map.get("word"));
@@ -107,8 +104,8 @@ public class ItineraryController {
 	
 	// 여행계획 수정
 	@PutMapping(value = "/modify/{itineraryId}")
-	public ResponseEntity<?> modify(@RequestBody ItineraryDetailDto Itinerarydetaildto) throws Exception {
-		int result = itineraryService.modifyItinerary(Itinerarydetaildto);
+	public ResponseEntity<?> modify(@RequestBody ItineraryDetailDto itineraryDetailDto) throws Exception {
+		int result = itineraryService.modifyItinerary(itineraryDetailDto);
 
 		if (result > 0) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
