@@ -135,4 +135,16 @@ public class BoardController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	// 6. Board 테이블에 있는 모든 게시글 수 반환 
+	@ApiOperation(value = "Board 테이블에 있는 모든 게시글 수 반환", notes = "Board 테이블에 있는 모든 게시글 수 반환합니다.")
+	@GetMapping("/list/count")
+	public ResponseEntity<?> getTotalAllBoardCount() throws Exception {
+		try {
+			int result = boardService.getTotalAllBoardCount();
+			return new ResponseEntity<Integer>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
 }
