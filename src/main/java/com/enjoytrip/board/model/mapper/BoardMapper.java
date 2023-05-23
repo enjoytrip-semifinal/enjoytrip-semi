@@ -14,7 +14,7 @@ public interface BoardMapper {
 	// 게시판 글 전체 가져오기
 	List<BoardDto> listBoard(Map<String, Object> param) throws SQLException;
 	
-	// 총 게시글 수 반환
+	// Board_id에 맞는 게시글 수 반환
 	int getTotalBoardCount(Map<String, Object> param) throws SQLException;
 	
 	// 게시글 하나 반환
@@ -40,4 +40,7 @@ public interface BoardMapper {
 	
 	// 파일 정보 가져오기
 	List<FileInfoDto> fileInfoList(int boardId) throws Exception;
+	
+	// Board 테이블에 있는 모든 게시글의 수 반환
+	int getTotalAllBoardCount() throws Exception;
 }	

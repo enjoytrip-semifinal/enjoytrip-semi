@@ -32,11 +32,17 @@
 		limit #{start}, #{listsize}
 	</select>
 	
-	<!-- 전체 글 수 가져오기 -->
+	<!-- board_id에 맞는 전체 글 수 가져오기 -->
 	<select id="getTotalBoardCount" parameterType="map" resultType="int">
 		select count(board_id)
 		from board
 		<include refid="search"></include>
+	</select>
+	
+	<!-- Board 테이블에 있는 모든 글 수 반환하기 -->
+	<select id="getTotalAllBoardCount" resultType="int">
+		select count(*)
+		from board
 	</select>
 	
 	<!-- 글 하나 가져오기 -->
