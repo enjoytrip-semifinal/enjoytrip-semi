@@ -142,7 +142,7 @@ public class BoardController {
 	public ResponseEntity<?> getTotalAllBoardCount() throws Exception {
 		try {
 			int result = boardService.getTotalAllBoardCount();
-			return new ResponseEntity<Integer>(HttpStatus.OK);
+			return new ResponseEntity<Integer>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
