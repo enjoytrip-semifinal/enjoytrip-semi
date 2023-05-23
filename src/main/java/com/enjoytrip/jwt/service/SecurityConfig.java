@@ -2,6 +2,8 @@ package com.enjoytrip.jwt.service;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,12 +18,15 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final JwtTokenProvider jwtTokenProvider;
+	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 	
 //	private final LogoutHandler logoutHandler;
-
+	
 	/**
 	 * httpBasic().disable().csrf().disable(): rest api이므로 basic auth 및 csrf 보안을 사용하지 않는다는 설정
 	 *  sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS): JWT를 사용하기 때문에 세션을 사용하지 않는다는 설정
@@ -44,18 +49,27 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
-//                .anyRequest().authenticated()
+
+                .antMatchers("/swagger/**").permitAll()
+                .antMatchers("/exist", "/signup","/","/notice","/board","/tour","/place","/plan","/login").permitAll()
+                .antMatchers("/user/refresh-token").permitAll()
+                .antMatchers("/user/login", "/user/findid", "/user/findpw").permitAll()
+                .antMatchers(HttpMethod.GET, "/user/join").permitAll()
+                .antMatchers(HttpMethod.POST, "/user/join").permitAll() 
+
+                .antMatchers("/notice/list").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/notice/write", "/notice/delete", "/notice/modify").hasRole("ADMIN")
+                .antMatchers("/board/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/file/download/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/hotplace/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/itinerary/**").hasAnyRole("USER", "ADMIN")
+                
+                .antMatchers("/user/logout", "/user/modify").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/user/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/user/**").hasRole("USER")
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .logout()
-                .logoutUrl("/user/logout") 
-//                .addLogoutHandler(logoutHandler)
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-//                .logoutSuccessHandler(
-//                		(request, response, authentication) 
-//                		-> SecurityContextHolder.clearContext()
-//                )
          ;
         return http.build();
     }
@@ -64,4 +78,7 @@ public class SecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
+
+
+
 }

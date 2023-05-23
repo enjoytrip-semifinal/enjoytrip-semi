@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enjoytrip.itinerary.model.mapper.ItineraryReplyMapper">
+
+	<select id="listReply" parameterType="map" resultType="itineraryReplyDto">
+			select r.itinerary_reply_id, r.content, DATE_FORMAT(r.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', 
+				r.itinerary_id, r.user_id, u.nickname
+			from itinerary_reply r left join user u using(user_id)
+			where itinerary_id = #{itineraryId}
+			order by itinerary_reply_id 
+			limit #{start}, #{listsize}
+	</select>
+
+	<insert id="writeReply" parameterType="itineraryReplyDto">
+			insert into itinerary_reply(content, register_date, itinerary_id, user_id)
+			values (#{content}, now(), #{itineraryId}, #{userId})
+	</insert>
+	
+	<update id="modifyReply" parameterType="itineraryReplyDto">
+			update itinerary_reply
+			set content = #{content}, register_date = now()
+			where itinerary_reply_id = #{itineraryReplyId}
+	</update>
+	
+	<delete id="deleteReply" parameterType="int">
+			delete from itinerary_reply
+			where itinerary_reply_id = #{itineraryReplyId}
+	</delete>
+</mapper>

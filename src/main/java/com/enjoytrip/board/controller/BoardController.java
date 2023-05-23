@@ -48,7 +48,7 @@ public class BoardController {
 		List<BoardDto> list = boardService.listBoard(map);
 		
 		Map<String, Object> returnMap = new HashMap<>();
-		returnMap.put("bordList", list);
+		returnMap.put("boardList", list);
 		returnMap.put("pgno", map.get("pgno"));
 		returnMap.put("key", map.get("key"));
 		returnMap.put("word", map.get("word"));
@@ -85,7 +85,7 @@ public class BoardController {
 	@PostMapping("/write")
 	public ResponseEntity<?> writeBoard(@RequestBody BoardDto board, String[] path) throws Exception {
 		// 사용자 정보 
-			
+		
 		// ===========================================
 		
 		// 페이징 처리를 위한 Map
@@ -132,6 +132,18 @@ public class BoardController {
 		if(result > 0) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	// 6. Board 테이블에 있는 모든 게시글 수 반환 
+	@ApiOperation(value = "Board 테이블에 있는 모든 게시글 수 반환", notes = "Board 테이블에 있는 모든 게시글 수 반환합니다.")
+	@GetMapping("/list/count")
+	public ResponseEntity<?> getTotalAllBoardCount() throws Exception {
+		try {
+			int result = boardService.getTotalAllBoardCount();
+			return new ResponseEntity<Integer>(HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}

@@ -1,6 +1,7 @@
 package com.enjoytrip.jwt.service;
 
 import java.security.Key;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -55,7 +56,7 @@ public class JwtTokenProvider {
 		log.info("authroities : {}", authorities);
 		long now = (new Date()).getTime();
 		// Access Token 생성
-		Date accessTokenExpiresIn = new Date(now + 86400000);
+		Date accessTokenExpiresIn = new Date(now + 40000);
 		String accessToken = Jwts.builder()
 				.setSubject(authentication.getName())
 				.claim("auth", authorities)
@@ -63,11 +64,37 @@ public class JwtTokenProvider {
 				.signWith(key, SignatureAlgorithm.HS256)
 				.compact();
 
-		// Refresh Token 생성
-		String refreshToken = Jwts.builder().setExpiration(new Date(now + 86400000))
+		// Refresh Token 생성 230506
+		String refreshToken = Jwts
+				.builder()
+				.setSubject(authentication.getName())
+				.setExpiration(new Date(now + 86400000))
 				.signWith(key, SignatureAlgorithm.HS256).compact();
 
 		return TokenInfo.builder().grantType("Bearer").accessToken(accessToken).refreshToken(refreshToken).build();
+	}
+	
+	// 230506 : ACCESS 토큰 만 생성하는 것
+	public String genereateAccessToken(String id, String role) {
+		long now = (new Date()).getTime();
+		Date accessTokenExpiresIn = new Date(now + 86400000);
+		String accessToken = Jwts.builder()
+				.setSubject(id)
+				.claim("auth", role)
+				.setExpiration(accessTokenExpiresIn)
+				.signWith(key, SignatureAlgorithm.HS256)
+				.compact();
+		return accessToken;
+	}
+	
+	// 230506 : 리프레시토큰 만 생성하는 것
+	public String generateRefreshToken(String id) {
+		long now = (new Date()).getTime();
+		return Jwts
+				.builder()
+				.setSubject(id)
+				.setExpiration(new Date(now + 86400000))
+				.signWith(key, SignatureAlgorithm.HS256).compact();
 	}
 
 	// JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
@@ -86,6 +113,17 @@ public class JwtTokenProvider {
 		// UserDetails 객체를 만들어서 Authentication 리턴
 		UserDetails principal = new User(claims.getSubject(), "", authorities);
 		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+	}
+	
+	// 230506 JWT 토큰 복호화해서 Date 값만 가져오는 메서드
+	public Date getDateFromRefreshToken(String token) {
+		log.info("DATE");
+		Claims claims = parseClaims(token);
+		// Long lastFreshTime = (Long) claims.get("exp"); 
+		Integer expValue = (Integer) claims.get("exp");
+		Long lastFreshTime = expValue.longValue();
+		log.info("lastFreshTime : {}", lastFreshTime);
+		return new Date(lastFreshTime*1000);
 	}
 	
     // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN": "TOKEN 값"
@@ -110,7 +148,7 @@ public class JwtTokenProvider {
 		return false;
 	}
 
-	private Claims parseClaims(String accessToken) {
+	public Claims parseClaims(String accessToken) {
 		try {
 			return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
 		} catch (ExpiredJwtException e) {
