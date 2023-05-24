@@ -27,4 +27,10 @@
 			delete from itinerary_reply
 			where itinerary_reply_id = #{itineraryReplyId}
 	</delete>
+	
+	<select id="getTotalAllItineraryReplyCount" parameterType="int" resultType="int">
+		select count(*)
+		from itinerary_reply
+		where itinerary_reply_id = #{itineraryReplyId}
+	</select>
 </mapper>

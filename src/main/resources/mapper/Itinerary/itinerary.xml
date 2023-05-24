@@ -30,13 +30,13 @@
 			<if test="key == 'title'">
 				where title like concat('%', #{word}, '%')
 			</if>
-
+			
 			<if test="key == 'content'">
 				where content like concat('%', #{word}, '%')
 			</if>
-
+			
 			<if test="key == 'userId'">
-				where user_id = ${word}
+				where user_id in (select user_id from user where nickname like concat('%', #{word},'%')) 
 			</if>
 		</if>
 	</sql>
@@ -88,4 +88,10 @@
 		SET place_name = #{placeName}, place_address = #{placeAddress}, place_order = #{placeOrder}, place_comment = #{placeComment}
 		WHERE itinerary_id = #{itineraryId} AND place_id = #{placeId};
 	</update>
+	
+	<select id="getTotalAllItineraryCount" resultType="int">
+		select count(*)
+		from itinerary_detail
+	</select>
+	
 </mapper>
