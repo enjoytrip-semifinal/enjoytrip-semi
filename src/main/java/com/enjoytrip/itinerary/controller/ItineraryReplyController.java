@@ -92,10 +92,10 @@ public class ItineraryReplyController {
 	}
 	
 	// 5. 해당 게시글에 대한 총 리뷰 수 반환하기
-	@GetMapping("/list/{itineraryReplyId}")
-	public ResponseEntity<?> getTotalAllItineraryReplyCount(@PathVariable int itineraryReplyId) {
+	@GetMapping("/list/{itineraryId}")
+	public ResponseEntity<?> getTotalAllItineraryReplyCount(@PathVariable int itineraryId) {
 		try {
-			int result = itineraryReplyService.getTotalAllItineraryReplyCount(itineraryReplyId);
+			int result = itineraryReplyService.getTotalAllItineraryReplyCount(itineraryId);
 			return new ResponseEntity<Integer>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);

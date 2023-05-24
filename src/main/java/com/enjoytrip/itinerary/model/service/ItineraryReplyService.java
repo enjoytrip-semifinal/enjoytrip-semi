@@ -15,6 +15,6 @@ public interface ItineraryReplyService {
 
 	int modifyReply(ItineraryReplyDto itineraryReply);
 
-	int getTotalAllItineraryReplyCount(int itineraryReplyId);
+	int getTotalAllItineraryReplyCount(int itineraryId);
 
 }

@@ -49,8 +49,8 @@ public class ItineraryReplyServiceImpl implements ItineraryReplyService {
 	}
 
 	@Override
-	public int getTotalAllItineraryReplyCount(int itineraryReplyId) {
-		return itineraryReplyMapper.getTotalAllItineraryReplyCount(itineraryReplyId);
+	public int getTotalAllItineraryReplyCount(int itineraryId) {
+		return itineraryReplyMapper.getTotalAllItineraryReplyCount(itineraryId);
 	}
 
 }
