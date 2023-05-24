@@ -9,4 +9,5 @@ public class ItineraryReplyDto {
 	private String registerDate;
 	private int itineraryId;
 	private int userId;
+	private String nickname;
 }

@@ -91,7 +91,6 @@ public class ItineraryReplyController {
 		}
 	}
 	
-	// 5. 해당 게시글에 대한 총 리뷰 수 반환하기
 	@GetMapping("/list/{itineraryId}")
 	public ResponseEntity<?> getTotalAllItineraryReplyCount(@PathVariable int itineraryId) {
 		try {
