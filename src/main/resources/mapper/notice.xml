@@ -33,7 +33,7 @@
 		select *
 		from notice
 		<include refid="search"></include>
-		order by notice_id
+		order by notice_id desc
 		limit #{start}, #{listsize}
 	</select>
 
@@ -53,12 +53,11 @@
 		#{title}, #{content}, #{adminid})
 	</insert>
 
-	<insert id="registFile">
-		insert into notice_file_info (notice_file_id, notice_url, notice_id)
+	<insert id="registFiles">
+		insert into notice_file_info (notice_file_id, file_url, notice_id)
 		values
-		<foreach collection="files" item="file"
-			separator=" , ">
-			(default, #{file.fileUrl}, #{file.noticeId}
+		<foreach collection="files" item="file" separator=",">
+			(default, #{file.fileUrl}, LAST_INSERT_ID())
 		</foreach>
 	</insert>
 	

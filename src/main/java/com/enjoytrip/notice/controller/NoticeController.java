@@ -96,8 +96,8 @@ public class NoticeController {
 	@ApiOperation(value = "공지 사항 글 쓰기")
 	@ApiResponses({ @ApiResponse(code = 200, message = "공지 사항 글 쓰기 OK"), @ApiResponse(code = 500, message = "서버 에러") })
 	@PostMapping("/write")
-	public ResponseEntity<?> write(@RequestBody NoticeDto notice, String[] url) throws Exception {
-		int result = noticeService.write(notice, url);
+	public ResponseEntity<?> write(@RequestBody NoticeDto notice) throws Exception {
+		int result = noticeService.write(notice);
 		System.out.println(result);
 		if(result > 0) {
 			return new ResponseEntity<Integer>(result, HttpStatus.OK);

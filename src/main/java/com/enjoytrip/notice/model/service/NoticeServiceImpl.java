@@ -55,21 +55,24 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	@Transactional
-	public int write(NoticeDto noticeDto, String[] url) throws Exception {
+	public int write(NoticeDto notice) throws Exception {
+		int result = noticeMapper.write(notice);
 		
-		if (url != null && url.length > 0) {
+		List<String> uploadFiles = notice.getFileInfos();
+		
+		if (notice.getFileInfos() != null && notice.getFileInfos().size() > 0) {
 			List<NoticeFileInfoDto> files = new ArrayList<>();
-			for (String path : url) {
+			for (String fileName : uploadFiles) {
 				NoticeFileInfoDto file = new NoticeFileInfoDto();
-				file.setNoticeId(noticeDto.getNoticeid());
-				file.setFileUrl(path);
+				file.setFileUrl(fileName);
 				files.add(file);
+				System.out.println("efefef");
 			}
 			
 			noticeMapper.registFiles(files);
 		}
 		
-		return noticeMapper.write(noticeDto);
+		return result;
 	}
 
 	@Override
