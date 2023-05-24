@@ -84,5 +84,10 @@ public class ItineraryServiceImpl implements ItineraryService{
 	public ItineraryDetailDto selectOne(Integer num) {
 		return itinerarymapper.selectOne(num);
 	}
+
+	@Override
+	public int getTotalAllItineraryCount() {
+		return itinerarymapper.getTotalAllItineraryCount();
+	}
 	
 }

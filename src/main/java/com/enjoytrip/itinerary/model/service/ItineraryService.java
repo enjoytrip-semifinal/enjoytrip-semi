@@ -15,4 +15,5 @@ public interface ItineraryService {
 	public int modifyItinerary(ItineraryDetailDto Itinerarydetaildto);
 	public int deleteItinerary(int num);
 	public ItineraryDetailDto selectOne(Integer num);
+	public int getTotalAllItineraryCount();
 }

@@ -130,5 +130,15 @@ public class ItineraryController {
 		}
 	}
 	
+	// 6. Board 테이블에 있는 모든 게시글 수 반환 
+	@GetMapping("/list/count")
+	public ResponseEntity<?> getTotalAllItineraryCount() throws Exception {
+		try {
+			int result = itineraryService.getTotalAllItineraryCount();
+			return new ResponseEntity<Integer>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
 
 }
