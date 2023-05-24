@@ -49,4 +49,10 @@ public class BoardReviewServiceImpl implements BoardReviewService{
 	public int modifyReview(BoardReviewDto boardReview) {
 		return boardReviewMapper.modifyReview(boardReview);
 	}
+
+	// 해당 게시글에 대한 모든 댓글 수 반환하기
+	@Override
+	public int getTotalAllBoardReviewCount(int boardId) {
+		return boardReviewMapper.getTotalAllBoardReviewCount(boardId);
+	}
 }

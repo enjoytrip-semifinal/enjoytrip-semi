@@ -42,6 +42,7 @@ public class ItineraryServiceImpl implements ItineraryService{
 		
 		return itinerarymapper.listItinerary(param);
 	}
+	
 	// 여행계획 작성하기
 	@Override
 	public int writeItinerary(ItineraryDetailDto itinerarydetaildto) {
@@ -56,7 +57,6 @@ public class ItineraryServiceImpl implements ItineraryService{
 	    
 	    return result;
 	}
-
 	
 	// 여행계획 수정하기
 	@Override
@@ -83,6 +83,12 @@ public class ItineraryServiceImpl implements ItineraryService{
 	@Override
 	public ItineraryDetailDto selectOne(Integer num) {
 		return itinerarymapper.selectOne(num);
+	}
+	
+	//총 여행계획 갯수 가져오기
+	@Override
+	public int getTotalAllItineraryCount() {
+		return itinerarymapper.getTotalAllItineraryCount();
 	}
 	
 }

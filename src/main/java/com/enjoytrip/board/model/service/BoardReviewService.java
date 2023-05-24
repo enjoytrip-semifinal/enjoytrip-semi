@@ -10,4 +10,5 @@ public interface BoardReviewService {
 	int writeReview(BoardReviewDto boardReview);
 	int deleteReview(int boardReviewId);
 	int modifyReview(BoardReviewDto boardReview);
+	int getTotalAllBoardReviewCount(int boardId);
 }

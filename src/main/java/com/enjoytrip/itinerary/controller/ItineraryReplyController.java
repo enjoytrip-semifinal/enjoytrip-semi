@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,12 +30,14 @@ import io.swagger.annotations.ApiOperation;
 public class ItineraryReplyController {
 	
 	private ItineraryReplyService itineraryReplyService;
+	
+	@Autowired
 	public ItineraryReplyController(ItineraryReplyService itineraryReplyService) {
 		super();
 		this.itineraryReplyService = itineraryReplyService;
 	}
 	
-	// 댓글 리스트로 가져오기
+	// 댓글 리스트형식으로 가져오기
 	@GetMapping("/list")
 	public ResponseEntity<?> listReply(@RequestParam Map<String, String> map){
 		
@@ -87,6 +90,17 @@ public class ItineraryReplyController {
 		if(result > 0) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	// 해당 게시글의 댓글 갯수 가져오기
+	@GetMapping("/list/{itineraryId}")
+	public ResponseEntity<?> getTotalAllItineraryReplyCount(@PathVariable int itineraryId) {
+		try {
+			int result = itineraryReplyService.getTotalAllItineraryReplyCount(itineraryId);
+			return new ResponseEntity<Integer>(result, HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}

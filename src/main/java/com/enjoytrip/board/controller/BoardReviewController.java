@@ -95,4 +95,16 @@ public class BoardReviewController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	// 5. 해당 게시글에 대한 총 리뷰 수 반환하기
+	@ApiOperation(value = "해당 게시글에 대한 총 리뷰 수 반환하기", notes = "해당 게시글에 대한 총 리뷰 수 반환합니다.")
+	@GetMapping("/list/{boardId}")
+	public ResponseEntity<?> getTotalAllBoardReviewCount(@PathVariable int boardId) {
+		try {
+			int result = boardReviewService.getTotalAllBoardReviewCount(boardId);
+			return new ResponseEntity<Integer>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
 }
