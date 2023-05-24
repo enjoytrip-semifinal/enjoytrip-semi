@@ -20,4 +20,6 @@ public interface NoticeService {
 	int updateNoticeHit(int noticeid) throws Exception;
 
 	PageNavigation makePageNav(Map<String, String> map) throws Exception;
+	
+	int getTotalAllBoardCount() throws Exception;
 }

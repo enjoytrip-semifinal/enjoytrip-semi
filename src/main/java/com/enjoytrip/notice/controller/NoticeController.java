@@ -129,5 +129,16 @@ public class NoticeController {
 			return new ResponseEntity<String>("서버 오류", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@ApiOperation(value = "총 공지사항 글 개수 반환")
+	@GetMapping("/list/count")
+	public ResponseEntity<?> getTotalAllBoardCount() throws Exception {
+		try {
+			int result = noticeService.getTotalAllBoardCount();
+			return new ResponseEntity<Integer>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
 }
 

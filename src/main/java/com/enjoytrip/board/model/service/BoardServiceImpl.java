@@ -147,4 +147,10 @@ public class BoardServiceImpl implements BoardService{
 	public void updateHit(int boardId) throws Exception{
 		boardMapper.updateHit(boardId);
 	}
+
+	// 전체 글 수 반환하기
+	@Override
+	public int getTotalAllBoardCount() throws Exception {
+		return boardMapper.getTotalAllBoardCount();
+	}
 }

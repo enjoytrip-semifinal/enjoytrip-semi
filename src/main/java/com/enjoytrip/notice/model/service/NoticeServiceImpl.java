@@ -110,19 +110,11 @@ public class NoticeServiceImpl implements NoticeService {
 		param.put("key", key == null ? "" : key);
 		param.put("word", map.get("word") == null ? "" : map.get("word"));
 
-		int totalCount = noticeMapper.getTotalNoticeCount(param);
-		pageNavigation.setTotalCount(totalCount);
-
-		int totalPageCount = (totalCount - 1) / sizePerPage + 1;
-		pageNavigation.setTotalPageCount(totalPageCount);
-
-		boolean startRange = currentPage <= naviSize;
-		pageNavigation.setStartRange(startRange);
-
-		boolean endRange = (totalPageCount - 1) / naviSize * naviSize < currentPage;
-		pageNavigation.setEndRange(endRange);
-		pageNavigation.makeNavigator();
-
 		return pageNavigation;
+	}
+
+	@Override
+	public int getTotalAllBoardCount() throws Exception {
+		return noticeMapper.getTotalNoticeCount();
 	}
 }

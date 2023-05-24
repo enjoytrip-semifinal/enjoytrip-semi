@@ -35,7 +35,7 @@
 				where content like concat('%', #{word}, '%')
 			</if>
 
-			<if test="key == 'userid'">
+			<if test="key == 'userId'">
 				where user_id = ${word}
 			</if>
 		</if>
@@ -60,18 +60,13 @@
 		limit #{start}, #{listsize}
 	</select>
 
-	<select id="getTotalItineraryCount" parameterType="map"
-		resultType="int">
-		select count(itinerary_id)
-		from itinerary_detail
-		<include refid="search"></include>
-	</select>
-
 	<select id="selectOne" resultMap="ItineraryDetailResultMap"
 		parameterType="java.lang.Integer">
 		SELECT d.itinerary_id, d.user_id, d.register_date, d.start_date, d.end_date, d.title, d.content,
-			   p.place_name, p.place_address, p.place_order, p.place_comment, p.place_id
-		FROM itinerary_detail d LEFT JOIN itinerary_place p ON d.itinerary_id = p.itinerary_id
+			   p.place_name, p.place_address, p.place_order, p.place_comment, p.place_id, u.nickname
+		FROM itinerary_detail d 
+		LEFT JOIN itinerary_place p ON d.itinerary_id = p.itinerary_id
+		LEFT JOIN user u ON d.user_id = u.user_id
 		WHERE d.itinerary_id = #{itineraryId}
 		order by p.place_order
 	</select>
