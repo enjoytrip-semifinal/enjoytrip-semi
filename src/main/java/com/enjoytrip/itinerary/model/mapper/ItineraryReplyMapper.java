@@ -18,6 +18,6 @@ public interface ItineraryReplyMapper {
 
 	int modifyReply(ItineraryReplyDto itineraryReply);
 
-	int getTotalAllItineraryReplyCount(int itineraryReplyId);
+	int getTotalAllItineraryReplyCount(int itineraryId);
 
 }

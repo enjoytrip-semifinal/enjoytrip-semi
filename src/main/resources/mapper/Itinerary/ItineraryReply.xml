@@ -31,6 +31,6 @@
 	<select id="getTotalAllItineraryReplyCount" parameterType="int" resultType="int">
 		select count(*)
 		from itinerary_reply
-		where itinerary_reply_id = #{itineraryReplyId}
+		where itinerary_id = #{itineraryId}
 	</select>
 </mapper>
