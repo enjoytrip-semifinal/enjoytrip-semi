@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.enjoytrip.itinerary.model.ItineraryReplyDto;
@@ -14,6 +15,8 @@ import com.enjoytrip.util.SizeConstant;
 public class ItineraryReplyServiceImpl implements ItineraryReplyService {
 
 	private ItineraryReplyMapper itineraryReplyMapper;
+	
+	@Autowired
 	public ItineraryReplyServiceImpl(ItineraryReplyMapper itineraryReplyMapper) {
 		super();
 		this.itineraryReplyMapper = itineraryReplyMapper;
