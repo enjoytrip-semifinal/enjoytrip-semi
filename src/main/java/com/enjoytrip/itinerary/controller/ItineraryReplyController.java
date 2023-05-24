@@ -37,7 +37,7 @@ public class ItineraryReplyController {
 		this.itineraryReplyService = itineraryReplyService;
 	}
 	
-	// 댓글 리스트로 가져오기
+	// 댓글 리스트형식으로 가져오기
 	@GetMapping("/list")
 	public ResponseEntity<?> listReply(@RequestParam Map<String, String> map){
 		
@@ -94,6 +94,7 @@ public class ItineraryReplyController {
 		}
 	}
 	
+	// 해당 게시글의 댓글 갯수 가져오기
 	@GetMapping("/list/{itineraryId}")
 	public ResponseEntity<?> getTotalAllItineraryReplyCount(@PathVariable int itineraryId) {
 		try {
