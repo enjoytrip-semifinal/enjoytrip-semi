@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.enjoytrip.itinerary.model.mapper.ItineraryReplyMapper">
 
-	<resultMap id="ItineraryReplyResultMap]"
+	<resultMap id="ItineraryReplyResultMap"
 		type="itineraryReplyDto">
 		<id property="itineraryReplyId" column="itinerary_reply_id" />
 		<result property="content" column="content" />
