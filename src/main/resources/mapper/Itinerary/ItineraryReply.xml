@@ -13,7 +13,7 @@
 		<result property="nickname" column="nickname"  />
 	</resultMap>
 	
-	<select id="listReply" parameterType="map" resultMap="ItineraryReplyResultMap]">
+	<select id="listReply" parameterType="map" resultMap="ItineraryReplyResultMap">
 			select r.itinerary_reply_id, r.content, DATE_FORMAT(r.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', 
 				r.itinerary_id, r.user_id, u.nickname
 			from itinerary_reply r left join user u using(user_id)
