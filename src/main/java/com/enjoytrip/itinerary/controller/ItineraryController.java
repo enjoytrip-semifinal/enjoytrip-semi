@@ -63,8 +63,9 @@ public class ItineraryController {
 
 	    List<ItineraryPlaceDto> itineraryPlaces = new ArrayList<>();
 	    
-	    // Iterate over the place information and create ItineraryPlaceDto objects
+	    // placeOrder를 따로 저장을 해줘서 장소에 순서를 지정
 	    int placeOrder = 0;
+	    // 여러개의 장소를 하나의 리스트에 저장하여 전송
 	    for (ItineraryPlaceDto places : itineraryDetailDto.getItineraryPlaces()) {
 	        ItineraryPlaceDto itineraryPlaceDto = new ItineraryPlaceDto();
 	        itineraryPlaceDto.setPlaceName(places.getPlaceName());
@@ -130,6 +131,7 @@ public class ItineraryController {
 		}
 	}
 	
+	//총 여행계획 갯수 가져오기
 	@GetMapping("/list/count")
 	public ResponseEntity<?> getTotalAllItineraryCount() throws Exception {
 		try {
