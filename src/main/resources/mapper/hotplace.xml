@@ -176,7 +176,7 @@
 		#{userId}
 	</delete>
 
-	<insert id="registerFile" parameterType="int">
+	<insert id="registerFile">
 		insert into hotplace_file_info (hotplace_id, file_name)
 		values (LAST_INSERT_ID(), #{fileName})
 		
