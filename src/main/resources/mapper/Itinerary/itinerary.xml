@@ -20,6 +20,8 @@
 			<result property="placeComment" column="place_comment" />
 			<result property="itineraryId" column="itinerary_id" />
 			<result property="placeId" column="place_id" />
+			<result property="placeType" column="place_type" />
+			<result property="imageName" column="image_name" />
 		</collection>
 	</resultMap>
 
@@ -46,8 +48,8 @@
 	
 	<!-- 여행계획 작성에 포함되는 장소 등록 -->
 	<insert id="writePlace" parameterType="ItineraryPlaceDto">
-	    INSERT INTO itinerary_place (place_name, place_address, place_order, place_comment, itinerary_id) 
-	    VALUES (#{placeName}, #{placeAddress}, #{placeOrder}, #{placeComment}, #{itineraryId})
+	    INSERT INTO itinerary_place (place_name, place_address, place_order, place_comment, itinerary_id, place_type, image_name) 
+	    VALUES (#{placeName}, #{placeAddress}, #{placeOrder}, #{placeComment}, #{itineraryId}, #{placeType}, #{imageName})
 	</insert>
 	
 	<!-- 여행계획 전체 리스트 가져오기 -->
@@ -85,11 +87,11 @@
 		WHERE itinerary_id = #{itineraryId};
 	</update>
 	
-	<!-- 여행계획 수정에 해당하는 장소 수정 -->
-	<update id="modifyPlace" parameterType="ItineraryPlaceDto">
-		UPDATE itinerary_place
-		SET place_name = #{placeName}, place_address = #{placeAddress}, place_order = #{placeOrder}, place_comment = #{placeComment}
-		WHERE itinerary_id = #{itineraryId} AND place_id = #{placeId};
+	<!-- 여행계획 수정에 해당하는 장소 삭제 -->
+	<update id="deletePlace" parameterType="java.lang.Integer">
+		delete from
+		itinerary_place
+		where itinerary_id=#{itineraryId}
 	</update>
 	
 	<!-- 여행계획 전체 갯수 가져오기 -->
