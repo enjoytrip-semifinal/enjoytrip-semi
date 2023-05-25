@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.enjoytrip.board.model.FileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceDto;
 import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceReplyDto;
@@ -43,11 +44,8 @@ public class HotplaceServiceImpl implements HotplaceService {
 		hotplace.setUserId(userService.getUser_idbyId());
 
 		int result = hotplaceMapper.insertHotplace(hotplace);
-		
-		if (hotplace.getFileList() != null &&hotplace.getFileList().size()>0) { // 올릴 파일이 존재한다면?
-			// 파일 정보가 있다
-			System.out.println(hotplace.getFileList().size());
-			System.out.println(Arrays.deepToString(hotplace.getFileList().toArray()));
+
+		if(hotplace.getFileList()!=null && hotplace.getFileList().size()>0) {
 			int file = hotplaceMapper.registerFile(hotplace.getFileList());
 			if(file>0) System.out.println("야~호~");
 		}
@@ -85,14 +83,8 @@ public class HotplaceServiceImpl implements HotplaceService {
 	public int updateHotplace(HotplaceDto hotplaceDto) throws Exception {
 		// TODO Auto-generated method stub
 
-		// 그럼 일단 원래 있던 파일들을 다 삭제한다.
-//		int countDelFile = hotplaceMapper.deleteFileAll(hotplaceDto.getHotplaceId());
-//		System.out.println("저장된 파일 "+countDelFile+"개 삭제 완료");
-		// 그리고 파일 빼고 다 업데이트 해준다
 		int updateCount = hotplaceMapper.updateHotplace(hotplaceDto);
-		// 그리고 지금 얻어온 파일 이름을 다시 넣어준다.
-//		int fileCount = hotplaceMapper.registerFile(hotplaceDto.getFileList(), hotplaceDto.getHotplaceId());
-//		System.out.println("새로 등록된 파일 "+fileCount+"개 등록 완료");
+
 		return updateCount;
 	}
 
