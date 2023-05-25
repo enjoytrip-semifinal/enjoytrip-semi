@@ -178,17 +178,8 @@
 
 	<insert id="registerFile" parameterType="int">
 		insert into hotplace_file_info (hotplace_id, file_name)
-		values
-		<if test="hotplaceId == null">
-			<foreach collection="fileList" item="fileName" separator=",">
-				(LAST_INSERT_ID(), #{fileName})
-			</foreach>
-		</if>
-		<if test="hotplaceId != null">
-			<foreach collection="fileList" item="fileName" separator=",">
-				(#{hotplaceId}, #{fileName})
-			</foreach>
-		</if>
+		values (LAST_INSERT_ID(), #{fileName})
+		
 	</insert>
 
 
