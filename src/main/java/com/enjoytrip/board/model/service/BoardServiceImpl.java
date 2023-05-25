@@ -55,7 +55,7 @@ public class BoardServiceImpl implements BoardService{
 		serviceMap.put("board", boardMapper.viewBoard(boardId));
 		
 		// 게시글의 파일 정보 가져오기
-		serviceMap.put("fileInfoList", boardMapper.fileInfoList(boardId));
+		serviceMap.put("files", boardMapper.fileInfoList(boardId));
 		
 		return serviceMap;
 	}
@@ -63,32 +63,24 @@ public class BoardServiceImpl implements BoardService{
 	// 글 쓰기
 	@Override
 	@Transactional
-	public int writeBoard(BoardDto board, String[] path) throws Exception {
+	public int writeBoard(BoardDto board) throws Exception {
 		
 		// 게시판 글 쓰기
 		int reuslt = boardMapper.writeBoard(board);
 		
+		//업로드 할 파일 정보 얻어오기
+		List<String> uploadFiles = board.getFileInfos();
+		
 		// 파일 정보가 있다면
-		if (path != null && path.length > 0) {
-			List<FileInfoDto> fileInfoList = new ArrayList<>();
-			for (int i = 0; i < path.length; i++) {
-				FileInfoDto fileInfo = new FileInfoDto();
-				fileInfo.setBoard_id(board.getBoard_id());
-				fileInfo.setFile_url(path[i]);
-				
-				try {
-					fileInfoList.add(fileInfo);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		if (uploadFiles != null && uploadFiles.size() > 0) {
+			List<FileInfoDto> files = new ArrayList<>();
+			for (String fileName : uploadFiles) {
+				FileInfoDto file = new FileInfoDto();
+				file.setFile_url(fileName);
+				files.add(file);
 			}
 			
-			for (int i = 0 ; i < fileInfoList.size(); i++) {
-				System.out.println("Board id : " + fileInfoList.get(i).getBoard_id());
-				System.out.println("file String : " + fileInfoList.get(i).getFile_url());
-			}
-			
-			boardMapper.registerFileInfo(fileInfoList);
+			boardMapper.registerFileInfo(files);
 		}
 		
 		return reuslt;

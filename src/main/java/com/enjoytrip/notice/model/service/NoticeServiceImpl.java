@@ -55,21 +55,28 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	@Transactional
-	public int write(NoticeDto noticeDto, String[] url) throws Exception {
+	public int write(NoticeDto notice) throws Exception {
+		//공지사항 글 쓰기
+		int result = noticeMapper.write(notice);
 		
-		if (url != null && url.length > 0) {
+		//업로드 할 파일 정보 얻어오기
+		List<String> uploadFiles = notice.getFileInfos();
+		
+		System.out.println("[size] " + uploadFiles.size());
+		
+		if (uploadFiles != null && uploadFiles.size() > 0) {
 			List<NoticeFileInfoDto> files = new ArrayList<>();
-			for (String path : url) {
+			for (String fileName : uploadFiles) {
 				NoticeFileInfoDto file = new NoticeFileInfoDto();
-				file.setNoticeId(noticeDto.getNoticeid());
-				file.setFileUrl(path);
+				file.setFileUrl(fileName);
 				files.add(file);
+				System.out.println("efefef");
 			}
 			
 			noticeMapper.registFiles(files);
 		}
 		
-		return noticeMapper.write(noticeDto);
+		return result;
 	}
 
 	@Override
@@ -107,19 +114,11 @@ public class NoticeServiceImpl implements NoticeService {
 		param.put("key", key == null ? "" : key);
 		param.put("word", map.get("word") == null ? "" : map.get("word"));
 
-		int totalCount = noticeMapper.getTotalNoticeCount(param);
-		pageNavigation.setTotalCount(totalCount);
-
-		int totalPageCount = (totalCount - 1) / sizePerPage + 1;
-		pageNavigation.setTotalPageCount(totalPageCount);
-
-		boolean startRange = currentPage <= naviSize;
-		pageNavigation.setStartRange(startRange);
-
-		boolean endRange = (totalPageCount - 1) / naviSize * naviSize < currentPage;
-		pageNavigation.setEndRange(endRange);
-		pageNavigation.makeNavigator();
-
 		return pageNavigation;
+	}
+
+	@Override
+	public int getTotalAllBoardCount() throws Exception {
+		return noticeMapper.getTotalNoticeCount();
 	}
 }

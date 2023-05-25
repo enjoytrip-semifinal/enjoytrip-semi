@@ -11,7 +11,7 @@ public interface NoticeService {
 
 	Map<String, Object> getNotice(int noticeid) throws Exception;
 
-	int write(NoticeDto notice, String[] url) throws Exception;
+	int write(NoticeDto notice) throws Exception;
 
 	int delete(int noticeid) throws Exception;
 
@@ -20,4 +20,6 @@ public interface NoticeService {
 	int updateNoticeHit(int noticeid) throws Exception;
 
 	PageNavigation makePageNav(Map<String, String> map) throws Exception;
+	
+	int getTotalAllBoardCount() throws Exception;
 }

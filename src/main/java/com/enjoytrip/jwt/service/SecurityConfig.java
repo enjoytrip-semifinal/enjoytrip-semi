@@ -42,12 +42,13 @@ public class SecurityConfig {
         http
                 .httpBasic().disable()	 
                 .csrf().disable()
+                .cors().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
 //                .antMatchers("/**").permitAll()
-                .antMatchers("/swagger/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/exist", "/user/exist").permitAll()
                 .antMatchers("/user/refresh-token", "/user/login", "/user/findid", "/user/findpw").permitAll()
                 .antMatchers("/user/logout/**", "/user/modify/**").hasAnyRole("USER", "ADMIN")
@@ -68,7 +69,7 @@ public class SecurityConfig {
                 
                 .antMatchers("/file/download/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/hotplace/list/**").permitAll()
-                .antMatchers("/hotplace/write/**", "/hotplace/modify/**", "/hotplace/delete/**"
+                .antMatchers("/hotplace/write/**", "/hotplace/update/**", "/hotplace/delete/**"
                 		,"/hotplace/like/**", "/hotplace/hate/**").hasAnyRole("USER", "ADMIN")
                 
                 .antMatchers("/hotplace/reply/list/**").permitAll()

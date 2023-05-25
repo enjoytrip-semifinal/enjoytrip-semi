@@ -33,7 +33,7 @@
 		select *
 		from notice
 		<include refid="search"></include>
-		order by notice_id
+		order by notice_id desc
 		limit #{start}, #{listsize}
 	</select>
 
@@ -53,20 +53,22 @@
 		#{title}, #{content}, #{adminid})
 	</insert>
 
-	<insert id="registFile">
-		insert into notice_file_info (notice_file_id, notice_url, notice_id)
+	<!-- 파일 등록 -->
+	<insert id="registFiles">
+		insert into notice_file_info (notice_file_id, file_url, notice_id)
 		values
-		<foreach collection="files" item="file"
-			separator=" , ">
-			(default, #{file.fileUrl}, #{file.noticeId}
+		<foreach collection="files" item="file" separator=",">
+			(default, #{file.fileUrl}, LAST_INSERT_ID())
 		</foreach>
 	</insert>
 	
-<!-- 	<select id="fileInfoList" parameterType="int" resultType="fileInfoDto">
-		select notice_file_id, file_url, notice_id
-		from board_file_info
+	<!-- 등록 된 파일들 Key 가져오기 -->
+	<!-- key는 파일 이름 + 업로드 시간 -->
+	<select id="getFiles" parameterType="int" resultType="string">
+		select file_url
+		from notice_file_info
 		where notice_id = #{noticeId}
-	</select> -->
+	</select>
 
 	<!-- 공지사항 삭제 -->
 	<delete id="delete" parameterType="java.lang.Integer">

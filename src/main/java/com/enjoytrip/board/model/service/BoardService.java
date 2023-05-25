@@ -15,7 +15,7 @@ public interface BoardService {
 	Map<String, Object> viewBoard(int boardId) throws Exception;
 	
 	// 글 쓰기
-	int writeBoard(BoardDto board, String[] path) throws Exception;
+	int writeBoard(BoardDto board) throws Exception;
 	
 	// 글 수정하기
 	int modifyBoard(BoardDto board, String[] path) throws Exception;

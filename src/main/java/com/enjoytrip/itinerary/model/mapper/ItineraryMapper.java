@@ -33,10 +33,14 @@ public interface ItineraryMapper {
 	// 여행계획 작성에 포함되는 장소들 등록
 	void writePlace(ItineraryPlaceDto itineraryPlace);
 	
-	// 여행계획 수정에 해당되는 장소들 수정
-	void modifyPlace(ItineraryPlaceDto itineraryPlace);
+	// 여행계획 수정에 해당되는 장소를 삭제
+	void deletePlace(int itineraryId);
 	
 	//총 여행계획 갯수 가져오기
 	int getTotalAllItineraryCount();
+	
+	
+	
+
 
 }
