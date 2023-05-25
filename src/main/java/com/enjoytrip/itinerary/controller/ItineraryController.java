@@ -71,6 +71,8 @@ public class ItineraryController {
 	        itineraryPlaceDto.setPlaceName(places.getPlaceName());
 	        itineraryPlaceDto.setPlaceComment(places.getPlaceComment());
 	        itineraryPlaceDto.setPlaceAddress(places.getPlaceAddress());
+	        itineraryPlaceDto.setPlaceType(places.getPlaceType());
+	        itineraryPlaceDto.setImageName(places.getImageName());
 	        itineraryPlaceDto.setPlaceOrder(placeOrder++);
 
 	        itineraryPlaces.add(itineraryPlaceDto);
