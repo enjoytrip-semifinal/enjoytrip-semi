@@ -17,7 +17,7 @@
 	<select id="listReply" parameterType="map"
 		resultType="hotplacereplyDto">
 		select h.*, u.nickname
-		from hotplace_reply left join user u using(user_id)
+		from hotplace_reply h left join user u using(user_id)
 		where hotplace_id = #{id}
 		order by hotplace_reply_id desc
 		<if test="start !=null and listsize != null">limit #{start}, #{listsize}</if>

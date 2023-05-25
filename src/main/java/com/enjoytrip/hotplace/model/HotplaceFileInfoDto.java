@@ -1,15 +1,15 @@
 package com.enjoytrip.hotplace.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
-@Getter
-@Setter
-@ToString
+import lombok.Data;
+
+@Data
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class HotplaceFileInfoDto {
 	private int fileId;
 	private int hotplaceId;
-	private String url;
+	private String fileName;
 }
  
