@@ -73,7 +73,7 @@ public class SecurityConfig {
                 		,"/hotplace/like/**", "/hotplace/hate/**").hasAnyRole("USER", "ADMIN")
                 
                 .antMatchers("/hotplace/reply/list/**").permitAll()
-                .antMatchers("/hotplace/reply/write/**", "/hotplace/reply/modify/**"
+                .antMatchers("/hotplace/reply/write/**", "/hotplace/reply/update/**"
                 		, "/hotplace/reply/delete/**").hasAnyRole("USER", "ADMIN")
                 
                 .antMatchers("/itinerary/list/**").permitAll()
