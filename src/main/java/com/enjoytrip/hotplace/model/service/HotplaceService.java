@@ -25,5 +25,7 @@ public interface HotplaceService {
 	int likeHotplace(int hotplaceId) throws Exception;
 	
 	int hateHotplace(int hotplaceId) throws Exception;
+	
+	int getTop3() throws Exception;
 
 }

@@ -48,8 +48,8 @@ public class HotplaceServiceImpl implements HotplaceService {
 			// 파일 정보가 있다
 			System.out.println(hotplace.getFileList().size());
 			System.out.println(Arrays.deepToString(hotplace.getFileList().toArray()));
-			hotplaceMapper.registerFile(hotplace.getFileList(), hotplace.getHotplaceId());
-			
+			int file = hotplaceMapper.registerFile(hotplace.getFileList());
+			if(file>0) System.out.println("야~호~");
 		}
 
 		return result;
@@ -199,6 +199,12 @@ public class HotplaceServiceImpl implements HotplaceService {
 		param.put("listsize", SizeConstant.LIST_SIZE);
 
 		return hotplaceMapper.listHotplace(param);
+	}
+
+	@Override
+	public int getTop3() throws Exception {
+		// TODO Auto-generated method stub
+		return hotplaceMapper.getTop3();
 	}
 
 }

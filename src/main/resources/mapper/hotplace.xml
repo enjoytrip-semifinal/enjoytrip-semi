@@ -20,12 +20,6 @@
 		<result column="nickname" property="nickname" />
 	</resultMap>
 
-	<resultMap type="hotplaceFileInfoDto" id="file">
-		<result column="hotplace_file_id" property="fileId" />
-		<result column="file_name" property="fileName" />
-		<result column="hotplace_id" property="hotplaceId" />
-
-	</resultMap>
 
 	<!-- 글 작성하기 -->
 	<insert id="insertHotplace" parameterType="hotplaceDto">
@@ -85,6 +79,14 @@
 		order by hotplace_id desc
 		limit #{start}, #{listsize}
 
+
+	</select>
+
+
+	<select id="getTop3" resultMap="hotplace">
+		select * from hotplace
+		order by
+		like_count limit 3
 
 	</select>
 
@@ -177,10 +179,15 @@
 	</delete>
 
 	<insert id="registerFile">
-		insert into hotplace_file_info (hotplace_id, file_name)
-		values (LAST_INSERT_ID(), #{fileName})
-		
+		INSERT INTO hotplace_file_info (hotplace_id, file_name)
+		VALUES
+		<foreach collection="fileList" item="file" separator=",">
+			(LAST_INSERT_ID(), #{file})
+		</foreach>
 	</insert>
+
+
+
 
 
 </mapper>
