@@ -42,7 +42,7 @@ public interface HotplaceMapper {
 	List<HotplaceDto> listHotplace(Map<String, Object> param) throws SQLException;
 
 	// 7. 파일 등록
-	int registerFile(List<String> fileList, int hotplaceId) throws Exception;
+	int registerFile(List<String> fileList) throws Exception;
 
 	// 8. 하나의 게시글만 봄
 	HotplaceDto getHotplaceById(int hotplaceId) throws SQLException;
@@ -55,5 +55,7 @@ public interface HotplaceMapper {
 	
 	//11. 페이징 처리를 위해 전체 게시글 수를 구해준다.
 	int getTotalHotplaceCount(Map<String, Object> param) throws SQLException;
+	
+	int getTop3() throws Exception;
 	
 }

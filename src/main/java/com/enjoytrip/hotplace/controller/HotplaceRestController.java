@@ -46,12 +46,13 @@ public class HotplaceRestController {
 
 	@Autowired
 	HotplaceService service;
-
-	@Value("${file.path}")
-	private String uploadPath;
-
-	@Value("${file.imgPath}")
-	private String uploadImgPath;
+	
+//	//조회수 높은 순으로 3개 뽑아오기
+//	@GetMapping("/top")
+//	public ResponseEntity<?> top3Hotplace() throws Exception{
+//		
+//	}
+	
 
 	// 게시판 전체 목록 조회
 	@GetMapping("/list")
