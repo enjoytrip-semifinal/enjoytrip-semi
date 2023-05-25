@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,10 +50,16 @@ public class HotplaceRestController {
 	HotplaceService service;
 	
 //	//조회수 높은 순으로 3개 뽑아오기
-//	@GetMapping("/top")
-//	public ResponseEntity<?> top3Hotplace() throws Exception{
-//		
-//	}
+	@GetMapping("/top")
+	public ResponseEntity<?> top3Hotplace() throws Exception{
+		List<HotplaceDto> topList = service.getTop3();
+		
+		if(topList.size()>0) {
+			return new ResponseEntity<List<HotplaceDto>>(topList,HttpStatus.OK);
+		}else {
+			return new ResponseEntity<String>("탑 3 불러오기~~",HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 
 	// 게시판 전체 목록 조회
@@ -117,7 +125,7 @@ public class HotplaceRestController {
 		
 		int result = service.updateHotplace(hotplace);
 		if (result > 0) {
-			return new ResponseEntity<Integer>(service.updateHotplace(hotplace), HttpStatus.OK);
+			return new ResponseEntity<HotplaceDto>(service.getHotplaceById(hotplace.getHotplaceId()), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("게시글 수정 중 오류 발생", HttpStatus.BAD_REQUEST);
 		}

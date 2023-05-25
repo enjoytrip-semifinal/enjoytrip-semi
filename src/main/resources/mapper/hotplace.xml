@@ -18,13 +18,13 @@
 		<result column="address" property="address" />
 		<result column="season" property="season" />
 		<result column="nickname" property="nickname" />
-		<result column="image" property="image"/>
+		<result column="image" property="image" />
 	</resultMap>
-	
+
 	<resultMap type="hotplaceFileInfoDto" id="file">
-		<result column="hotplace_file_id" property="fileId"/>
-		<result column="file_name" property="fileName"/>
-		<result column="hotplace_id" property="hotplaceId"/>
+		<result column="hotplace_file_id" property="fileId" />
+		<result column="file_name" property="fileName" />
+		<result column="hotplace_id" property="hotplaceId" />
 	</resultMap>
 
 
@@ -92,10 +92,10 @@
 
 	<select id="getTop3" resultMap="hotplace">
 		select * from hotplace
-		order by
-		like_count limit 3
-
+		order by like_count desc, register_date desc
+		limit 3
 	</select>
+
 
 	<!-- 전체 글 수 가져오기 -->
 	<select id="getTotalHotplaceCount" parameterType="map"
@@ -184,7 +184,7 @@
 		where hotplace_id = #{hotplaceId} and user_id =
 		#{userId}
 	</delete>
-	
+
 	<insert id="registerFile">
 		INSERT INTO hotplace_file_info (hotplace_id, file_name)
 		VALUES

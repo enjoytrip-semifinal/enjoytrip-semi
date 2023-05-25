@@ -26,6 +26,6 @@ public interface HotplaceService {
 	
 	int hateHotplace(int hotplaceId) throws Exception;
 	
-	int getTop3() throws Exception;
+	List<HotplaceDto> getTop3() throws Exception;
 
 }
