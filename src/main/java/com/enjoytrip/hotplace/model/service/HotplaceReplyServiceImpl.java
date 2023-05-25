@@ -54,4 +54,12 @@ public class HotplaceReplyServiceImpl implements HotplaceReplyService {
 		return replyMapper.deleteReply(hotplaceId);
 	}
 
+	@Override
+	public int getTotalCount(int hotplaceId) {
+		// TODO Auto-generated method stub
+		return replyMapper.getTotalCount(hotplaceId);
+	}
+
+	
+	
 }
