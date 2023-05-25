@@ -69,7 +69,7 @@ public class SecurityConfig {
                 
                 .antMatchers("/file/download/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/hotplace/list/**").permitAll()
-                .antMatchers("/hotplace/write/**", "/hotplace/modify/**", "/hotplace/delete/**"
+                .antMatchers("/hotplace/write/**", "/hotplace/update/**", "/hotplace/delete/**"
                 		,"/hotplace/like/**", "/hotplace/hate/**").hasAnyRole("USER", "ADMIN")
                 
                 .antMatchers("/hotplace/reply/list/**").permitAll()

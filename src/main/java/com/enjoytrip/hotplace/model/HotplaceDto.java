@@ -2,15 +2,13 @@ package com.enjoytrip.hotplace.model;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
-@Getter
-@Setter
-@ToString
+import lombok.Data;
+
+@Data
+@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class HotplaceDto {
 	private int hotplaceId;
 	private int likeCount;
@@ -20,13 +18,10 @@ public class HotplaceDto {
 	private String title;
 	private String content;
 	private String regDate;
-	private String userId;
-	private int sido;
-	private int gugun;
+	private int userId;
 	private int type;
 	private String address;
-	private List<HotplaceFileInfoDto> fileInfos;
+	private List<String> fileList;
 	private int season;
 	private String nickname;
 }
- 

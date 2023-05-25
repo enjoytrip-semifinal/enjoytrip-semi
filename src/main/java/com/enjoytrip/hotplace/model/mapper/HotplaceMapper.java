@@ -42,7 +42,7 @@ public interface HotplaceMapper {
 	List<HotplaceDto> listHotplace(Map<String, Object> param) throws SQLException;
 
 	// 7. 파일 등록
-	int registerFile(List<HotplaceFileInfoDto> list) throws Exception;
+	int registerFile(List<String> fileList, int hotplaceId) throws Exception;
 
 	// 8. 하나의 게시글만 봄
 	HotplaceDto getHotplaceById(int hotplaceId) throws SQLException;
