@@ -86,13 +86,13 @@
 		insert into board_file_info (board_file_id, file_url, board_id)
 		values
 		<foreach collection="fileInfoList" item="fileInfoDto" separator=",">
-			(default, #{fileInfoDto.file_url}, #{fileInfoDto.board_id}
+			(default, #{fileInfoDto.file_url}, LAST_INSERT_ID())
 		</foreach>
 	</insert>
 	
 	<!-- 파일 정보 가져오기 -->
-	<select id="fileInfoList" parameterType="int" resultType="fileInfoDto">
-		select board_file_id, file_url, board_id
+	<select id="fileInfoList" parameterType="int" resultType="string">
+		select file_url
 		from board_file_info
 		where board_id = #{boardId}
 	</select>

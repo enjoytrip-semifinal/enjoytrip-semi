@@ -83,7 +83,7 @@ public class BoardController {
 	// 3. 게시판 글 쓰기
 	@ApiOperation(value = "게시판 글 쓰기", notes = "게시판의 글 하나를 작성합니다.")
 	@PostMapping("/write")
-	public ResponseEntity<?> writeBoard(@RequestBody BoardDto board, String[] path) throws Exception {
+	public ResponseEntity<?> writeBoard(@RequestBody BoardDto board) throws Exception {
 		// 사용자 정보 
 		
 		// ===========================================
@@ -94,7 +94,7 @@ public class BoardController {
 		pageMap.put("key", "");
 		pageMap.put("word", "");
 		
-		int result = boardService.writeBoard(board, path);
+		int result = boardService.writeBoard(board);
 		if(result > 0) {
 			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 		} else {

@@ -52,12 +52,6 @@ public class NoticeController {
 		this.noticeService = noticeService;
 	}
 
-	@Value("${file.path}")
-	private String uploadPath;
-
-	@Value("${file.imgPath}")
-	private String uploadImgPath;
-
 	@ApiOperation(value = "공지 사항")
 	@ApiResponses({ @ApiResponse(code = 200, message = "공지 사항 OK"), @ApiResponse(code = 500, message = "서버 에러") })
 	@GetMapping("/list")
@@ -85,7 +79,10 @@ public class NoticeController {
 	@ApiResponses({ @ApiResponse(code = 200, message = "공지 사항 글 하나 조회 OK"), @ApiResponse(code = 500, message = "서버 에러") })
 	@GetMapping("/list/{noticeid}")
 	public ResponseEntity<?> getNotice(@PathVariable("noticeid") Integer noticeid) throws Exception {
+		
 		Map<String, Object> resultMap = noticeService.getNotice(noticeid);
+		noticeService.updateNoticeHit(noticeid);
+		
 		if (resultMap.get("files") != null) {
 			return new ResponseEntity<Map>(resultMap, HttpStatus.OK);
 		} else {
@@ -97,8 +94,9 @@ public class NoticeController {
 	@ApiResponses({ @ApiResponse(code = 200, message = "공지 사항 글 쓰기 OK"), @ApiResponse(code = 500, message = "서버 에러") })
 	@PostMapping("/write")
 	public ResponseEntity<?> write(@RequestBody NoticeDto notice) throws Exception {
+
 		int result = noticeService.write(notice);
-		System.out.println(result);
+		
 		if(result > 0) {
 			return new ResponseEntity<Integer>(result, HttpStatus.OK);
 		} else {

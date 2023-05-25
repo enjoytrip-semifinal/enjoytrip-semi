@@ -56,11 +56,15 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	@Transactional
 	public int write(NoticeDto notice) throws Exception {
+		//공지사항 글 쓰기
 		int result = noticeMapper.write(notice);
 		
+		//업로드 할 파일 정보 얻어오기
 		List<String> uploadFiles = notice.getFileInfos();
 		
-		if (notice.getFileInfos() != null && notice.getFileInfos().size() > 0) {
+		System.out.println("[size] " + uploadFiles.size());
+		
+		if (uploadFiles != null && uploadFiles.size() > 0) {
 			List<NoticeFileInfoDto> files = new ArrayList<>();
 			for (String fileName : uploadFiles) {
 				NoticeFileInfoDto file = new NoticeFileInfoDto();

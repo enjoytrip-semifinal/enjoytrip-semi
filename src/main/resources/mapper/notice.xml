@@ -53,6 +53,7 @@
 		#{title}, #{content}, #{adminid})
 	</insert>
 
+	<!-- 파일 등록 -->
 	<insert id="registFiles">
 		insert into notice_file_info (notice_file_id, file_url, notice_id)
 		values
@@ -61,11 +62,13 @@
 		</foreach>
 	</insert>
 	
-<!-- 	<select id="fileInfoList" parameterType="int" resultType="fileInfoDto">
-		select notice_file_id, file_url, notice_id
-		from board_file_info
+	<!-- 등록 된 파일들 Key 가져오기 -->
+	<!-- key는 파일 이름 + 업로드 시간 -->
+	<select id="getFiles" parameterType="int" resultType="string">
+		select file_url
+		from notice_file_info
 		where notice_id = #{noticeId}
-	</select> -->
+	</select>
 
 	<!-- 공지사항 삭제 -->
 	<delete id="delete" parameterType="java.lang.Integer">
