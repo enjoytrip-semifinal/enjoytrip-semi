@@ -25,4 +25,7 @@ public interface BoardService {
 	
 	// 삭제하기
 	int deleteBoard(int boardId) throws Exception;
+	
+	// 전체 글 수 반환하기
+	int getTotalAllBoardCount() throws Exception;
 }

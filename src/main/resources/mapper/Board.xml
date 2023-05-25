@@ -15,7 +15,7 @@
 			</if>
 			
 			<if test="key == 'userId'">
-				where user_id = ${word}
+				where user_id in (select user_id from user where nickname like concat('%', #{word},'%')) 
 			</if>
 		</if>
 	</sql>
@@ -32,19 +32,26 @@
 		limit #{start}, #{listsize}
 	</select>
 	
-	<!-- 전체 글 수 가져오기 -->
+	<!-- board_id에 맞는 전체 글 수 가져오기 -->
 	<select id="getTotalBoardCount" parameterType="map" resultType="int">
 		select count(board_id)
 		from board
 		<include refid="search"></include>
 	</select>
 	
+	<!-- Board 테이블에 있는 모든 글 수 반환하기 -->
+	<select id="getTotalAllBoardCount" resultType="int">
+		select count(*)
+		from board
+	</select>
+	
 	<!-- 글 하나 가져오기 -->
 	<select id="viewBoard" parameterType="int" resultType="boardDto">
-
-			select board_id, DATE_FORMAT(register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', hit, title, content, user_id
-			from board
-			where board_id = #{boardId}
+			
+		select b.board_id, DATE_FORMAT(b.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', b.hit, b.title, b.user_id, b.content, u.nickname
+		from board b left join user u using(user_id)
+		where board_id = #{boardId}
+			
 	</select>
 	
 	<!-- 글 쓰기 -->

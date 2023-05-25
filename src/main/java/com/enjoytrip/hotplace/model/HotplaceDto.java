@@ -27,5 +27,6 @@ public class HotplaceDto {
 	private String address;
 	private List<HotplaceFileInfoDto> fileInfos;
 	private int season;
+	private String nickname;
 }
  

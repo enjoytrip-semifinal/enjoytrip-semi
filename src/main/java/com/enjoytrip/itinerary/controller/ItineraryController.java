@@ -42,12 +42,9 @@ public class ItineraryController {
 	@GetMapping(value = "/list")
 	public ResponseEntity<?> list(@RequestParam Map<String, String> map) throws Exception {
 		List<ItineraryDetailDto> list = itineraryService.listItinerary(map);
-		PageNavigation pageNavigation = itineraryService.makePageNavigation(map);
 
 		Map<String, Object> returnMap = new HashMap<>();
 		returnMap.put("itineraryList", list);
-		returnMap.put("navigation", pageNavigation);
-
 		returnMap.put("pgno", map.get("pgno"));
 		returnMap.put("key", map.get("key"));
 		returnMap.put("word", map.get("word"));
@@ -66,8 +63,9 @@ public class ItineraryController {
 
 	    List<ItineraryPlaceDto> itineraryPlaces = new ArrayList<>();
 	    
-	    // Iterate over the place information and create ItineraryPlaceDto objects
+	    // placeOrder를 따로 저장을 해줘서 장소에 순서를 지정
 	    int placeOrder = 0;
+	    // 여러개의 장소를 하나의 리스트에 저장하여 전송
 	    for (ItineraryPlaceDto places : itineraryDetailDto.getItineraryPlaces()) {
 	        ItineraryPlaceDto itineraryPlaceDto = new ItineraryPlaceDto();
 	        itineraryPlaceDto.setPlaceName(places.getPlaceName());
@@ -107,8 +105,8 @@ public class ItineraryController {
 	
 	// 여행계획 수정
 	@PutMapping(value = "/modify/{itineraryId}")
-	public ResponseEntity<?> modify(@RequestBody ItineraryDetailDto Itinerarydetaildto) throws Exception {
-		int result = itineraryService.modifyItinerary(Itinerarydetaildto);
+	public ResponseEntity<?> modify(@RequestBody ItineraryDetailDto itineraryDetailDto) throws Exception {
+		int result = itineraryService.modifyItinerary(itineraryDetailDto);
 
 		if (result > 0) {
 			return new ResponseEntity<Void>(HttpStatus.OK);
@@ -133,5 +131,15 @@ public class ItineraryController {
 		}
 	}
 	
+	//총 여행계획 갯수 가져오기
+	@GetMapping("/list/count")
+	public ResponseEntity<?> getTotalAllItineraryCount() throws Exception {
+		try {
+			int result = itineraryService.getTotalAllItineraryCount();
+			return new ResponseEntity<Integer>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
 
 }

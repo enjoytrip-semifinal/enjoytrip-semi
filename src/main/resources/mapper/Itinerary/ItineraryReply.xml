@@ -3,7 +3,17 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.enjoytrip.itinerary.model.mapper.ItineraryReplyMapper">
 
-	<select id="listReply" parameterType="map" resultType="itineraryReplyDto">
+	<resultMap id="ItineraryReplyResultMap" type="itineraryReplyDto">
+		<id property="itineraryReplyId" column="itinerary_reply_id" />
+		<result property="content" column="content" />
+		<result property="registerDate" column="register_date" />
+		<result property="itineraryId" column="itinerary_id" />
+		<result property="userId" column="user_id" />
+		<result property="nickname" column="nickname"  />
+	</resultMap>
+	
+	<!-- 댓글 리스트형식으로 가져오기 -->
+	<select id="listReply" parameterType="map" resultMap="ItineraryReplyResultMap">
 			select r.itinerary_reply_id, r.content, DATE_FORMAT(r.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', 
 				r.itinerary_id, r.user_id, u.nickname
 			from itinerary_reply r left join user u using(user_id)
@@ -11,20 +21,31 @@
 			order by itinerary_reply_id 
 			limit #{start}, #{listsize}
 	</select>
-
+	
+	<!-- 댓글 작성 -->
 	<insert id="writeReply" parameterType="itineraryReplyDto">
 			insert into itinerary_reply(content, register_date, itinerary_id, user_id)
 			values (#{content}, now(), #{itineraryId}, #{userId})
 	</insert>
 	
+	<!-- 댓글 수정 -->
 	<update id="modifyReply" parameterType="itineraryReplyDto">
 			update itinerary_reply
 			set content = #{content}, register_date = now()
 			where itinerary_reply_id = #{itineraryReplyId}
 	</update>
 	
+	<!-- 댓글 삭제 -->
 	<delete id="deleteReply" parameterType="int">
 			delete from itinerary_reply
 			where itinerary_reply_id = #{itineraryReplyId}
 	</delete>
+	
+	<!-- 해당 게시글의 전체 댓글 갯수 가져오기 -->
+	<select id="getTotalAllItineraryReplyCount" parameterType="int" resultType="int">
+		select count(*)
+		from itinerary_reply
+		where itinerary_id = #{itineraryId}
+	</select>
+	
 </mapper>

@@ -23,4 +23,7 @@ public interface BoardReviewMapper {
 	
 	// 댓글 전체 삭제
 	int deleteAllReview(int boardId);
+	
+	// 해당 게시글에 대한 모든 댓글 수 반환하기
+	int getTotalAllBoardReviewCount(int boardId);
 }	
