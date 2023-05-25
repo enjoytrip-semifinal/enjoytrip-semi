@@ -6,8 +6,8 @@
 
 	<!-- 리뷰 가져오기 -->
 	<select id="listReview" parameterType="map" resultType="boardReviewDto">
-			select *
-			from board_reply
+			select *, u.nickname
+			from board_reply b left join user u using(user_id)
 			where board_id = #{id}
 			order by board_reply_id desc
 			limit #{start}, #{listsize}
