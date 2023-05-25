@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
 //                .antMatchers("/**").permitAll()
-                .antMatchers("/swagger/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/exist", "/user/exist").permitAll()
                 .antMatchers("/user/refresh-token", "/user/login", "/user/findid", "/user/findpw").permitAll()
                 .antMatchers("/user/logout/**", "/user/modify/**").hasAnyRole("USER", "ADMIN")
