@@ -19,6 +19,12 @@
 		<result column="season" property="season" />
 		<result column="nickname" property="nickname" />
 	</resultMap>
+	
+	<resultMap type="hotplaceFileInfoDto" id="file">
+		<result column="hotplace_file_id" property="fileId"/>
+		<result column="file_name" property="fileName"/>
+		<result column="hotplace_id" property="hotplaceId"/>
+	</resultMap>
 
 
 	<!-- 글 작성하기 -->
@@ -177,17 +183,13 @@
 		where hotplace_id = #{hotplaceId} and user_id =
 		#{userId}
 	</delete>
-
+	
 	<insert id="registerFile">
 		INSERT INTO hotplace_file_info (hotplace_id, file_name)
 		VALUES
-		<foreach collection="fileList" item="file" separator=",">
-			(LAST_INSERT_ID(), #{file})
+		<foreach collection="fileList" item="fileName" separator=",">
+			(LAST_INSERT_ID(), #{fileName})
 		</foreach>
 	</insert>
-
-
-
-
 
 </mapper>

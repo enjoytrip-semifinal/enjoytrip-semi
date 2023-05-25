@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 import com.enjoytrip.hotplace.model.HotplaceDto;
+import com.enjoytrip.hotplace.model.HotplaceFileInfoDto;
 
 @Mapper
 public interface HotplaceMapper {
@@ -42,7 +42,7 @@ public interface HotplaceMapper {
 	List<HotplaceDto> listHotplace(Map<String, Object> param) throws SQLException;
 
 	// 7. 파일 등록
-	int registerFile(List<String> fileList) throws Exception;
+	int registerFile(List<String> fileList) throws SQLException;
 
 	// 8. 하나의 게시글만 봄
 	HotplaceDto getHotplaceById(int hotplaceId) throws SQLException;
