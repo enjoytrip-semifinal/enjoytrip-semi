@@ -15,5 +15,6 @@ public class NoticeDto {
 	private int hit;
 	private String title;
 	private String content;
-	private int adminid;	
+	private int adminid;
+	private List<String> fileInfos;
 }
