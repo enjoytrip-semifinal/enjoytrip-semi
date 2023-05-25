@@ -88,7 +88,7 @@
 	<!-- 여행계획 수정에 해당하는 장소 수정 -->
 	<update id="modifyPlace" parameterType="ItineraryPlaceDto">
 		UPDATE itinerary_place
-		SET place_name = #{placeName}, place_address = #{placeAddress}, place_order = #{placeOrder}, place_comment = #{placeComment}
+		SET place_name = #{placeName}, place_address = #{placeAddress}, place_order = #{placeOrder}
 		WHERE itinerary_id = #{itineraryId} AND place_id = #{placeId};
 	</update>
 	
