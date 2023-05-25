@@ -76,12 +76,12 @@ public class SecurityConfig {
                 .antMatchers("/hotplace/reply/write/**", "/hotplace/reply/update/**"
                 		, "/hotplace/reply/delete/**").hasAnyRole("USER", "ADMIN")
                 
-                .antMatchers("/itinerary/list/**", "/itineray/detail/**").permitAll()
-                .antMatchers("/itineray/write/**", "/itineray/delete/**", "/itineray/modify/**").hasAnyRole("USER","ADMIN")
+                .antMatchers("/itinerary/list/**", "/itinerary/detail/**").permitAll()
+                .antMatchers("/itinerary/write/**", "/itinerary/delete/**", "/itinerary/modify/**").hasAnyRole("USER","ADMIN")
                 
                 .antMatchers("/itinerary/reply/list/**").permitAll()
-                .antMatchers("/itineray/reply/write/**", "/itineray/reply/delete/**"
-                		, "/itineray/reply/modify/**").hasAnyRole("USER","ADMIN")
+                .antMatchers("/itinerary/reply/write/**", "/itinerary/reply/delete/**"
+                		, "/itinerary/reply/modify/**").hasAnyRole("USER","ADMIN")
                 
 
                 .anyRequest().authenticated()
