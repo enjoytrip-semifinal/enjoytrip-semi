@@ -40,33 +40,50 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()   
-//        		.defaultSuccessUrl("/index.html")
-//        		.failureUrl("/login.html?error=true").and()	 
+                .httpBasic().disable()	 
                 .csrf().disable()
+                .cors().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
-
-                .antMatchers("/swagger/**").permitAll()
-                .antMatchers("/exist", "/signup","/","/notice","/board","/tour","/place","/plan","/login").permitAll()
-                .antMatchers("/user/refresh-token").permitAll()
-                .antMatchers("/user/login", "/user/findid", "/user/findpw").permitAll()
-                .antMatchers(HttpMethod.GET, "/user/join").permitAll()
-                .antMatchers(HttpMethod.POST, "/user/join").permitAll() 
-
-                .antMatchers("/notice/list").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/notice/write", "/notice/delete", "/notice/modify").hasRole("ADMIN")
-                .antMatchers("/board/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/file/download/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/hotplace/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/itinerary/**").hasAnyRole("USER", "ADMIN")
-                
-                .antMatchers("/user/logout", "/user/modify").hasAnyRole("USER", "ADMIN")
+//                .antMatchers("/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/exist", "/user/exist").permitAll()
+                .antMatchers("/user/refresh-token", "/user/login", "/user/findid", "/user/findpw").permitAll()
+                .antMatchers("/user/logout/**", "/user/modify/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/user/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/user/**").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/user/join").permitAll()
+                .antMatchers(HttpMethod.POST, "/user/join").permitAll() 
+                .antMatchers(HttpMethod.DELETE, "/user/join").hasAnyRole("USER", "ADMIN")
+
+                .antMatchers("/notice/list").permitAll()
+                .antMatchers("/notice/write", "/notice/delete", "/notice/modify").hasRole("ADMIN")
+                
+                .antMatchers("/board/list/**").permitAll()
+                .antMatchers("/board/write/**", "/board/delete/**", "/board/modify/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/board/review/list/**").permitAll()
+                .antMatchers("/board/review/write/**", "/board/review/delete/**", 
+                		"/board/review/modify/**").hasAnyRole("USER", "ADMIN")
+                
+                .antMatchers("/file/download/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/hotplace/list/**").permitAll()
+                .antMatchers("/hotplace/write/**", "/hotplace/update/**", "/hotplace/delete/**"
+                		,"/hotplace/like/**", "/hotplace/hate/**").hasAnyRole("USER", "ADMIN")
+                
+                .antMatchers("/hotplace/reply/list/**").permitAll()
+                .antMatchers("/hotplace/reply/write/**", "/hotplace/reply/modify/**"
+                		, "/hotplace/reply/delete/**").hasAnyRole("USER", "ADMIN")
+                
+                .antMatchers("/itinerary/list/**").permitAll()
+                .antMatchers("/itineray/write/**", "/itineray/delete/**", "/itineray/modify/**", "/itineray/detail/**").hasAnyRole("USER","ADMIN")
+                
+                .antMatchers("/itinerary/reply/list/**").permitAll()
+                .antMatchers("/itineray/reply/write/**", "/itineray/reply/delete/**"
+                		, "/itineray/reply/modify/**").hasAnyRole("USER","ADMIN")
+                
+
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)

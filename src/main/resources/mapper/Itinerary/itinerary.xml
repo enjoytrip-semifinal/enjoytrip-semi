@@ -2,11 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper
-	namespace="com.enjoytrip.itinerary.model.mapper.ItineraryMapper">
+<mapper namespace="com.enjoytrip.itinerary.model.mapper.ItineraryMapper">
 
-	<resultMap id="ItineraryDetailResultMap"
-		type="ItineraryDetailDto">
+	<resultMap id="ItineraryDetailResultMap" type="ItineraryDetailDto">
 		<id property="itineraryId" column="itinerary_id" />
 		<result property="userId" column="user_id" />
 		<result property="registerDate" column="register_date" />
@@ -14,7 +12,7 @@
 		<result property="endDate" column="end_date" />
 		<result property="title" column="title" />
 		<result property="content" column="content" />
-		<result column="nickname" property="nickname" />
+		<result property="nickname" column="nickname"  />
 		<collection property="itineraryPlaces" ofType="ItineraryPlaceDto">
 			<result property="placeName" column="place_name" />
 			<result property="placeAddress" column="place_address" />
@@ -22,6 +20,8 @@
 			<result property="placeComment" column="place_comment" />
 			<result property="itineraryId" column="itinerary_id" />
 			<result property="placeId" column="place_id" />
+			<result property="placeType" column="place_type" />
+			<result property="imageName" column="image_name" />
 		</collection>
 	</resultMap>
 
@@ -30,27 +30,29 @@
 			<if test="key == 'title'">
 				where title like concat('%', #{word}, '%')
 			</if>
-
+			
 			<if test="key == 'content'">
 				where content like concat('%', #{word}, '%')
 			</if>
-
+			
 			<if test="key == 'userId'">
-				where user_id = ${word}
+				where user_id in (select user_id from user where nickname like concat('%', #{word},'%')) 
 			</if>
 		</if>
 	</sql>
-
+	<!-- 여행계획 작성 -->
 	<insert id="writeItinerary" parameterType="ItineraryDetailDto" useGeneratedKeys="true" keyProperty="itineraryId">
 	  INSERT INTO itinerary_detail (user_id, register_date, start_date, end_date, title, content)
 	  VALUES ( #{userId}, NOW(), #{startDate}, #{endDate}, #{title}, #{content});
 	</insert>
 	
+	<!-- 여행계획 작성에 포함되는 장소 등록 -->
 	<insert id="writePlace" parameterType="ItineraryPlaceDto">
-	    INSERT INTO itinerary_place (place_name, place_address, place_order, place_comment, itinerary_id) 
-	    VALUES (#{placeName}, #{placeAddress}, #{placeOrder}, #{placeComment}, #{itineraryId})
+	    INSERT INTO itinerary_place (place_name, place_address, place_order, place_comment, itinerary_id, place_type, image_name) 
+	    VALUES (#{placeName}, #{placeAddress}, #{placeOrder}, #{placeComment}, #{itineraryId}, #{placeType}, #{imageName})
 	</insert>
-
+	
+	<!-- 여행계획 전체 리스트 가져오기 -->
 	<select id="listItinerary" resultMap="ItineraryDetailResultMap" parameterType="map">
 		select d.itinerary_id, d.user_id, DATE_FORMAT(d.register_date, '%Y-%m-%d %H:%i:%s') as 'register_date', 
 			d.start_date, d.end_date, d.title, d.content, u.nickname
@@ -59,9 +61,9 @@
 		order by itinerary_id
 		limit #{start}, #{listsize}
 	</select>
-
-	<select id="selectOne" resultMap="ItineraryDetailResultMap"
-		parameterType="java.lang.Integer">
+	
+	<!-- 여행계획 글 하나 조회 -->
+	<select id="selectOne" resultMap="ItineraryDetailResultMap" parameterType="java.lang.Integer">
 		SELECT d.itinerary_id, d.user_id, d.register_date, d.start_date, d.end_date, d.title, d.content,
 			   p.place_name, p.place_address, p.place_order, p.place_comment, p.place_id, u.nickname
 		FROM itinerary_detail d 
@@ -70,22 +72,32 @@
 		WHERE d.itinerary_id = #{itineraryId}
 		order by p.place_order
 	</select>
-
+	
+	<!-- 여행계획 삭제 -->
 	<delete id="deleteItinerary" parameterType="java.lang.Integer">
 		delete from
 		itinerary_detail
 		where itinerary_id=#{itineraryId}
 	</delete>
-
+	
+	<!-- 여행계획 수정 -->
 	<update id="modifyItinerary" parameterType="ItineraryDetailDto">
 		UPDATE itinerary_detail
 		SET title = #{title}, content = #{content}, start_date = #{startDate},end_date = #{endDate}
 		WHERE itinerary_id = #{itineraryId};
-
 	</update>
-	<update id="modifyPlace" parameterType="ItineraryPlaceDto">
-		UPDATE itinerary_place
-		SET place_name = #{placeName}, place_address = #{placeAddress}, place_order = #{placeOrder}, place_comment = #{placeComment}
-		WHERE itinerary_id = #{itineraryId} AND place_id = #{placeId};
+	
+	<!-- 여행계획 수정에 해당하는 장소 삭제 -->
+	<update id="deletePlace" parameterType="java.lang.Integer">
+		delete from
+		itinerary_place
+		where itinerary_id=#{itineraryId}
 	</update>
+	
+	<!-- 여행계획 전체 갯수 가져오기 -->
+	<select id="getTotalAllItineraryCount" resultType="int">
+		select count(*)
+		from itinerary_detail
+	</select>
+	
 </mapper>

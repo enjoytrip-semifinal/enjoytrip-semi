@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -53,20 +54,11 @@ public class HotplaceRestController {
 	private String uploadImgPath;
 
 	// 게시판 전체 목록 조회
-	@ApiOperation(value = "페이징 처리된 게시판 글 조회", notes = "페이징 처리된 게시판의 <b>목록</b>을 리턴합니다. <br>"
-			+ "map : pgno=[페이지 번호]&key=[검색종류 : (title, content, userId)]&word=[검색어] <br>"
-			+ "ex : pgno=1&key=&word=")
-	@Parameter(name = "pgno", schema = @Schema(type="number"))
-	@Parameter(name = "sido", schema = @Schema(type="number"))
-	@Parameter(name = "gugun", schema = @Schema(type="number"))
-	@Parameter(name = "type", schema = @Schema(type="number"))
-	@Parameter(name = "season", schema = @Schema(type="number"))
 	@GetMapping("/list")
 	public ResponseEntity<?> listHotplace(@RequestParam Map<String, String> map) throws Exception {
-		
+
 		List<HotplaceDto> list = service.listHotplace(map);
-		
-		//System.out.println(list.size());
+
 
 		PageNavigation pageNavigation = service.makePageNavigation(map);
 
@@ -74,20 +66,14 @@ public class HotplaceRestController {
 		returnMap.put("hotplaceList", list);
 		returnMap.put("navigation", pageNavigation);
 
-		returnMap.put("pgno", map.get("pgno").isEmpty()?0:Integer.parseInt(map.get("pgno")));
-		returnMap.put("sido", map.get("sido").isEmpty()?0:Integer.parseInt(map.get("sido")));
-		returnMap.put("gugun", map.get("gugun").isEmpty()?0:Integer.parseInt(map.get("gugun")));
-		returnMap.put("type", map.get("type").isEmpty()?0:Integer.parseInt(map.get("type")));
-		returnMap.put("season", map.get("season").isEmpty()?0:Integer.parseInt(map.get("season")));
-		
+		//넣어줘야할 값 pgno, writer, address, type, season
 
-//		returnMap.put("pgno", map.get("pgno"));
-//		returnMap.put("sido", map.get("sido"));
-//		returnMap.put("gugun", map.get("gugun"));
-//		returnMap.put("type", map.get("type"));
-//		returnMap.put("season", map.get("season"));
+		returnMap.put("pgno", map.get("pgno")==null?"1":map.get("pgno"));
+		returnMap.put("key", map.get("key")==null?"":map.get("key"));	//key는 검색 조건을 의미한다.
+		returnMap.put("word", map.get("word")==null?"":map.get("word"));
+		returnMap.put("type", map.get("type")==null?"0":map.get("type"));
+		returnMap.put("season", map.get("season")==null?"0":map.get("season"));
 
-		
 		if (list != null && !list.isEmpty()) {
 			return new ResponseEntity<Map>(returnMap, HttpStatus.OK);
 		} else {
@@ -108,35 +94,57 @@ public class HotplaceRestController {
 
 		Map<String, Object> returnMap = new HashMap<>();
 
-		returnMap.put("hotplace", hotplace);
-		returnMap.put("pgno", map.get("pgno"));
-		returnMap.put("sido", map.get("sido"));
-		returnMap.put("gugun", map.get("gugun"));
-		returnMap.put("type", map.get("type"));
+		returnMap.put("pgno", map.get("pgno")==null?"1":map.get("pgno"));
+		returnMap.put("key", map.get("key")==null?"":map.get("key"));	//key는 검색 조건을 의미한다.
+		returnMap.put("word", map.get("word")==null?"":map.get("word"));
+		returnMap.put("type", map.get("type")==null?"0":map.get("type"));
+		returnMap.put("season", map.get("season")==null?"0":map.get("season"));
 
 		if (hotplace != null) {
-			return new ResponseEntity<Map>(returnMap, HttpStatus.OK);
+			return new ResponseEntity<HotplaceDto>(hotplace, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("게시글 불러오는 중 오류 발생", HttpStatus.NO_CONTENT);
 		}
 
 	}
 
+	// 게시글 하나 조회
+	@ApiOperation(value = "핫플레이스 글 수정", notes = "원하는 핫플레이스 <b>하나</b>를 리턴합니다.")
+	@PutMapping(value = "update")
+	public ResponseEntity<?> updateHotplace(@RequestBody HotplaceDto hotplace)
+			throws Exception {
+
+		Map<String, String> pageMap = new HashMap<String, String>();
+
+		pageMap.put("pgno","1");
+		pageMap.put("key","");	//key는 검색 조건을 의미한다.
+		pageMap.put("word", "");
+		pageMap.put("type", "0");
+		pageMap.put("season", "0");
+		
+		int result = service.updateHotplace(hotplace);
+		if (result > 0) {
+			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("게시글 수정 중 오류 발생", HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
 	@ApiOperation(value = "게시판 글 쓰기", notes = "게시판의 글 하나를 작성합니다.")
 	@PostMapping("/write")
-	public ResponseEntity<?> writeHotplace(@RequestBody HotplaceDto hotplace, String[] url)
-			throws Exception {
+	public ResponseEntity<?> writeHotplace(@RequestBody HotplaceDto hotplace) throws Exception {
 		System.out.println("insert hoplace is called!!");
+
+//		hotplace.setUserId();
 		// 페이징 처리를 위한 Map
 		Map<String, String> pageMap = new HashMap<String, String>();
 
 		pageMap.put("pgno", "1");
-		pageMap.put("sido", "0");
-		pageMap.put("gugun", "0");
 		pageMap.put("type", "0");
-		pageMap.put("season","0");
-
-		int result = service.insertHotplace(hotplace,url);
+		pageMap.put("season", "0");
+		
+		int result = service.insertHotplace(hotplace);
 		if (result > 0) {
 			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 		} else {
@@ -149,7 +157,7 @@ public class HotplaceRestController {
 	@DeleteMapping("/delete/{num}")
 	public ResponseEntity<?> deleteHotplace(@PathVariable int num) throws Exception {
 		int result = service.deleteHotplace(num);
-		
+
 		// 페이징 처리를 위한 Map
 		Map<String, String> pageMap = new HashMap<String, String>();
 		pageMap.put("pgno", "1");
@@ -160,10 +168,10 @@ public class HotplaceRestController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
-	
-	//5. 좋아요 수 증가
+
+	// 5. 좋아요 수 증가
 	@ApiOperation(value = "좋앙용~~~", notes = "너어무우 좋아용~~~")
-	@DeleteMapping("/like/{num}")
+	@GetMapping("/like/{num}")
 	public ResponseEntity<?> likeHotplace(@PathVariable int num) throws Exception {
 		int result = service.likeHotplace(num);
 
@@ -174,21 +182,21 @@ public class HotplaceRestController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
-	
-	
-	
-	//5. 좋아요 수 감소
-		@ApiOperation(value = "싫어용!!", notes = "싫은데요~~~")
-		@DeleteMapping("/hate/{num}")
-		public ResponseEntity<?> hateHotplace(@PathVariable int num) throws Exception {
-			int result = service.hateHotplace(num);
 
-			if (result > 0) {
-				HotplaceDto hotplace = service.getHotplaceById(num);
-				return new ResponseEntity<HotplaceDto>(hotplace, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-			}
+	// 5. 좋아요 수 감소
+	@ApiOperation(value = "싫어용!!", notes = "싫은데요~~~")
+	@GetMapping("/hate/{num}")
+	public ResponseEntity<?> hateHotplace(@PathVariable int num) throws Exception {
+		int result = service.hateHotplace(num);
+
+		System.out.println(num);
+
+		if (result > 0) {
+			HotplaceDto hotplace = service.getHotplaceById(num);
+			return new ResponseEntity<HotplaceDto>(hotplace, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
+	}
 
 }

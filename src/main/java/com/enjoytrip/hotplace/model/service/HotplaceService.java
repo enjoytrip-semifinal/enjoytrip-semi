@@ -14,7 +14,7 @@ public interface HotplaceService {
 
 	HotplaceDto getHotplaceById(int hotplaceId)throws Exception;
 
-	int insertHotplace(HotplaceDto hotplace, String url[]) throws Exception;
+	int insertHotplace(HotplaceDto hotplace) throws Exception;
 
 	int updateHotplace(HotplaceDto hotplace) throws Exception;
 

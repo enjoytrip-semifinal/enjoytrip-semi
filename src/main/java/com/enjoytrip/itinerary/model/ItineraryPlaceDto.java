@@ -10,4 +10,6 @@ public class ItineraryPlaceDto {
 	private String placeComment;
 	private int itineraryId;
 	private int placeId;
+	private int placeType;
+	private String imageName;
 }

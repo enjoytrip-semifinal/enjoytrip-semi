@@ -42,6 +42,7 @@ public class ItineraryServiceImpl implements ItineraryService{
 		
 		return itinerarymapper.listItinerary(param);
 	}
+	
 	// 여행계획 작성하기
 	@Override
 	public int writeItinerary(ItineraryDetailDto itinerarydetaildto) {
@@ -56,18 +57,18 @@ public class ItineraryServiceImpl implements ItineraryService{
 	    
 	    return result;
 	}
-
 	
 	// 여행계획 수정하기
 	@Override
 	public int modifyItinerary(ItineraryDetailDto itinerarydetaildto) {
+		itinerarymapper.deletePlace(itinerarydetaildto.getItineraryId());
 	    int result = itinerarymapper.modifyItinerary(itinerarydetaildto);
-
+	    
 	    List<ItineraryPlaceDto> itineraryPlaces = itinerarydetaildto.getItineraryPlaces();
 	    int placeOrder = 0;
 	    for (ItineraryPlaceDto itineraryPlace : itineraryPlaces) {
 	    	itineraryPlace.setPlaceOrder(placeOrder++);
-	        itinerarymapper.modifyPlace(itineraryPlace);
+	        itinerarymapper.writePlace(itineraryPlace);
 	    }
 	    
 	    return result;
@@ -83,6 +84,12 @@ public class ItineraryServiceImpl implements ItineraryService{
 	@Override
 	public ItineraryDetailDto selectOne(Integer num) {
 		return itinerarymapper.selectOne(num);
+	}
+	
+	//총 여행계획 갯수 가져오기
+	@Override
+	public int getTotalAllItineraryCount() {
+		return itinerarymapper.getTotalAllItineraryCount();
 	}
 	
 }
