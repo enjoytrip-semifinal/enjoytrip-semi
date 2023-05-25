@@ -21,7 +21,7 @@ public class HotplaceDto {
 	private int userId;
 	private int type;
 	private String address;
-	private List<String> fileList;
+	private String image;
 	private int season;
 	private String nickname;
 }
