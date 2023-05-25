@@ -16,4 +16,6 @@ public interface HotplaceReplyService {
 	int updateReply(HotplaceReplyDto replyDto);
 	//해당 게시물에 속하는 댓글 전체 삭제
 	int deleteReplyAll(int hotplaceId);
+	//전체 댓글 수를 불러옴
+	int getTotalCount(int hotplaceId);
 }

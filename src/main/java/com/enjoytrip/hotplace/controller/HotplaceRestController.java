@@ -110,7 +110,7 @@ public class HotplaceRestController {
 
 	// 게시글 하나 조회
 	@ApiOperation(value = "핫플레이스 글 수정", notes = "원하는 핫플레이스 <b>하나</b>를 리턴합니다.")
-	@PutMapping(value = "update")
+	@PutMapping(value = "/update")
 	public ResponseEntity<?> updateHotplace(@RequestBody HotplaceDto hotplace)
 			throws Exception {
 

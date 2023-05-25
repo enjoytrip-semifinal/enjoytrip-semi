@@ -24,4 +24,7 @@ public interface HotplaceReplyMapper {
 
 	// 해당 게시물에 속하는 댓글 전체 삭제
 	int deleteReplyAll(int hotplaceId);
+	
+	//해당 게시글에 속하는 전체 댓글ㅈ의 개수를 가져온다
+	int getTotalCount(int hotplaceId);
 }

@@ -47,4 +47,10 @@
 		delete from hotplace_reply
 		where hotplace_id = #{hotplaceId}
 	</delete>
+	
+	<select id="getTotalCount" parameterType="int" resultType="int">
+		select count(*)
+		from hotplace_reply
+		where hotplace_id = #{hotplaceId}
+	</select>
 </mapper>
