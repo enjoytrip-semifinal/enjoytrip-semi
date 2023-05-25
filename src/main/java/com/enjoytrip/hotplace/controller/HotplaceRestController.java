@@ -84,22 +84,14 @@ public class HotplaceRestController {
 
 	// 게시글 하나 조회
 	@ApiOperation(value = "핫플레이스 글 하나 조회", notes = "원하는 핫플레이스 <b>하나</b>를 리턴합니다.")
-	@GetMapping(value = "list/{num}")
-	public ResponseEntity<?> viewHotplace(@PathVariable int num, @RequestParam Map<String, String> map)
+	@GetMapping(value = "/list/{num}")
+	public ResponseEntity<?> viewHotplace(@PathVariable int num)
 			throws Exception {
-
+		
 		HotplaceDto hotplace = service.getHotplaceById(num);
 
 		// 조회수 증가
 		service.updateHit(num);
-
-		Map<String, Object> returnMap = new HashMap<>();
-
-		returnMap.put("pgno", map.get("pgno")==null?"1":map.get("pgno"));
-		returnMap.put("key", map.get("key")==null?"":map.get("key"));	//key는 검색 조건을 의미한다.
-		returnMap.put("word", map.get("word")==null?"":map.get("word"));
-		returnMap.put("type", map.get("type")==null?"0":map.get("type"));
-		returnMap.put("season", map.get("season")==null?"0":map.get("season"));
 
 		if (hotplace != null) {
 			return new ResponseEntity<HotplaceDto>(hotplace, HttpStatus.OK);
@@ -111,7 +103,7 @@ public class HotplaceRestController {
 
 	// 게시글 하나 조회
 	@ApiOperation(value = "핫플레이스 글 수정", notes = "원하는 핫플레이스 <b>하나</b>를 리턴합니다.")
-	@PutMapping(value = "/update")
+	@PutMapping("/update")
 	public ResponseEntity<?> updateHotplace(@RequestBody HotplaceDto hotplace)
 			throws Exception {
 
@@ -125,7 +117,7 @@ public class HotplaceRestController {
 		
 		int result = service.updateHotplace(hotplace);
 		if (result > 0) {
-			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+			return new ResponseEntity<Integer>(service.updateHotplace(hotplace), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("게시글 수정 중 오류 발생", HttpStatus.BAD_REQUEST);
 		}
@@ -193,6 +185,7 @@ public class HotplaceRestController {
 		System.out.println(num);
 
 		if (result > 0) {
+			//HotplaceDto hotplace = service.getHotplaceById(num);
 			HotplaceDto hotplace = service.getHotplaceById(num);
 			return new ResponseEntity<HotplaceDto>(hotplace, HttpStatus.OK);
 		} else {

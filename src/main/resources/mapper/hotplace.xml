@@ -18,6 +18,7 @@
 		<result column="address" property="address" />
 		<result column="season" property="season" />
 		<result column="nickname" property="nickname" />
+		<result column="image" property="image"/>
 	</resultMap>
 	
 	<resultMap type="hotplaceFileInfoDto" id="file">
@@ -30,9 +31,9 @@
 	<!-- 글 작성하기 -->
 	<insert id="insertHotplace" parameterType="hotplaceDto">
 		insert into hotplace
-		(user_id,latitude,longitude,title,content,register_date,like_count,hit_count,type,address,season)
+		(user_id,latitude,longitude,title,content,register_date,like_count,hit_count,type,address,season,image)
 		values (#{userId},
-		#{latitude},#{longitude},#{title},#{content},now(),0,0,#{type},#{address},#{season})
+		#{latitude},#{longitude},#{title},#{content},now(),0,0,#{type},#{address},#{season},#{image})
 		<selectKey resultType="int" keyProperty="hotplaceId"
 			order="AFTER">
 			select last_insert_id()

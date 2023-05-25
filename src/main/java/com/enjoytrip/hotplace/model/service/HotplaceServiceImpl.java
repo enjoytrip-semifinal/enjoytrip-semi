@@ -42,13 +42,7 @@ public class HotplaceServiceImpl implements HotplaceService {
 	public int insertHotplace(HotplaceDto hotplace) throws Exception {
 
 		hotplace.setUserId(userService.getUser_idbyId());
-
 		int result = hotplaceMapper.insertHotplace(hotplace);
-
-		if(hotplace.getFileList()!=null && hotplace.getFileList().size()>0) {
-			int file = hotplaceMapper.registerFile(hotplace.getFileList());
-			if(file>0) System.out.println("야~호~");
-		}
 
 		return result;
 	}
@@ -133,8 +127,9 @@ public class HotplaceServiceImpl implements HotplaceService {
 	}
 
 	@Override
-	public HotplaceDto getHotplaceById(int hotplaceId) throws SQLException {
+	public HotplaceDto getHotplaceById(int hotplaceId) throws Exception {
 		// TODO Auto-generated method stub
+
 		return hotplaceMapper.getHotplaceById(hotplaceId);
 	}
 
