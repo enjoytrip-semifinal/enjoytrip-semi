@@ -56,6 +56,6 @@ public interface HotplaceMapper {
 	//11. 페이징 처리를 위해 전체 게시글 수를 구해준다.
 	int getTotalHotplaceCount(Map<String, Object> param) throws SQLException;
 	
-	int getTop3() throws Exception;
+	List<HotplaceDto> getTop3() throws Exception;
 	
 }

@@ -189,7 +189,7 @@ public class HotplaceServiceImpl implements HotplaceService {
 	}
 
 	@Override
-	public int getTop3() throws Exception {
+	public List<HotplaceDto> getTop3() throws Exception {
 		// TODO Auto-generated method stub
 		return hotplaceMapper.getTop3();
 	}
