@@ -1,6 +1,6 @@
 # Enjoy Trip
 # 1학기 프로젝트 Enjoy Trip 
-<img width="890" alt="KakaoTalk_20230608_164520086" src="https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/e75dffca-acb0-4167-8d0a-b8a2aae1e08b">
+<img width="890" alt="KakaoTalk_20230608_164520086" src="https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/e75dffca-acb0-4167-8d0a-b8a2aae1e08b" >
 
 - - -
 # 📌프로젝트 소개
@@ -88,20 +88,16 @@
 - - -
 # 🙈 기능 엿보기(GIF)
 ### 회원가입 및 로그인
-![join_login](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/bc047d59-82da-403b-bcb2-b61ae966f4e8)
-
+<img src="https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/bc047d59-82da-403b-bcb2-b61ae966f4e8" width="600"/>
 
 ### 공지사항 게시판 보기 및  작성
-![notice](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/73d3d77a-03b9-4eab-ab23-53e3df1dd2a4)
-
+<img src="https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/73d3d77a-03b9-4eab-ab23-53e3df1dd2a4" width="600"/>
 
 ### 게시판 글, 사진 업로드
-![writearticle](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/ea100e95-6c11-4378-8bc4-34b21f2e3d3d)
-
+<img src="https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/ea100e95-6c11-4378-8bc4-34b21f2e3d3d" width="600"/>
 
 ### 여행계획 설정
-![tourplan](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/4753c384-c25b-4f87-b9d7-0ae4750a3821)
-
+<img src="https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/4753c384-c25b-4f87-b9d7-0ae4750a3821" width="600"/>
 
 ### 핫플레이스 조회 및 등록
-![hotplace](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/2fb6e97a-536b-4fd5-be95-b18e59ba7daf)
+<img src="https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/2fb6e97a-536b-4fd5-be95-b18e59ba7daf" width="600"/>
