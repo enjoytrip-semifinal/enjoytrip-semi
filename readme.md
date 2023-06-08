@@ -1,29 +1,107 @@
-##여행계획
-라우팅 정보
-![AB46A499-FF96-437F-A813-356511A56BEC](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/98890934/27453249-2bbe-47a7-a000-5e431c18fca8)
+# Enjoy Trip
+# 1학기 프로젝트 Enjoy Trip 
+<img width="890" alt="KakaoTalk_20230608_164520086" src="https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/e75dffca-acb0-4167-8d0a-b8a2aae1e08b">
+
+- - -
+# 📌프로젝트 소개
+## ✈️ 여행을 사랑하는 모두를 위한 웹사이트
+
+> 행복하게 여행하려면 가볍게 여행해야한다. 
+
+여행을 가기전 여행 계획을 세우기 위해서는 후기를 찾아보고 지도에 위치를 본 후 여행경로를 설정해야합니다. 여러 사이트를 돌아다니지 않고 한 사이트에서 가능하도록 하는 것을 목표로 제작된 웹 사이트 입니다. 크게 타겟 유저를 3분류로 고려하여 제작하였습니다.
+
+1. **여행 초보자**
+    
+    여행 계획을 세오는 것이 처음인 사람은 여행 계획을 어떻게 세워야 하는지 부터 막막해집니다. 하지만 ‘Enjoy Trip’에서는 다른 사람의 여행계획 경로를 볼 수 있어 처음부터 끝까지 혼자 계획해야 하는 부담을 줄여줍니다.
+    
+2. **여행을 사랑하는 사람들**
+    
+    여행을 즐기고 새로운 장소를 탐험하며 다양한 경험을 쌓고 싶은 여행자는 ‘핫플레이스’ 게시판을 통해 새로운 장소를 접할 수 도 있고 실제로 여행한 사람의 생생한 후기를 보며 새롭고 재밌는 장소를 쉽게 찾을 수 있습니다!
+    
+3. **혼자 여행하는 사람들**
+    
+    다른사람의 여행경로와 생생한 후기를 통해 안전하고 실패없는 여행을 계획할 수 있습니다.
+    
+---
+
+## 🔎 주요 기능 설명
+### 🔥 ‘핫플레이스’ 게시판을 통해 사진과 함께 생생한 후기를 전달해요!
+
+- **사진과 함께 전하는 생생한 현장감**
+    
+    핫플레이스 게시판은 사진이 ‘**필수**’인 게시판 입니다.
+    
+- **지도에 마커를 찍어 장소 등록하기**
+    
+    정확한 주소를 검색해서 장소를 등록할 수도 있지만 
+    근처 주소를 검색 후 마커를 이동시켜 주소등록도 가능합니다.
+    
+- **댓글을 통해 소통하기**
+    
+    해당 여행지에 대한 궁금증이나 소통을 하고 싶다면 댓글을 통해 소통이 가능합니다!
+    
+- - -
+### ✉️ 사진을 올리기 부끄러운 당신을 위한 자유 게시판도 있어요!
+
+- **사진이 필요 없는 게시판**
+    
+    핫플레이스 게시판은 사진이 필수이지만 자유 게시판은 사진이 선택사항입니다! 
+    원하는 내용의 글을 마음껏 게시할 수 있습니다.
+    
+- **댓글기능**
+    
+    댓글을 통해 게시판에 대한 질문을 해도 되고 답변을 달 수 있습니다!
+    
+- - -
+### 🚩 나만의 여행 경로를 설정해봐요!
+
+- **여행지를 선택후 경로를 대략적으로 보고 설정할 수 있습니다.**
+    
+    여행지를 선택 후 해당 순서로 방문했을 경우 경로를 대략적으로 볼 수 있습니다.
+    또한 Drop Down으로 방문 순서 변경이 가능합니다.
+    
+- **다른 사람의 여행 경로도 볼 수 있어요!**
+    
+    다른 사람의 여행 경로도 게시판 형태로 볼 수 있어서 혼자 여행 계획이 어렵다면 
+    다른 사람의 경로를 참고할 수 있습니다.
+    
+- - -
+# 🛠️ 기술 스택
+
+| 분야 | 사용기술 |
+| --- | --- |
+|  Front-End | Vue.js, KakaoMap API |
+| Back-End | Spring Boot, Spring Security, JWT  |
+| DataBase | MySQL, S3, AWS RDS |
+| DevOps | AWS EC2 |
+| Tool | Notion, STS, GitHub, Visual Code |
+| Design | Figma |
+
+- - -
+# 🧱 아키텍처
+![flowchart_gridOO](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/1c7ebf98-48d3-4839-8834-4a271c067f85)
+
+- - -
+# 📈 ERD
+![erd](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/f53c8bbe-29ac-4c47-be4b-56e38a343703)
+
+- - -
+# 🙈 기능 엿보기(GIF)
+### 회원가입 및 로그인
+![join_login](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/bc047d59-82da-403b-bcb2-b61ae966f4e8)
 
 
-1.전체 여행계획 리스트로 가져오기
-![리스트가져오기1](https://user-images.githubusercontent.com/76669772/235839585-a5fda6f5-ac9d-4749-95f6-8e62f288a8ee.PNG)
-![리스트가져오기2](https://user-images.githubusercontent.com/76669772/235839587-b48cafa7-6b77-4f29-8f41-011892326c8c.PNG)
-
-2.여행계획 하나 선택하여 해당 여행계획의 정보 가져오기
-![리스트상세보기](https://user-images.githubusercontent.com/76669772/235839640-6b79f672-6a31-4db1-ae17-7ed7ef8b7989.PNG)
-![리스트상세보기2](https://user-images.githubusercontent.com/76669772/235839644-8f1fe540-105c-4f92-9f77-4e4a5f255f9e.PNG)
-
-3.여행계획 작성하기 - 계획 작성에 성공하면 swagger에서 숫자 1이 나타남
-![계획작성1](https://user-images.githubusercontent.com/76669772/235839703-6d1e852b-41ac-4636-9f5e-21e73f4c1a1a.PNG)
-![계획작성2](https://user-images.githubusercontent.com/76669772/235839705-61eb9932-88a5-4969-8c96-6cb9002ee003.PNG)
-
-4.여행계획 수정하기 - 계획 수정에 성공하면 swagger에서 숫자 1이 나타남
-![수정1](https://user-images.githubusercontent.com/76669772/235839730-d17a425d-bf32-451c-991b-e50bd3d6c63c.PNG)
-![수정2](https://user-images.githubusercontent.com/76669772/235839734-974df98c-f477-49d1-9be3-970f22711ba5.PNG)
-
-5.여행계획 삭제하기 - 계획 삭제에 성공하면 swagger에서 숫자 1이 나타남
-![삭제1](https://user-images.githubusercontent.com/76669772/235839755-f165686d-ad3a-4855-8653-456c1ee2395b.PNG)
-![삭제2](https://user-images.githubusercontent.com/76669772/235839759-e073618d-7d23-44a1-a0a4-bc33a07247c0.PNG)
+### 공지사항 게시판 보기 및  작성
+![notice](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/73d3d77a-03b9-4eab-ab23-53e3df1dd2a4)
 
 
-6.여행계획에 대한 댓글 작성하기 - 댓글 작성에 성공하면 swagger에서 숫자 1이 나타남
-![댓글작성](https://user-images.githubusercontent.com/76669772/235839840-49f73df5-3c12-4f2e-8d75-88cc91b6d4e0.PNG)
-![댓글작성2](https://user-images.githubusercontent.com/76669772/235839847-2c7a3ec0-7320-45d2-8c29-a6f3393dd702.PNG)
+### 게시판 글, 사진 업로드
+![writearticle](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/ea100e95-6c11-4378-8bc4-34b21f2e3d3d)
+
+
+### 여행계획 설정
+![tourplan](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/4753c384-c25b-4f87-b9d7-0ae4750a3821)
+
+
+### 핫플레이스 조회 및 등록
+![hotplace](https://github.com/enjoytrip-semifinal/enjoytrip-semi/assets/44702967/2fb6e97a-536b-4fd5-be95-b18e59ba7daf)
